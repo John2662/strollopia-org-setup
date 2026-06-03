@@ -1,0 +1,256 @@
+Strollopia Organization Setup Wizard — Step-by-Step Guide
+==========================================================
+
+This guide explains every step of the Strollopia org setup wizard. Each section
+describes what the setting does, why it matters, and what to enter. You do not
+need any technical background — just an idea of what you want your mapping
+application to do.
+
+You can stop the wizard at any time by pressing Ctrl+C. Your progress is saved
+automatically, and you can pick up where you left off by running the wizard
+again with --resume.
+
+
+Step 1: Org Identity
+--------------------
+This step establishes who you are on the Strollopia platform.
+
+  Org domain name
+    Your unique address on Strollopia. This is how the system identifies your
+    organization. It looks like a web address — for example
+    "mytown.strollopia.com" or "artgallery.strollopia.com". Pick something
+    short and recognizable. This cannot be changed later without creating a
+    new organization.
+
+  Display name
+    The human-readable name shown to your visitors — for example "Downtown
+    Kentville Business" or "Halifax Art Walk". This appears in the app header
+    and anywhere your org is listed.
+
+  Tag line (optional)
+    A short phrase that appears under your display name — for example
+    "Explore local shops and restaurants" or "A self-guided mural tour".
+    Leave blank if you don't need one.
+
+  Viewer URL
+    The web address where your visitors will access your maps. The wizard
+    suggests one based on your domain name (e.g.
+    "https://mytown.viewer.strollopia.com"). In most cases the suggested
+    value is correct.
+
+
+Step 2: Admin Account
+---------------------
+Every organization needs at least one administrator who can manage maps,
+users, and content.
+
+  Admin email
+    The email address for the main admin account. This is used to log in to
+    the management dashboard. Use a real address — password resets are sent
+    here.
+
+  Admin name
+    The display name for the admin user (e.g. "Jane Smith" or just "Admin").
+
+  Password / Confirm password
+    Choose a password for the admin account. The wizard offers a default
+    placeholder password ("changeme123") — you should replace it with
+    something secure, especially for production organizations. You will be
+    asked to type it twice to confirm.
+
+
+Step 3: Map Defaults
+--------------------
+These settings control where your maps are centered when they first load.
+
+  City/address (for your reference)
+    You can type a city name or address here as a reminder for yourself.
+    This is NOT saved in the configuration — it's just to help you remember
+    why you chose the coordinates below.
+
+  Default latitude
+    The north-south position for your map center. Latitudes range from -90
+    (South Pole) to 90 (North Pole). For example, Halifax, Nova Scotia is
+    approximately 44.65.
+
+    Tip: open Google Maps, right-click a location, and the first number in
+    the coordinates shown is the latitude.
+
+  Default longitude
+    The east-west position for your map center. Longitudes range from -180
+    to 180. For example, Halifax is approximately -63.57.
+
+    Tip: the second number in the Google Maps coordinates is the longitude.
+
+
+Step 4: Access & Anonymous Settings
+------------------------------------
+These settings control who can view your maps and how.
+
+  Allow anonymous access?
+    If YES, visitors can view your maps without creating an account or
+    logging in. This is useful for public-facing maps (tourism walks, mural
+    tours, etc.). If NO, every visitor must have a registered account.
+
+    If you enable anonymous access you will be asked for three additional
+    settings:
+
+      Session period (seconds)
+        How long an anonymous session lasts before it expires. The default
+        is 3600 seconds (1 hour). After this time the visitor's session
+        ends and they would need to start a new one.
+
+      Max anonymous users
+        The maximum number of anonymous visitors that can be active at the
+        same time. The default is 10. Increase this if you expect heavy
+        public traffic.
+
+      Org key
+        A unique string used internally to generate anonymous access tokens.
+        Pick something unique to your org — for example "mytown-2024" or
+        "artwalk-public". This is not shown to visitors.
+
+  Restrict public map access?
+    If YES (the default), public maps require the viewer to be loaded from
+    your official viewer URL. This prevents other websites from embedding
+    your maps without permission. If NO, your maps can be accessed from
+    any origin.
+
+
+Step 5: Categories
+------------------
+Categories organize the points of interest on your maps. Visitors can filter
+the map by category to find what they're looking for.
+
+  Each category has a name and one or more subcategories. For example:
+
+    Category: "Food"
+      Subcategories: "Restaurants", "Cafes", "Bakeries"
+
+    Category: "Art"
+      Subcategories: "Murals", "Galleries", "Sculptures"
+
+  An "other" subcategory is added automatically to every category, and a
+  catch-all "other" category is added at the end. These act as fallbacks
+  for items that don't fit neatly into a specific bucket.
+
+  You must create at least one category. You can add as many as you need.
+  Enter a blank name when you are finished adding categories.
+
+
+Step 6: Media Types & Layouts
+------------------------------
+This step controls what kinds of content can be attached to each point of
+interest, and how that content is arranged.
+
+  Media types
+    Select which content types your maps will support:
+
+      richtext  — Formatted text (paragraphs, headings, bold, links, etc.)
+      image     — Photos and illustrations
+      audio     — Sound clips, narration, audio guides
+      video     — Video content
+
+    Most organizations enable all four. You can select a subset if you
+    know you won't need certain types.
+
+  Layouts
+    A layout defines the arrangement of content fields for a single point
+    of interest. When a content creator adds a new point on the map, they
+    choose a layout, and that determines what fields are available.
+
+    The wizard offers preset layouts:
+
+      text     — One text block
+      text2    — Two text blocks
+      image    — One text block + one image
+      audio    — One text block + one audio clip
+      layout1  — Image, text, audio, and a second text block
+
+    You can also create custom layouts by combining the media types you
+    enabled. For example, you could create a layout with two images and
+    one text block.
+
+    Each field in a layout has a short key (like "rt1" for the first
+    richtext field, "i1" for the first image). These keys are generated
+    automatically — you just pick the types.
+
+
+Step 7: Maps
+------------
+An organization can have one or more maps. Each map is a separate
+collection of points of interest with its own settings.
+
+  Map name/slug
+    A short, lowercase identifier for the map — for example "main-map",
+    "mural-tour", or "downtown". This is used in URLs and directory names,
+    so it must contain only lowercase letters, numbers, and hyphens.
+
+  Is this map public?
+    If YES, the map is visible to anyone who visits your viewer URL (or to
+    anonymous users, if enabled). If NO, only logged-in users with the
+    right permissions can see it. Most maps are public.
+
+  Languages
+    A comma-separated list of language codes for the map content — for
+    example "en" for English, "en,fr" for English and French. The default
+    is "en".
+
+  You must create at least one map. Enter a blank name when you are
+  finished adding maps.
+
+
+Step 8: UI Support (optional)
+-----------------------------
+These settings control which Strollopia tools are available to your
+organization's content creators and administrators.
+
+  Editor
+    The content editor lets authorized users create and edit points of
+    interest directly in the browser. If your team will be adding content
+    through the web interface, enable this.
+
+  Builder
+    The map builder provides advanced tools for designing map layouts,
+    setting boundaries, and configuring map behavior. Enable this if you
+    need fine-grained control over how your maps look and work.
+
+  Datalogger
+    The datalogger is a mobile-friendly tool for collecting field data.
+    Users can walk a route and log points of interest from their phone.
+    Enable this if your team will be doing on-the-ground data collection.
+
+  Default language
+    The default language for the user interface (not the map content).
+    Typically "en" for English.
+
+
+Step 9: Review & Write
+----------------------
+The wizard shows you the complete configuration in YAML format. Review it
+to make sure everything looks correct.
+
+  If you choose YES, the wizard:
+    - Creates the org directory (org-data/<your-domain>/)
+    - Creates a subdirectory for each map with a media/ folder inside
+    - Writes the org-setup.yaml file
+    - Deletes the draft file (if resuming from a previous session)
+
+  If you choose NO, nothing is written to disk. You can run the wizard
+  again.
+
+
+After the Wizard
+----------------
+Once the wizard has written your org-setup.yaml, the next steps are:
+
+  1. Add map data — Place your import-schema.yaml and map-data.tsv files
+     in the appropriate map directory under org-data/.
+
+  2. Add media files — Copy images, audio, and video files into the
+     media/ subdirectory for each map.
+
+  3. Run the import — Use strollopia_import.py to push your org and map
+     data to the Strollopia server.
+
+See the project README.md for import commands and options.

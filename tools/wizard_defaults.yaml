@@ -1,0 +1,31 @@
+# wizard_defaults.yaml — default values for org_yaml_wizard.py
+org_identity:
+  viewer_template: "https://{name}.viewer.strollopia.com"
+  allows_anonymous: false
+  restrict_public_map: true
+
+admin:
+  password: "changeme123"
+
+map_defaults:
+  languages: ["en"]
+  is_public: true
+
+mediatypes: ["richtext", "image", "audio", "video"]
+
+layout_presets:
+  text: ["rt1:richtext"]
+  text2: ["rt1:richtext", "rt2:richtext"]
+  image: ["rt1:richtext", "i1:image"]
+  audio: ["rt1:richtext", "a1:audio"]
+  layout1: ["i1:image", "rt1:richtext", "a1:audio", "rt2:richtext"]
+
+ui_support:
+  editor: "ED"
+  builder: "BL"
+  datalogger: "DL"
+  default_language: "en"
+
+anonymous_settings:
+  period: 3600
+  max_anon: 10
