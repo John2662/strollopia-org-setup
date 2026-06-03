@@ -1,0 +1,23 @@
+---
+org_domain_name: kentville.strollopia.com
+main_admin_email: info@kentvillebusiness.ca
+main_admin_password: changeme123
+display_name: 'Downtown Kentville Business'
+allows_anonymous: No
+map_default_lat: 45.0752
+map_default_lng: -64.4943
+categories:
+  Art: ['Contemporary', 'Historical', 'Modern', 'Exhibitions', 'other']
+  Events: ['Workshops', 'Lectures', 'Tours', 'Conferences', 'other']
+  Mural: ['Mural', 'other']
+  other: ['other']
+mediatypes: ['richtext', 'image', 'audio', 'video']
+layouts:
+  text: ['rt1:richtext']
+  text2: ['rt1:richtext', 'rt2:richtext']
+  image: ['rt1:richtext', 'i1:image']
+  audio: ['rt1:richtext', 'a1:audio']
+  layout1: ['i1:image', 'rt1:richtext', 'a1:audio', 'rt2:richtext']
+org_maps:
+  business-map: { 'is_public': true }
+  mural-map: { 'is_public': true }

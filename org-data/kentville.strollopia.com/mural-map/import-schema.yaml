@@ -1,0 +1,27 @@
+---
+# import-schema.yaml — Kentville murals (mural-map)
+#
+# The directory name "mural-map" is the org map name.
+# Media files are resolved from media/ in this directory.
+
+card_layout: "image"                    # rt1:richtext + i1:image
+
+poi_fields:
+  name: "name"
+  lat: "lat"
+  lng: "lng"
+
+categories:
+  category: "categories"
+  subcategory: "subcategory"
+
+content_columns:
+  rt1:
+    column: "desc"
+  i1:
+    column: "image_file_name"
+
+options:
+  skip_existing: true
+  sleep_between_rows: 2
+  language: "en"

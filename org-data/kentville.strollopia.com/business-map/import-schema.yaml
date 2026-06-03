@@ -1,0 +1,41 @@
+---
+# import-schema.yaml — Kentville business directory (main-map)
+#
+# The directory name "main-map" is the org map name.
+# Media files are resolved from media/ in this directory.
+
+card_layout: "image"                    # Fixed layout card for all rows
+
+poi_fields:
+  name: "Business Name"
+  lat: "lat"
+  lng: "lng"
+
+user_fields:
+  email: "Email Address"
+  name_first: "First Name"
+  name_last: "Last Name"
+
+schedule:
+  monday: "Monday"
+  tuesday: "Tuesday"
+  wednesday: "Wednesday"
+  thursday: "Thursday"
+  friday: "Friday"
+  saturday: "Saturday"
+  sunday: "Sunday"
+
+categories:
+  category: "Category"
+  subcategory: "Sub Category"
+
+content_columns:
+  rt1:
+    column: "blurb"
+  i1:
+    column: "image_file"
+
+options:
+  skip_existing: true
+  sleep_between_rows: 2
+  language: "en"
