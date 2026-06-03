@@ -1,6 +1,8 @@
 ---
 org_domain_name: kentville.strollopia.com
+viewer: 'https://kentville.viewer.strollopia.com'
 main_admin_email: info@kentvillebusiness.ca
+main_admin_name: 'Admin'
 main_admin_password: changeme123
 display_name: 'Downtown Kentville Business'
 allows_anonymous: No
