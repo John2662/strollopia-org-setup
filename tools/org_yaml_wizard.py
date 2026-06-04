@@ -9,6 +9,8 @@ import sys
 
 import yaml
 
+from post_org_setup import post_org_setup
+
 
 # ---------------------------------------------------------------------------
 # Input helpers
@@ -504,7 +506,7 @@ def _delete_draft(output_dir, org_domain_name):
 # Orchestration
 # ---------------------------------------------------------------------------
 
-def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-data/", start_step=1):
+def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-data/"):
     """Run wizard steps and return the complete org config dict.
 
     Parameters
@@ -512,13 +514,13 @@ def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-da
     defaults : dict
         Wizard default values loaded from wizard_defaults.yaml.
     existing : dict | None
-        Previously saved config (for --edit mode).
+        Previously saved config (for --edit or --resume mode).  Every value
+        in this dict is offered as the default for its prompt so the user
+        can press Enter to keep it or retype to correct it.
     org_domain_name : str | None
         Pre-fill for Step 1's domain prompt.
     output_dir : str
         Base directory for org data (used for draft saving).
-    start_step : int
-        Step number to start from (1-8). Steps before this are skipped.
     """
     if existing is None:
         existing = {}
@@ -527,16 +529,13 @@ def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-da
     print("  Strollopia Org Setup Wizard")
     print("=" * 50)
 
-    config = dict(existing)
+    if existing:
+        print("\nPrevious answers are shown in [brackets] — press Enter to keep them.")
+
+    config = {}
 
     # Resolve the domain for draft saving — needed even when resuming
-    draft_domain = org_domain_name or config.get("org_domain_name")
-
-    if start_step > 1:
-        print(f"\nResuming from step {start_step}. Completed steps:")
-        for s in range(1, start_step):
-            print(f"  Step {s}: {STEP_NAMES.get(s, '?')} - done")
-        print()
+    draft_domain = org_domain_name or existing.get("org_domain_name")
 
     step_funcs = {
         1: lambda: step_org_identity(defaults, existing, org_domain_name=org_domain_name),
@@ -550,7 +549,7 @@ def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-da
     }
 
     try:
-        for step_num in range(start_step, 9):
+        for step_num in range(1, 9):
             result = step_funcs[step_num]()
             config.update(result)
 
@@ -567,19 +566,13 @@ def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-da
     except (KeyboardInterrupt, EOFError):
         print("\n\nInterrupted.")
         if draft_domain:
-            # Save whatever we have so far
-            if config.get("org_domain_name") or org_domain_name:
-                draft_config = dict(config)
-                # _wizard_step tracks last *completed* step; current step was not completed
-                # so we keep whatever was saved by the last successful step
-                draft = _draft_path(output_dir, draft_domain)
-                if os.path.exists(draft):
-                    print(f"Draft saved to: {draft}")
-                else:
-                    # No step completed yet — nothing to save
-                    print("No steps were completed. Nothing saved.")
+            draft = _draft_path(output_dir, draft_domain)
+            if os.path.exists(draft):
+                print(f"Draft saved to: {draft}")
+            else:
+                print("No steps were completed. Nothing saved.")
             print(
-                f"Resume with: python tools/org_yaml_wizard.py {draft_domain} --resume"
+                f"Resume with: python tools/org_yaml_wizard.py {draft_domain} --review"
             )
         sys.exit(1)
 
@@ -635,6 +628,16 @@ def write_org_setup(config, output_dir):
     return yaml_path
 
 
+def _offer_post_to_server(yaml_path):
+    """Ask whether to post the org-setup.yaml to the Strollopia server."""
+    print("\n=== Post to Server ===\n")
+
+    if not ask_yes_no("Post this org config to the server?", default=False):
+        return
+
+    post_org_setup(yaml_path)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="CLI wizard to build org-setup.yaml for Strollopia organizations."
@@ -645,9 +648,9 @@ def main():
         help="Org domain name (e.g. myorg.strollopia.com). Required unless --edit is used.",
     )
     parser.add_argument(
-        "--resume",
+        "--review",
         action="store_true",
-        help="Resume a previously interrupted wizard run from the draft file",
+        help="Re-run the wizard with previous answers as defaults so you can review and correct them",
     )
     parser.add_argument(
         "--output-dir",
@@ -671,11 +674,11 @@ def main():
     if not args.edit and not args.org_domain_name:
         parser.error("org_domain_name is required unless --edit is provided")
 
-    if args.resume and not args.org_domain_name:
-        parser.error("org_domain_name is required with --resume")
+    if args.review and not args.org_domain_name:
+        parser.error("org_domain_name is required with --review")
 
-    if args.resume and args.edit:
-        parser.error("--resume and --edit cannot be used together")
+    if args.review and args.edit:
+        parser.error("--review and --edit cannot be used together")
 
     # Load defaults
     defaults_path = args.defaults
@@ -689,7 +692,6 @@ def main():
     # Determine org_domain_name and existing config
     existing = {}
     org_domain_name = args.org_domain_name
-    start_step = 1
 
     if args.edit:
         # --edit mode: derive domain from existing YAML
@@ -701,19 +703,24 @@ def main():
         org_domain_name = existing.get("org_domain_name")
         print(f"Loaded existing config from {args.edit}")
 
-    elif args.resume:
-        # --resume mode: load draft
+    elif args.review:
+        # --review mode: load draft or finished org-setup.yaml, re-run all steps with saved values
         draft_config, last_step = _load_draft(args.output_dir, org_domain_name)
-        if draft_config is None or last_step == 0:
-            print(f"Error: no draft found for {org_domain_name}")
-            print(f"  Expected: {_draft_path(args.output_dir, org_domain_name)}")
-            sys.exit(1)
-        existing = draft_config
-        start_step = last_step + 1
-        if start_step > 8:
-            print("All steps already completed. Running review step.")
-            start_step = 8  # re-run last step to be safe
-        print(f"Resuming {org_domain_name} from step {start_step} ({STEP_NAMES.get(start_step, '?')})")
+        if draft_config is not None:
+            existing = draft_config
+            print(f"Loaded draft for {org_domain_name} (completed through step {last_step}: {STEP_NAMES.get(last_step, '?')})")
+        else:
+            # No draft — try the finished org-setup.yaml
+            yaml_path = os.path.join(args.output_dir, org_domain_name, "org-setup.yaml")
+            if not os.path.exists(yaml_path):
+                print(f"Error: no draft or org-setup.yaml found for {org_domain_name}")
+                print(f"  Looked for: {_draft_path(args.output_dir, org_domain_name)}")
+                print(f"         and: {yaml_path}")
+                sys.exit(1)
+            with open(yaml_path) as f:
+                existing = yaml.safe_load(f) or {}
+            print(f"Loaded existing config from {yaml_path}")
+        print("All steps will be re-run with your previous answers as defaults.")
 
     else:
         # New org: check if directory already exists
@@ -731,7 +738,6 @@ def main():
         existing,
         org_domain_name=org_domain_name,
         output_dir=args.output_dir,
-        start_step=start_step,
     )
 
     # Step 9: Review & Write
@@ -757,6 +763,9 @@ def main():
             print(f"    Media: {os.path.join(org_dir, map_name, 'media')}/")
 
         print("\nDone!")
+
+        # Offer to post the config to the server
+        _offer_post_to_server(path)
     else:
         print("Aborted. No files written.")
 

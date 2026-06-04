@@ -8,7 +8,8 @@ application to do.
 
 You can stop the wizard at any time by pressing Ctrl+C. Your progress is saved
 automatically, and you can pick up where you left off by running the wizard
-again with --resume.
+again with --review. Every step will be shown again with your previous answers
+pre-filled — just press Enter to keep a value, or retype it to correct it.
 
 
 Step 1: Org Identity

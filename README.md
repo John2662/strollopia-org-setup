@@ -9,6 +9,7 @@ strollopia-org-setup/
 ├── tools/
 │   ├── org_yaml_wizard.py      # Interactive wizard to create org-setup.yaml
 │   ├── wizard_defaults.yaml    # Default values used by the wizard
+│   ├── post_org_setup.py       # Post org-setup.yaml to the server
 │   ├── strollopia_import.py    # Unified data import tool
 │   └── api_client.py           # API helpers
 │
@@ -36,19 +37,34 @@ pip install -r requirements.txt
 # Start the wizard for a new org
 python tools/org_yaml_wizard.py myorg.strollopia.com
 
-# Resume a wizard that was interrupted (Ctrl+C)
-python tools/org_yaml_wizard.py myorg.strollopia.com --resume
+# Review/correct a draft after interrupting (Ctrl+C)
+python tools/org_yaml_wizard.py myorg.strollopia.com --review
 
 # Edit an existing org config
 python tools/org_yaml_wizard.py --edit org-data/myorg.strollopia.com/org-setup.yaml
 ```
 
 The wizard saves progress after each step, so you can press Ctrl+C at any time
-and resume later with `--resume`. On completion it writes `org-setup.yaml` and
-creates the directory structure under `org-data/`.
+and pick up later with `--review`. The review flag re-runs every step with your
+previous answers as defaults — just press Enter to keep a value or retype it to
+correct it. On completion the wizard writes `org-setup.yaml` and creates the
+directory structure under `org-data/`.
 
 For a detailed explanation of every wizard step (suitable for end-users and the
 website team), see **[wizard-guide.txt](wizard-guide.txt)**.
+
+## Posting an Org to the Server
+
+After the wizard writes `org-setup.yaml`, it offers to post it to the server.
+You can also post it separately using the standalone script. A Django super-admin
+account is required (this is different from the org admin defined in the YAML).
+
+```bash
+# Post an org-setup.yaml to the server (prompts for super-admin credentials)
+python tools/post_org_setup.py myorg.strollopia.com
+```
+
+The target server is controlled by the environment variables listed below.
 
 ## Importing Data
 

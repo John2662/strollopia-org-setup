@@ -1,25 +1,39 @@
 ---
 org_domain_name: kentville.strollopia.com
-viewer: 'https://kentville.viewer.strollopia.com'
-main_admin_email: info@kentvillebusiness.ca
-main_admin_name: 'Admin'
+viewer: https://kentville.viewer.strollopia.com
+display_name: '"kentville Maps"'
+tag_line: '"Stroll through kentville"'
+main_admin_email: john2662@gmail.com
+main_admin_name: Admin
 main_admin_password: changeme123
-display_name: 'Downtown Kentville Business'
-allows_anonymous: No
-map_default_lat: 45.0752
-map_default_lng: -64.4943
+allows_anonymous: true
+anonymous_settings:
+  period: 3600
+  max_anon: 10
+  org_key: nceruncuerhgv
+restrict_public_map: false
+map_default_lat: 45.0
+map_default_lng: 64.2
 categories:
-  Art: ['Contemporary', 'Historical', 'Modern', 'Exhibitions', 'other']
-  Events: ['Workshops', 'Lectures', 'Tours', 'Conferences', 'other']
-  Mural: ['Mural', 'other']
-  other: ['other']
-mediatypes: ['richtext', 'image', 'audio', 'video']
+  Mural:
+    - Mural
+  Other:
+    - Other
+mediatypes:
+  - richtext
+  - image
+  - audio
 layouts:
-  text: ['rt1:richtext']
-  text2: ['rt1:richtext', 'rt2:richtext']
-  image: ['rt1:richtext', 'i1:image']
-  audio: ['rt1:richtext', 'a1:audio']
-  layout1: ['i1:image', 'rt1:richtext', 'a1:audio', 'rt2:richtext']
+  text:
+    - rt1:richtext
+  image:
+    - rt1:richtext
+    - i1:image
 org_maps:
-  business-map: { 'is_public': true }
-  mural-map: { 'is_public': true }
+  mural-map:
+    is_public: true
+  business-map:
+    is_public: true
+ui_support:
+  datalogger: 'DL'
+  default_language: 'en'

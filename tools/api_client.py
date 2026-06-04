@@ -44,6 +44,46 @@ def print_api_base_url():
 
 # ── Authentication ────────────────────────────────────────────────
 
+def admin_login(email, password):
+    """Log in as a Django superadmin and return the auth token, or None on failure."""
+    payload = {
+        'email': email,
+        'password': password,
+        'org_domain_name': 'admin.strollopia.com',
+    }
+    try:
+        resp = requests.post(f'{get_api_base_url()}api/user/login/', json=payload)
+        data = resp.json()
+    except Exception as exc:
+        print(f'Login attempt failed: {exc}')
+        return None
+    if 'token_key' not in data:
+        print(f'Login attempt failed: {data}')
+        return None
+    return data['token_key']
+
+
+def initialize_org_from_yaml(yaml_path, token):
+    """Upload an org-setup.yaml file to create/initialize an organization.
+
+    Returns (success: bool, response_data: dict or str).
+    """
+    headers = {'Authorization': f'Token {token}'}
+    with open(yaml_path, 'rb') as f:
+        resp = requests.post(
+            f'{get_api_base_url()}api/core/admin/organizations/initialize/yaml/',
+            headers=headers,
+            files={'file': (os.path.basename(yaml_path), f, 'text/yaml')},
+        )
+    try:
+        data = resp.json()
+    except Exception:
+        data = resp.text[:500]
+    if resp.status_code == 201:
+        return True, data
+    return False, f'HTTP {resp.status_code}: {data}'
+
+
 def login(email, password, org_domain_name):
     """Log in and return (token, user_pk) or raise on failure."""
     payload = {
