@@ -1,0 +1,82 @@
+---
+org_domain_name: wolfville.strollopia.com
+viewer: https://wolfville.viewer.strollopia.com
+display_name: '"Wolfville Maps"'
+tag_line: '"Stroll through Wolfville"'
+main_admin_email: john2662@gmail.com
+main_admin_name: Admin
+main_admin_password: changeme123
+allows_anonymous: true
+anonymous_settings:
+  period: 3600
+  max_anon: 10
+  org_key: nceruncuerhgv
+restrict_public_map: false
+map_default_lat: 45.092
+map_default_lng: -64.362
+categories:
+  Health & Wellness:
+    - Health & Wellness
+  Food & Beverages:
+    - Food & Beverages
+  Bar:
+    - Bar
+  Cafe:
+    - Cafe
+  Food:
+    - Food
+  Shopping/Retail:
+    - Shopping/Retail
+  Recreation:
+    - Recreation
+  Professional Services:
+    - Professional Services
+  Personal Services:
+    - Personal Services
+  Accommodations:
+    - Accommodations
+  Parking:
+    - Parking
+  Gov Services:
+    - Gov Services
+  Support:
+    - Support
+  Urgent Medical Services:
+    - Urgent Medical Services
+  Repair:
+    - Repair
+  Structure:
+    - Structure
+  Other:
+    - Other
+mediatypes:
+  - richtext
+  - image
+  - audio
+layouts:
+  text:
+    - rt1:richtext
+  image:
+    - rt1:richtext
+    - i1:image
+org_maps:
+  downtown:
+    is_public: true
+    in_public_viewer_list: true
+    anon_post_target: true
+  business-map:
+    is_public: true
+    in_public_viewer_list: true
+ui_support:
+  datalogger: 'DL'
+  default_language: 'en'
+  ui_config:
+    app_preferences:
+      data_logger_only: true
+      data_logger_values:
+        language: en
+        target_map: downtown
+        layout_card: image
+        field_key_array:
+          - richtext: rt1
+          - image: i1

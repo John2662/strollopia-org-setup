@@ -1,0 +1,826 @@
+{
+  "832 boul. des Acadiens, Bertrand, NB E1W 1H3, Canada": {
+    "lat": "47.7570880",
+    "lng": "-65.0666782"
+  },
+  "8 Bayside Dr, Saint John, NB E2J 1A2, Canada": {
+    "lat": "45.2864054",
+    "lng": "-66.0425903"
+  },
+  "385 Queen St., Fredericton, NB E3B 1B2, Canada": {
+    "lat": "45.9634730",
+    "lng": "-66.6442418"
+  },
+  "1966 Mountain Rd, Moncton, NB E1G 1A9, Canada": {
+    "lat": "46.1226150",
+    "lng": "-64.8541735"
+  },
+  "475 St. George St, Moncton, NB E1C 1Y4, Canada": {
+    "lat": "46.0912127",
+    "lng": "-64.7825742"
+  },
+  "164 Collishaw St, Moncton, NB E1C 9R3, Canada": {
+    "lat": "46.0959836",
+    "lng": "-64.8053933"
+  },
+  "1245 Hanwell Rd, Fredericton, NB E3C 1A6, Canada": {
+    "lat": "45.9496252",
+    "lng": "-66.6901198"
+  },
+  "2285 King George Hwy, Miramichi, NB E1V 6S1, Canada": {
+    "lat": "47.0325085",
+    "lng": "-65.4859297"
+  },
+  "265 route 255, Saint Andr\u00e9, NB E3Y 3R3, Canada": {
+    "lat": "47.0796875",
+    "lng": "-67.7630627"
+  },
+  "5664 NB-10, Hardwood Ridge, NB E4A 1A4": {
+    "lat": "46.1362582",
+    "lng": "-66.0430250"
+  },
+  "Main St, New Brunswick E4W, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "541 Pinewood Rd., Riverview, NB, E1B 5M7, Canada": {
+    "lat": "46.0521154",
+    "lng": "-64.7911369"
+  },
+  "315 Baig Blvd. Moncton, NB E1E 1E1": {
+    "lat": "46.0744891",
+    "lng": "-64.8283164"
+  },
+  "145 Traynor St, Riverview, NB E1B 3B1, Canada": {
+    "lat": "46.0573275",
+    "lng": "-64.8164138"
+  },
+  "11 Rue Gallant, Saint-Quentin, NB E8A 2N5, Canada": {
+    "lat": "47.5071728",
+    "lng": "-67.3913600"
+  },
+  "18 Wheeler Rd, Four Corners, NB E4G 2W2, Canada": {
+    "lat": "45.7360659",
+    "lng": "-65.4933615"
+  },
+  "16260 NB-105, DSL de Drummond, NB, E3Y 2G5, Canada": {
+    "lat": "47.0401693",
+    "lng": "-67.7301541"
+  },
+  "88 Roseberry St., Campbellton, NB, E3N 5B8, Canada": {
+    "lat": "48.0050418",
+    "lng": "-66.6745488"
+  },
+  "17 University Ave, Miramichi, NB E1N 3A8, Canada": {
+    "lat": "47.0184175",
+    "lng": "-65.4601912"
+  },
+  "12073 NB-8, Upper Blackville, NB E9B 1Z8, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "686 Riverside Dr, Fredericton, NB E3A 8C2, Canada": {
+    "lat": "45.9356615",
+    "lng": "-66.6094702"
+  },
+  "119 Irving Blvd, Bouctouche, NB, E4S 3K3, Canada": {
+    "lat": "46.4671918",
+    "lng": "-64.7289099"
+  },
+  "152 Hanington, Shediac, NB, E4P 1W4, Canada": {
+    "lat": "46.2192690",
+    "lng": "-64.5653656"
+  },
+  "1567 Mountain Rd, Moncton, NB E1G 1A3, Canada": {
+    "lat": "46.1161215",
+    "lng": "-64.8383333"
+  },
+  "267 Restigouche Rd, Oromocto, NB E2V 2H1, Canada": {
+    "lat": "45.8403260",
+    "lng": "-66.4980850"
+  },
+  "109 Ludlow St, Saint John, NB E2M 1C2, Canada": {
+    "lat": "45.2595267",
+    "lng": "-66.0755303"
+  },
+  "151 Hanington Rd, Shediac, NB E4P 9G8, Canada": {
+    "lat": "46.2192690",
+    "lng": "-64.5653656"
+  },
+  "950 Mountain Rd, Moncton, NB E1C 2S2, Canada": {
+    "lat": "46.1019702",
+    "lng": "-64.8142145"
+  },
+  "800 St. Mary's St., Fredericton, NB, E3G 8S8": {
+    "lat": "45.9883570",
+    "lng": "-66.6324288"
+  },
+  "171 McAllister Dr., Saint John, NB E2J 2S6": {
+    "lat": "45.3071268",
+    "lng": "-66.0108927"
+  },
+  "525 Dundonald St, Fredericton, NB E3B 1X5, Canada": {
+    "lat": "45.9543261",
+    "lng": "-66.6474905"
+  },
+  "Wentworth Street, Miramichi, NB E1N 3A8, Canada": {
+    "lat": "47.0299324",
+    "lng": "-65.4689199"
+  },
+  "156 Pleasant St, Moncton, NB E1A 2V5, Canada": {
+    "lat": "46.1057893",
+    "lng": "-64.7626423"
+  },
+  "71 Jane St, Miramichi, NB E1V 2S8, Canada": {
+    "lat": "46.9983689",
+    "lng": "-65.5665041"
+  },
+  "242 Main St., Hampton, NB, E5N 6B8, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "26 Trites Rd, Riverview, NB E1B 2V6, Canada": {
+    "lat": "46.0568234",
+    "lng": "-64.8186997"
+  },
+  "1099 Golden Grove Rd, Saint John, NB E2H 2X1, Canada": {
+    "lat": "45.3399542",
+    "lng": "-65.9764067"
+  },
+  "387 Sunset Dr, Fredericton, NB E3A 1B3, Canada": {
+    "lat": "45.9842472",
+    "lng": "-66.6654702"
+  },
+  "40 Morton Ave, Moncton, NB E1A 3H8, Canada": {
+    "lat": "46.1122685",
+    "lng": "-64.7766582"
+  },
+  "280 Main St, Suite 5, Fredericton, NB E3A 1C9, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "5 Trinity Ave, Fredericton, NB E3C 0B7, Canada": {
+    "lat": "45.9312221",
+    "lng": "-66.6618003"
+  },
+  "11 Fashion Drive, Saint John, NB E2J 0A7, Canada": {
+    "lat": "45.3020963",
+    "lng": "-66.0265121"
+  },
+  "587a Mountain Rd, Moncton, NB E1C 6S1, Canada": {
+    "lat": "46.1042505",
+    "lng": "-64.8189453"
+  },
+  "533 Westmoreland Rd, Suite 3, Saint John, NB E2J 2G5": {
+    "lat": null,
+    "lng": null
+  },
+  "15 Fulton Ln, Saint John, NB E2H 2W4, Canada": {
+    "lat": "45.3272985",
+    "lng": "-66.0273278"
+  },
+  "441 NB-121, Bloomfield, NB E5N 4T3, Canada": {
+    "lat": "45.6097364",
+    "lng": "-65.7313454"
+  },
+  "74 St. George St, Moncton, NB E1C 1T3, Canada": {
+    "lat": "46.0895932",
+    "lng": "-64.7904179"
+  },
+  "620 Coverdale Rd, Riverview, NB E1B 3K6, Canada": {
+    "lat": "46.0619126",
+    "lng": "-64.8105052"
+  },
+  "150 Cliffe St, Fredericton, NB E3A 0A1, Canada": {
+    "lat": "45.9726295",
+    "lng": "-66.6311520"
+  },
+  "187 Botsford St, Moncton, NB E1C 4X4, Canada": {
+    "lat": "46.0962897",
+    "lng": "-64.7775537"
+  },
+  "460 Mountain Rd, Moncton, NB E1C 0K8, Canada": {
+    "lat": "46.0963750",
+    "lng": "-64.7932868"
+  },
+  "1061 NB-103, Woodstock, NB E7M 3C4, Canada": {
+    "lat": "46.1431148",
+    "lng": "-67.5846779"
+  },
+  "1299 Hanwell Rd, Fredericton, NB E3C 1A7, Canada": {
+    "lat": "45.9444589",
+    "lng": "-66.6978365"
+  },
+  "176 Main St, Fredericton, NB E3A 1C8, Canada": {
+    "lat": "45.9773952",
+    "lng": "-66.6528277"
+  },
+  "50 King St., St. Stephen, NB E3L 2C1": {
+    "lat": "45.1936417",
+    "lng": "-67.2756268"
+  },
+  "363 Mountain Rd, Moncton, NB E1C 2M7, Canada": {
+    "lat": "46.0966038",
+    "lng": "-64.7927024"
+  },
+  "78 Catherwood St, Saint John, NB E2M 1X7, Canada": {
+    "lat": "45.2537030",
+    "lng": "-66.0970042"
+  },
+  "139 Duke St, Miramichi, NB E1N 1H7, Canada": {
+    "lat": "47.0336552",
+    "lng": "-65.4639218"
+  },
+  "3990 NB-114, Hopewell Cape, NB E4H 3J2, Canada": {
+    "lat": "45.8217679",
+    "lng": "-64.5933208"
+  },
+  "231 Pleasant St, Miramichi, NB E1V 1Y6, Canada": {
+    "lat": "47.0002038",
+    "lng": "-65.5669528"
+  },
+  "1185 Mountain Rd, Moncton, NB E1C 2T4, Canada": {
+    "lat": "46.1080779",
+    "lng": "-64.8266160"
+  },
+  "1127 Champlain St, Dieppe, NB E1A 1P9, Canada": {
+    "lat": "46.0932299",
+    "lng": "-64.7607299"
+  },
+  "20 Centennial Dr, Moncton, NB E1E 4E4, Canada": {
+    "lat": "46.0834431",
+    "lng": "-64.8217605"
+  },
+  "300 Elmwood Dr, Moncton, NB E1A 6V2, Canada": {
+    "lat": "46.1123476",
+    "lng": "-64.7748218"
+  },
+  "26 Bridge St, Sackville, NB E4L 3N5, Canada": {
+    "lat": "45.8976891",
+    "lng": "-64.3664862"
+  },
+  "87 Lansdowne Ave, Saint John, NB E2K 3A1, Canada": {
+    "lat": "45.2755365",
+    "lng": "-66.0772664"
+  },
+  "275 Main St, Fredericton, NB, E3A 1E1": {
+    "lat": "45.9763264",
+    "lng": "-66.6476866"
+  },
+  "26 Eveleigh St., Sussex, NB, E4E 2N8, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "1 Prom. des V\u00e9t\u00e9rans, Edmundston, NB E3V 4E6, Canada": {
+    "lat": "47.3618326",
+    "lng": "-68.3283181"
+  },
+  "1010 Hanwell Rd, Fredericton, NB E3B 6A4, Canada": {
+    "lat": "45.9500785",
+    "lng": "-66.6888089"
+  },
+  "1150 Prospect St, Fredericton, NB E3B 3C1, Canada": {
+    "lat": "45.9413523",
+    "lng": "-66.6669327"
+  },
+  "371 Bishop Dr, Fredericton, NB E3C 2M6, Canada": {
+    "lat": "45.9437260",
+    "lng": "-66.6778043"
+  },
+  "15 Plaza Blvd, Moncton, NB E1C 0E8, Canada": {
+    "lat": "46.1150655",
+    "lng": "-64.8267355"
+  },
+  "212 McAllister Dr, Saint John, NB E2L 3S2, Canada": {
+    "lat": "45.3105645",
+    "lng": "-66.0189596"
+  },
+  "60 Rue du Vestiaire, Sh\u00e9diac, NB E4P 2W3, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "1330 B Chem. Tobique, Drummond, NB E3Y 2N7, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "13 River St, Kentville, NS B4N 1G8, Canada": {
+    "lat": "45.0798704",
+    "lng": "-64.4982775"
+  },
+  "7106 Nova Scotia Trunk 1, Coldbrook, NS B4R 1C1, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "77 Crescent Dr, New Minas, NS B4N 3G7, Canada": {
+    "lat": "45.0697096",
+    "lng": "-64.4619706"
+  },
+  "5657 Spring Garden Rd, Halifax, NS B3J 1H1, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "14384 Nova Scotia Trunk 1, Wilmot, NS B0P 1W0, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "12 Murdock MacKay Ct, Lower Sackville, NS B4C 3J4, Canada": {
+    "lat": "44.7575717",
+    "lng": "-63.6551988"
+  },
+  "68 Albert St, Windsor, NS B0N 2T0, Canada": {
+    "lat": "44.9923972",
+    "lng": "-64.1399646"
+  },
+  "592a Sackville Dr, Lower Sackville, NS B4C 2S3, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "390 Main St, Wolfville, NS B4P 1C9, Canada": {
+    "lat": "45.0917692",
+    "lng": "-64.3603241"
+  },
+  "4 Commercial St #9323, New Minas, NS B4N 3E9, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "8759 Commercial St, New Minas, NS B4N 3C4, Canada": {
+    "lat": "45.0717849",
+    "lng": "-64.4728820"
+  },
+  "246 Main St, Tatamagouche, NS B0K 1V0, Canada": {
+    "lat": "45.7118608",
+    "lng": "-63.2906597"
+  },
+  "361 Willow St, Truro, NS B2N 5A6, Canada": {
+    "lat": "45.3524747",
+    "lng": "-63.2937121"
+  },
+  "Bedford, NS, Canada": {
+    "lat": "44.7303901",
+    "lng": "-63.6582365"
+  },
+  "31 Temple Terrace, Lower Sackville, NS B4C 0A7, Canada": {
+    "lat": "44.7589879",
+    "lng": "-63.6513712"
+  },
+  "1595 Bedford Hwy, Bedford, NS B4A 3Y4, Canada": {
+    "lat": "44.7332533",
+    "lng": "-63.6538689"
+  },
+  "184 Arthur St, Truro, NS B2N 1Y4, Canada": {
+    "lat": "45.3620783",
+    "lng": "-63.2792521"
+  },
+  "815 Main St, Sydney Mines, NS B1V 2L9, Canada": {
+    "lat": "46.2422469",
+    "lng": "-60.2317368"
+  },
+  "1606 Lake Rd, Shelburne, NS B0T 1W0, Canada": {
+    "lat": "43.7492064",
+    "lng": "-65.3097898"
+  },
+  "2 Central Ave, Wolfville, NS B4P 2A6, Canada": {
+    "lat": "45.0918621",
+    "lng": "-64.3622152"
+  },
+  "6 Willow St, Hantsport, NS B0P 1P0, Canada": {
+    "lat": "45.0642534",
+    "lng": "-64.1813173"
+  },
+  "21 Convent Rd, Enfield, NS B2T 1C9, Canada": {
+    "lat": "44.9414536",
+    "lng": "-63.5363885"
+  },
+  "134 James St, New Glasgow, NS B2H 0A7, Canada": {
+    "lat": "45.5874665",
+    "lng": "-62.6429426"
+  },
+  "8498 Nova Scotia Trunk 7, Musquodoboit Harbour, NS B0J 2L0, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "91 Main St, Tatamagouche, NS B0K 1V0, Canada": {
+    "lat": "45.7157545",
+    "lng": "-63.2990017"
+  },
+  "1595 Dresden Row, Halifax, NS B3J 2K4, Canada": {
+    "lat": "44.6447094",
+    "lng": "-63.5786938"
+  },
+  "32 Glendale Ave, Lower Sackville, NS B4C 3M1, Canada": {
+    "lat": "44.7595487",
+    "lng": "-63.6569576"
+  },
+  "3667 Strawberry Hill St, Halifax, NS B3K 5A8, Canada": {
+    "lat": "44.6618934",
+    "lng": "-63.6193601"
+  },
+  "205 Damascus Rd, Bedford, NS B4A 0C2, Canada": {
+    "lat": "44.7502807",
+    "lng": "-63.6466609"
+  },
+  "125 Main St, Dartmouth, NS B2X 1R6, Canada": {
+    "lat": "44.6822132",
+    "lng": "-63.5399053"
+  },
+  "971 Cole Harbour Rd, Dartmouth, NS B2V 1E8, Canada": {
+    "lat": "44.6711897",
+    "lng": "-63.5000467"
+  },
+  "118 Wyse Rd, Dartmouth, NS B3A 1N7, Canada": {
+    "lat": "44.6715358",
+    "lng": "-63.5784649"
+  },
+  "287 Main St, Yarmouth, NS B5A 1E3, Canada": {
+    "lat": "43.8349118",
+    "lng": "-66.1199855"
+  },
+  "18 Water St, Oxford, NS B0M 1P0, Canada": {
+    "lat": "45.7360653",
+    "lng": "-63.8671225"
+  },
+  "505 King St, Bridgewater, NS B4V 1B3, Canada": {
+    "lat": "44.3769335",
+    "lng": "-64.5181238"
+  },
+  "9256 Commercial St, New Minas, NS B4N 4A9, Canada": {
+    "lat": "45.0708399",
+    "lng": "-64.4724137"
+  },
+  "85 Damascus Rd Phase 1, Bedford, NS B4A 0C2, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "610 E River Rd, New Glasgow, NS B2H 3S2, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "966 Prince St, Truro, NS B2N 1H8, Canada": {
+    "lat": "45.3640366",
+    "lng": "-63.2727028"
+  },
+  "484 Main St, Kentville, NS B4N 1L3, Canada": {
+    "lat": "45.0775123",
+    "lng": "-64.5000781"
+  },
+  "6931 Nova Scotia Trunk 1, Coldbrook, NS B4R 1B6, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "1 Aberdeen St., Kentville, NS B4N 2M9, Canada": {
+    "lat": "45.0773473",
+    "lng": "-64.4964954"
+  },
+  "3486 Prescott St, Halifax, NS B3K 4Y4, Canada": {
+    "lat": "44.6637729",
+    "lng": "-63.6108904"
+  },
+  "291 Radcliffe Dr, Halifax, NS B3S 1H8, Canada": {
+    "lat": "44.6615927",
+    "lng": "-63.6655906"
+  },
+  "440 Herring Cove Rd, Halifax, NS B3R 1W4, Canada": {
+    "lat": "44.6070011",
+    "lng": "-63.6140067"
+  },
+  "165 Chain Lake Dr, Halifax, NS B3S 1B3, Canada": {
+    "lat": "44.6450833",
+    "lng": "-63.6688969"
+  },
+  "265 Susie Lake Crescent, Halifax, NS B3S, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "2383 Agricola St, Halifax, NS B3K 4B8, Canada": {
+    "lat": "44.6527609",
+    "lng": "-63.5895543"
+  },
+  "1711 Barrington St, Halifax, NS B3J 2A4, Canada": {
+    "lat": "44.6474863",
+    "lng": "-63.5740555"
+  },
+  "5896 Spring Garden Rd, Halifax, NS B3H 3B8, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "334 Herring Cove Rd, Halifax, NS B3R 1V9, Canada": {
+    "lat": "44.6131085",
+    "lng": "-63.6165199"
+  },
+  "2240 Gottingen St, Halifax, NS B3K 1C3, Canada": {
+    "lat": "44.6535410",
+    "lng": "-63.5858093"
+  },
+  "1530 Queen St, Halifax, NS B3J 2H8, Canada": {
+    "lat": "44.6437066",
+    "lng": "-63.5766837"
+  },
+  "1086 Queen St, Halifax, NS B3H 2R9, Canada": {
+    "lat": "44.6369054",
+    "lng": "-63.5730465"
+  },
+  "1869 Upper Water St, Halifax, NS B3J 1S7, Canada": {
+    "lat": "44.6501813",
+    "lng": "-63.5728883"
+  },
+  "1539 Birmingham St, Halifax, NS B3J 2J6, Canada": {
+    "lat": "44.6438358",
+    "lng": "-63.5771492"
+  },
+  "2055 North Park St, Halifax, NS B3K 4B2, Canada": {
+    "lat": "44.6504762",
+    "lng": "-63.5858689"
+  },
+  "3548 Novalea Dr, Halifax, NS B3K 3E8, Canada": {
+    "lat": "44.6692629",
+    "lng": "-63.6087222"
+  },
+  "201 Chain Lake Dr, Halifax, NS B3S 1C8, Canada": {
+    "lat": "44.6483992",
+    "lng": "-63.6755531"
+  },
+  "5765 May St, Halifax, NS B3K 1R8, Canada": {
+    "lat": "44.6567742",
+    "lng": "-63.5962245"
+  },
+  "375 Pleasant St Unit 101, Dartmouth, NS B2Y 4N4, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "800A Windmill Rd, Dartmouth, NS B3B 1T3, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "25 Hebron Wy, St. John's, NL A1A 0M1, Canada": {
+    "lat": "47.6160793",
+    "lng": "-52.7260278"
+  },
+  "33 Symonds Ave, St. John's, NL A1E 1S6, Canada": {
+    "lat": "47.5504492",
+    "lng": "-52.7294385"
+  },
+  "116 Main St, Grand Falls-Windsor, NL A2B 1J7, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "673 Topsail Rd, St. John's, NL A1E 2E3, Canada": {
+    "lat": "47.5236719",
+    "lng": "-52.7715944"
+  },
+  "277 Marine Dr, Clarenville, NL A5A 1N1, Canada": {
+    "lat": "48.1713731",
+    "lng": "-53.9615152"
+  },
+  "570 Water St, St. John's, NL A1E 1B8, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "Ville Marie Dr, Marystown, NL A0E 2M0, Canada": {
+    "lat": "47.1701334",
+    "lng": "-55.1498810"
+  },
+  "1 Waterford Bridge Rd, St. John's, NL A1E 1C5, Canada": {
+    "lat": "47.5472230",
+    "lng": "-52.7209659"
+  },
+  "1 Station Rd, Glovertown, NL A0G 2L0, Canada": {
+    "lat": "48.6644689",
+    "lng": "-54.0711010"
+  },
+  "90 Roe Ave, Gander, NL A1V 1W6, Canada": {
+    "lat": "48.9589472",
+    "lng": "-54.5925981"
+  },
+  "323 Kenmount Rd, St. John's, NL A1B 3P9, Canada": {
+    "lat": "47.5522684",
+    "lng": "-52.7742573"
+  },
+  "160 Main St, Lewisporte, NL A0G 3A0, Canada": {
+    "lat": "49.2447506",
+    "lng": "-55.0568768"
+  },
+  "Second St & Edinburgh Dr, Mount Pearl, NL A1N 1Y5, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "78 Main St, Milltown, NL A0H 1W0, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "245 Duckworth St, St. John's, NL A1C 1G8, Canada": {
+    "lat": "47.5622015",
+    "lng": "-52.7109193"
+  },
+  "NL-70, Newfoundland and Labrador, Canada": {
+    "lat": "47.8615646",
+    "lng": "-53.0918642"
+  },
+  "30 Main St, Fogo, NL A0G 2B0, Canada": {
+    "lat": "49.7151927",
+    "lng": "-54.2837244"
+  },
+  "38 Pearson St, St. John's, NL A1A 3R1, Canada": {
+    "lat": "47.5958356",
+    "lng": "-52.7095836"
+  },
+  "351 Kenmount Rd, St. John's, NL A1B 3R2, Canada": {
+    "lat": "47.5488472",
+    "lng": "-52.7806378"
+  },
+  "Seal Cove, NL, Canada": {
+    "lat": "49.9346116",
+    "lng": "-56.3871559"
+  },
+  "17 Main St. N., Deer Lake, NL, A8A 1W7Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "157 Airport Blvd, Gander, NL A1V 1K6, Canada": {
+    "lat": "48.9568737",
+    "lng": "-54.6091531"
+  },
+  "156 Water St, Carbonear, NL A1Y 1B9, Canada": {
+    "lat": "47.7396866",
+    "lng": "-53.2162367"
+  },
+  "407 Creston Blvd, Creston, NL A0E 1K0, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "249 Main Rd, Arnold's Cove, NL A0B 1A0, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "16 Hardy Ave, Grand Falls-Windsor, NL A2A 2P9, Canada": {
+    "lat": "48.9490160",
+    "lng": "-55.6501516"
+  },
+  "136 Main St, Stephenville, NL A2N 1J3, Canada": {
+    "lat": "48.5504254",
+    "lng": "-58.5754635"
+  },
+  "27 Park St, Grand Falls-Windsor, NL A2B 1C7, Canada": {
+    "lat": "48.9600407",
+    "lng": "-55.6634588"
+  },
+  "98 Main St W, Channel-Port aux Basques, NL A0M 1C0, Canada": {
+    "lat": "47.5725837",
+    "lng": "-59.1375154"
+  },
+  "17 Church St, Grand Bank, NL A0E 1W0, Canada": {
+    "lat": "47.1024206",
+    "lng": "-55.7577833"
+  },
+  "W End Industrial Park, Pasadena, NL A0L 1K0, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "347 Memorial Dr, Clarenville, NL A5A 1R8, Canada": {
+    "lat": "48.1471744",
+    "lng": "-53.9604120"
+  },
+  "West St, St. Anthony, NL A0K 4S0, Canada": {
+    "lat": "51.3631784",
+    "lng": "-55.5867542"
+  },
+  "6 Herald Ave, Corner Brook, NL A2H 4B4, Canada": {
+    "lat": "48.9521296",
+    "lng": "-57.9533479"
+  },
+  "Main St, Springdale, NL A0J, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "1676 Topsail Rd, Paradise, NL A1L 1Z1, Canada": {
+    "lat": "47.5277555",
+    "lng": "-52.8735494"
+  },
+  "1062 Topsail Rd, Mount Pearl, NL A1N 5G4, Canada": {
+    "lat": "47.5263441",
+    "lng": "-52.8129514"
+  },
+  "1154 Topsail Rd, Mount Pearl, NL A1N 5G4, Canada": {
+    "lat": "47.5277092",
+    "lng": "-52.8217708"
+  },
+  "156 Little Bay Rd, Springdale, NL A0J 1T0, Canada": {
+    "lat": "49.5108197",
+    "lng": "-56.1070976"
+  },
+  "51 Kenmount Rd, St. John's, NL A1B 3P8, Canada": {
+    "lat": "47.5585334",
+    "lng": "-52.7523657"
+  },
+  "274 Conception Bay Hwy, Conception Bay South, NL A1W 5K7, Canada": {
+    "lat": "47.5204368",
+    "lng": "-52.9459955"
+  },
+  "421 NL-60, Holyrood, NL A0A 2R0, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "141 Torbay Rd, St. John's, NL A1A 0K6, Canada": {
+    "lat": "47.5918160",
+    "lng": "-52.7106877"
+  },
+  "321 Freshwater Rd, St. John's, NL A1B 1C3, Canada": {
+    "lat": "47.5623998",
+    "lng": "-52.7422129"
+  },
+  "161 Kenmount Rd, St. John's, NL A1B 3P9, Canada": {
+    "lat": "47.5522684",
+    "lng": "-52.7742573"
+  },
+  "155 Belvedere Ave, Charlottetown, PE C1A 2Y9, Canada": {
+    "lat": "46.2556164",
+    "lng": "-63.1295554"
+  },
+  "391 Nelson St, Crapaud, PE C0A 1J0, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "8779 PE-6, Cavendish, PE C0A 1M0, Canada": {
+    "lat": "46.4918965",
+    "lng": "-63.3465799"
+  },
+  "27014 PE-2, Summerside, PE C1N 4J8, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "167 Minna Jane Dr., Charlottetown, PE C1E 2L9, Canada": {
+    "lat": "46.2743326",
+    "lng": "-63.1551114"
+  },
+  "107 Victoria St W, Kensington, PE C0B 1M0, Canada": {
+    "lat": "46.4338320",
+    "lng": "-63.6449548"
+  },
+  "94 Queen St, Charlottetown, PE C1A 4B1, Canada": {
+    "lat": "46.2334646",
+    "lng": "-63.1265120"
+  },
+  "68 Allen St, Charlottetown, PE C1A 2V8, Canada": {
+    "lat": "46.2480237",
+    "lng": "-63.1254041"
+  },
+  "500 Rte 4, Montague, PE C0A 1R0, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "586 Main St, Montague, PE C0A 1R0, Canada": {
+    "lat": "46.1633532",
+    "lng": "-62.6442251"
+  },
+  "255 Heather Moyse Dr, Summerside, PE C1N 5P1, Canada": {
+    "lat": "46.3899052",
+    "lng": "-63.7906428"
+  },
+  "95 Capital Dr, Charlottetown, PE C1E 1R4, Canada": {
+    "lat": "46.2652399",
+    "lng": "-63.1551581"
+  },
+  "401 Water St, Summerside, PE C1N 1C8, Canada": {
+    "lat": "46.3940760",
+    "lng": "-63.7965870"
+  },
+  "9389 Main St N, Murray River, PE C0A 1W0, Canada": {
+    "lat": "46.0148826",
+    "lng": "-62.6119150"
+  },
+  "Summerside, PE, Canada": {
+    "lat": "46.3942590",
+    "lng": "-63.7892386"
+  },
+  "79 All Weather Hwy, Summerside, PE C1N 5N5, Canada": {
+    "lat": "46.4237330",
+    "lng": "-63.8056830"
+  },
+  "2238 Ohalloran Rd, Bloomfield, PE C0B 1E0, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "30 Main St, Souris, PE C0A 2B0, Canada": {
+    "lat": "46.3563225",
+    "lng": "-62.2615230"
+  },
+  "433 Water St, Summerside, PE C1N 1C8, Canada": {
+    "lat": "46.3945998",
+    "lng": "-63.7978368"
+  },
+  "109 Water St, Summerside, PE C1N 1A8, Canada": {
+    "lat": "46.3903799",
+    "lng": "-63.7843779"
+  },
+  "19 Indian Feather Path, Ellerslie, PE C0B 1J0, Canada": {
+    "lat": null,
+    "lng": null
+  },
+  "339 University Ave, Charlottetown, PE C1A 4M8, Canada": {
+    "lat": "46.2418418",
+    "lng": "-63.1343049"
+  },
+  "101 Abegweit Blvd, Borden-Carleton, PE C0B 1X0, Canada": {
+    "lat": "46.2547170",
+    "lng": "-63.6956080"
+  }
+}

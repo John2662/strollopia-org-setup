@@ -1,8 +1,8 @@
 ---
-org_domain_name: kentville.strollopia.com
-viewer: https://kentville.viewer.strollopia.com
-display_name: '"kentville Maps"'
-tag_line: '"Stroll through kentville"'
+org_domain_name: valleyartmap.strollopia.com
+viewer: https://valleyartmap.viewer.strollopia.com
+display_name: '"Valley Art Map"'
+tag_line: '"Explore public art in the Annapolis Valley"'
 main_admin_email: john2662@gmail.com
 main_admin_name: Admin
 main_admin_password: changeme123
@@ -12,11 +12,15 @@ anonymous_settings:
   max_anon: 10
   org_key: nceruncuerhgv
 restrict_public_map: false
-map_default_lat: 45.0
-map_default_lng: 64.2
+map_default_lat: 45.09
+map_default_lng: -64.36
 categories:
+  Sculpture:
+    - Sculpture
   Mural:
     - Mural
+  Structure:
+    - Structure
   Other:
     - Other
 mediatypes:
@@ -29,21 +33,29 @@ layouts:
   image:
     - rt1:richtext
     - i1:image
+  layout1:
+    - rt1:richtext
+    - i1:image
+    - a1:audio
+    - a2:audio
 org_maps:
-  mural-map:
+  art-map:
     is_public: true
-  business-map:
-    is_public: true
+    in_public_viewer_list: true
+    anon_post_target: true
 ui_support:
   datalogger: 'DL'
   default_language: 'en'
+  languages: ['fr']
   ui_config:
     app_preferences:
       data_logger_only: true
       data_logger_values:
         language: en
-        target_map: business-map
-        layout_card: image
+        target_map: art-map
+        layout_card: layout1
         field_key_array:
           - richtext: rt1
           - image: i1
+          - audio: a1
+          - audio: a2

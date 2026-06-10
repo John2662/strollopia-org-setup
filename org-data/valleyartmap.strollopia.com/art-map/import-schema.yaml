@@ -1,0 +1,30 @@
+---
+# import-schema.yaml — Valley Art Map
+#
+# All POIs have richtext description, image, teaser audio, and in-person audio.
+
+card_layout: "layout1"
+
+poi_fields:
+  name: "name"
+  lat: "lat"
+  lng: "lng"
+
+categories:
+  category: "category"
+  subcategory: "subcategory"
+
+content_columns:
+  rt1:
+    column: "desc"
+  i1:
+    column: "image_file"
+  a1:
+    column: "teaser_file"
+  a2:
+    column: "in_person_file"
+
+options:
+  skip_existing: true
+  sleep_between_rows: 2
+  language: "en"

@@ -1,0 +1,39 @@
+---
+org_domain_name: innsbruck.strollopia.com
+viewer: innsbruck.strollopia.com
+display_name: '"Innsbruck Hikes"'
+tag_line: '"Hike Innsbruck"'
+main_admin_email: john2662@gmail.com
+main_admin_name: Admin
+main_admin_password: changeme123#
+allows_anonymous: true
+anonymous_settings:
+  period: 3600
+  max_anon: 10
+  org_key: nceruncuerhgv
+restrict_public_map: false
+map_default_lat: 47.2
+map_default_lng: 11.4
+categories:
+  Hike:
+    - trail
+  Bike:
+    - path
+mediatypes:
+  - richtext
+  - image
+  - audio
+layouts:
+  text:
+    - rt1:richtext
+  image:
+    - rt1:richtext
+    - i1:image
+org_maps:
+  hike-map:
+    is_public: true
+  bike-map:
+    is_public: true
+ui_support:
+  datalogger: 'DL'
+  default_language: 'en'

@@ -1,0 +1,80 @@
+---
+org_domain_name: climate-stories.strollopia.com
+viewer: https://climate-stories.viewer.strollopia.com
+display_name: '"Climate Stories"'
+tag_line: '"Climate action stories from the Annapolis Valley"'
+main_admin_email: john2662@gmail.com
+main_admin_name: Admin
+main_admin_password: changeme123
+allows_anonymous: true
+anonymous_settings:
+  period: 3600
+  max_anon: 10
+  org_key: nceruncuerhgv
+restrict_public_map: false
+map_default_lat: 45.09
+map_default_lng: -64.46
+categories:
+  Health & Wellness:
+    - Health & Wellness
+  Food:
+    - Food
+  Agriculture:
+    - Agriculture
+  Community Engagement:
+    - Community Engagement
+  Waste Reduction:
+    - Waste Reduction
+  Shopping/Retail:
+    - Shopping/Retail
+  Accommodations:
+    - Accommodations
+  Support:
+    - Support
+  Recreation:
+    - Recreation
+  Renewable Energy:
+    - Renewable Energy
+  Transportation:
+    - Transportation
+  Other:
+    - Other
+mediatypes:
+  - richtext
+  - image
+  - audio
+  - video
+layouts:
+  text:
+    - rt1:richtext
+  image:
+    - rt1:richtext
+    - i1:image
+  layout1:
+    - rt1:richtext
+    - i1:image
+    - a1:audio
+  layout2:
+    - rt1:richtext
+    - i1:image
+    - v1:video
+org_maps:
+  climate-map:
+    is_public: true
+    in_public_viewer_list: true
+    anon_post_target: true
+ui_support:
+  datalogger: 'DL'
+  default_language: 'en'
+  ui_config:
+    app_preferences:
+      data_logger_only: true
+      data_logger_values:
+        language: en
+        target_map: climate-map
+        layout_card: layout1
+        field_key_array:
+          - richtext: rt1
+          - image: i1
+          - audio: a1
+          - video: v1

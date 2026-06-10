@@ -1,0 +1,31 @@
+---
+# import-schema.yaml — Climate Stories map
+#
+# POIs have richtext description, optional image, and optional teaser audio/video.
+# Uses card_layout_column to select layout per row based on available media.
+
+card_layout_column: "_layout"
+
+poi_fields:
+  name: "name"
+  lat: "lat"
+  lng: "lng"
+
+categories:
+  category: "category"
+  subcategory: "subcategory"
+
+content_columns:
+  rt1:
+    column: "desc"
+  i1:
+    column: "image_file"
+  a1:
+    column: "teaser_file"
+  v1:
+    column: "teaser_video_file"
+
+options:
+  skip_existing: true
+  sleep_between_rows: 2
+  language: "en"

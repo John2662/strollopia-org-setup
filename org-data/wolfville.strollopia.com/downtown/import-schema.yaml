@@ -1,0 +1,26 @@
+---
+# import-schema.yaml — Wolfville Downtown map
+#
+# POIs have richtext description and optional image. No audio content.
+
+card_layout_column: "_layout"
+
+poi_fields:
+  name: "name"
+  lat: "lat"
+  lng: "lng"
+
+categories:
+  category: "category"
+  subcategory: "subcategory"
+
+content_columns:
+  rt1:
+    column: "desc"
+  i1:
+    column: "image_file"
+
+options:
+  skip_existing: true
+  sleep_between_rows: 2
+  language: "en"

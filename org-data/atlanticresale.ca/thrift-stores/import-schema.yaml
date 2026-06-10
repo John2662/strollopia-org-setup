@@ -1,0 +1,31 @@
+---
+# import-schema.yaml — Atlantic Resale thrift stores (all four provinces)
+
+card_layout: "text"
+
+poi_fields:
+  name: "Store Name"
+  lat: "latitude"
+  lng: "longitude"
+
+schedule:
+  monday: "Monday"
+  tuesday: "Tuesday"
+  wednesday: "Wednesday"
+  thursday: "Thursday"
+  friday: "Friday"
+  saturday: "Saturday"
+  sunday: "Sunday"
+
+categories:
+  category: "_category"
+  subcategory: "Province_Full"
+
+content_columns:
+  rt1:
+    column: "_blurb"
+
+options:
+  skip_existing: true
+  sleep_between_rows: 2
+  language: "en"

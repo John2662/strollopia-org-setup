@@ -1,8 +1,8 @@
 ---
-org_domain_name: kentville.strollopia.com
-viewer: https://kentville.viewer.strollopia.com
-display_name: '"kentville Maps"'
-tag_line: '"Stroll through kentville"'
+org_domain_name: atlanticresale.ca
+viewer: https://atlanticresale.viewer.strollopia.com
+display_name: '"Atlantic Resale"'
+tag_line: '"Thrift stores across Atlantic Canada"'
 main_admin_email: john2662@gmail.com
 main_admin_name: Admin
 main_admin_password: changeme123
@@ -12,28 +12,24 @@ anonymous_settings:
   max_anon: 10
   org_key: nceruncuerhgv
 restrict_public_map: false
-map_default_lat: 45.0
-map_default_lng: 64.2
+map_default_lat: 46.5
+map_default_lng: -63.0
 categories:
-  Mural:
-    - Mural
-  Other:
-    - Other
+  Thrift Stores:
+    - New Brunswick
+    - Nova Scotia
+    - Newfoundland & Labrador
+    - Prince Edward Island
 mediatypes:
   - richtext
-  - image
-  - audio
 layouts:
   text:
     - rt1:richtext
-  image:
-    - rt1:richtext
-    - i1:image
 org_maps:
-  mural-map:
+  thrift-stores:
     is_public: true
-  business-map:
-    is_public: true
+    in_public_viewer_list: true
+    anon_post_target: true
 ui_support:
   datalogger: 'DL'
   default_language: 'en'
@@ -42,8 +38,7 @@ ui_support:
       data_logger_only: true
       data_logger_values:
         language: en
-        target_map: business-map
-        layout_card: image
+        target_map: thrift-stores
+        layout_card: text
         field_key_array:
           - richtext: rt1
-          - image: i1
