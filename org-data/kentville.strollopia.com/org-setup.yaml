@@ -47,3 +47,24 @@ ui_support:
         field_key_array:
           - richtext: rt1
           - image: i1
+    theme:
+      colors:
+        primary: "#4a6741"
+        primary_light: "#6b8a62"
+        primary_dark: "#354d30"
+        accent: "#d4a843"
+        accent_light: "#e0c06a"
+        bg_gradient_from: "#4a6741"
+        bg_gradient_via: "#3a5731"
+        bg_gradient_to: "#2a4721"
+        text_on_primary: "#ffffff"
+        cta_bg: "#ffffff"
+        cta_text: "#4a6741"
+        badge_bg: "#f0fdf4"
+        badge_text: "#166534"
+        badge_border: "#bbf7d0"
+      fonts:
+        family: "Poppins"
+        heading_weight: "900"
+        body_weight: "300"
+        google_fonts_url: "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap"

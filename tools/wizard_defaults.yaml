@@ -29,3 +29,78 @@ ui_support:
 anonymous_settings:
   period: 3600
   max_anon: 10
+
+theme_presets:
+  default:
+    # Current indigo/violet/cyan — no visual change for existing orgs
+    colors:
+      primary: "#6366f1"
+      primary_light: "#818cf8"
+      primary_dark: "#4f46e5"
+      accent: "#e11d48"
+      accent_light: "#fb7185"
+      bg_gradient_from: "#7c3aed"
+      bg_gradient_via: "#2563eb"
+      bg_gradient_to: "#06b6d4"
+      text_on_primary: "#ffffff"
+      cta_bg: "#ffffff"
+      cta_text: "#4f46e5"
+      badge_bg: "#fff1f2"
+      badge_text: "#be123c"
+      badge_border: "#fecdd3"
+
+  forest-green:
+    colors:
+      primary: "#4a6741"
+      primary_light: "#6b8a62"
+      primary_dark: "#354d30"
+      accent: "#d4a843"
+      accent_light: "#e0c06a"
+      bg_gradient_from: "#4a6741"
+      bg_gradient_via: "#3a5731"
+      bg_gradient_to: "#2a4721"
+      text_on_primary: "#ffffff"
+      cta_bg: "#ffffff"
+      cta_text: "#4a6741"
+      badge_bg: "#f0fdf4"
+      badge_text: "#166534"
+      badge_border: "#bbf7d0"
+    fonts:
+      family: "Poppins"
+      heading_weight: "900"
+      body_weight: "300"
+      google_fonts_url: "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap"
+
+  ocean-blue:
+    colors:
+      primary: "#1e40af"
+      primary_light: "#3b82f6"
+      primary_dark: "#1e3a8a"
+      accent: "#f59e0b"
+      accent_light: "#fbbf24"
+      bg_gradient_from: "#1e40af"
+      bg_gradient_via: "#1d4ed8"
+      bg_gradient_to: "#0ea5e9"
+      text_on_primary: "#ffffff"
+      cta_bg: "#ffffff"
+      cta_text: "#1e40af"
+      badge_bg: "#eff6ff"
+      badge_text: "#1e40af"
+      badge_border: "#bfdbfe"
+
+  warm-earth:
+    colors:
+      primary: "#92400e"
+      primary_light: "#b45309"
+      primary_dark: "#78350f"
+      accent: "#059669"
+      accent_light: "#34d399"
+      bg_gradient_from: "#92400e"
+      bg_gradient_via: "#78350f"
+      bg_gradient_to: "#451a03"
+      text_on_primary: "#ffffff"
+      cta_bg: "#ffffff"
+      cta_text: "#92400e"
+      badge_bg: "#fef3c7"
+      badge_text: "#92400e"
+      badge_border: "#fcd34d"

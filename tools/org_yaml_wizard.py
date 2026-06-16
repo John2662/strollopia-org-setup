@@ -453,6 +453,104 @@ def step_ui_support(defaults, existing):
     return {"ui_support": ui}
 
 
+def step_theme(defaults, existing):
+    """Step 9: Theme."""
+    print("\n=== Step 9: Theme ===\n")
+
+    presets = defaults.get("theme_presets", {})
+    existing_theme = (
+        existing.get("ui_support", {})
+        .get("ui_config", {})
+        .get("theme")
+    )
+
+    if not presets and not existing_theme:
+        print("No theme presets available. Skipping.")
+        return {}
+
+    if not ask_yes_no("Configure a UI theme?", default=bool(existing_theme)):
+        return {}
+
+    preset_names = list(presets.keys())
+    print("\nAvailable theme presets:")
+    for i, name in enumerate(preset_names, 1):
+        colors = presets[name].get("colors", {})
+        primary = colors.get("primary", "?")
+        accent = colors.get("accent", "?")
+        fonts = presets[name].get("fonts", {})
+        font_info = f", font: {fonts['family']}" if fonts.get("family") else ""
+        print(f"  {i}. {name} (primary: {primary}, accent: {accent}{font_info})")
+    print(f"  {len(preset_names) + 1}. custom")
+
+    while True:
+        value = input("Choice: ").strip()
+        try:
+            idx = int(value)
+            if 1 <= idx <= len(preset_names):
+                theme = dict(presets[preset_names[idx - 1]])
+                print(f"  Selected: {preset_names[idx - 1]}")
+                break
+            elif idx == len(preset_names) + 1:
+                theme = _build_custom_theme(existing_theme)
+                break
+        except ValueError:
+            pass
+        print(f"  Enter a number 1-{len(preset_names) + 1}.")
+
+    # Allow tweaking individual colors after preset selection
+    if ask_yes_no("Customize individual colors?", default=False):
+        colors = theme.get("colors", {})
+        print("  Enter new hex value or press Enter to keep current:")
+        for key in list(colors.keys()):
+            new_val = ask_optional(f"    {key}", default=colors[key])
+            if new_val:
+                colors[key] = new_val
+        theme["colors"] = colors
+
+    # Allow tweaking fonts
+    if ask_yes_no("Customize fonts?", default=False):
+        fonts = theme.get("fonts", {})
+        family = ask_optional("  Font family", default=fonts.get("family"))
+        if family:
+            fonts["family"] = family
+        hw = ask_optional("  Heading weight", default=fonts.get("heading_weight"))
+        if hw:
+            fonts["heading_weight"] = hw
+        bw = ask_optional("  Body weight", default=fonts.get("body_weight"))
+        if bw:
+            fonts["body_weight"] = bw
+        gf = ask_optional("  Google Fonts URL", default=fonts.get("google_fonts_url"))
+        if gf:
+            fonts["google_fonts_url"] = gf
+        if fonts:
+            theme["fonts"] = fonts
+
+    return {"_theme": theme}
+
+
+def _build_custom_theme(existing_theme):
+    """Build a custom theme from scratch or from existing values."""
+    existing_theme = existing_theme or {}
+    colors = existing_theme.get("colors", {})
+    theme = {"colors": {}}
+
+    color_keys = [
+        "primary", "primary_light", "primary_dark",
+        "accent", "accent_light",
+        "bg_gradient_from", "bg_gradient_via", "bg_gradient_to",
+        "text_on_primary", "cta_bg", "cta_text",
+        "badge_bg", "badge_text", "badge_border",
+    ]
+
+    print("\n  Enter hex color values (e.g. #4a6741):")
+    for key in color_keys:
+        val = ask_optional(f"    {key}", default=colors.get(key))
+        if val:
+            theme["colors"][key] = val
+
+    return theme
+
+
 # ---------------------------------------------------------------------------
 # Draft save/load helpers
 # ---------------------------------------------------------------------------
@@ -468,6 +566,7 @@ STEP_NAMES = {
     6: "Media Types & Layouts",
     7: "Maps",
     8: "UI Support",
+    9: "Theme",
 }
 
 
@@ -505,6 +604,15 @@ def _delete_draft(output_dir, org_domain_name):
 # ---------------------------------------------------------------------------
 # Orchestration
 # ---------------------------------------------------------------------------
+
+def _deep_merge(base, override):
+    """Recursively merge *override* into *base* (mutates base)."""
+    for key, value in override.items():
+        if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+            _deep_merge(base[key], value)
+        else:
+            base[key] = value
+
 
 def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-data/"):
     """Run wizard steps and return the complete org config dict.
@@ -546,12 +654,13 @@ def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-da
         6: lambda: step_media_layouts(defaults, existing),
         7: lambda: step_maps(defaults, existing),
         8: lambda: step_ui_support(defaults, existing),
+        9: lambda: step_theme(defaults, existing),
     }
 
     try:
-        for step_num in range(1, 9):
+        for step_num in range(1, 10):
             result = step_funcs[step_num]()
-            config.update(result)
+            _deep_merge(config, result)
 
             # After step 1, we know the domain name for draft saving
             if step_num == 1:
@@ -575,6 +684,13 @@ def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-da
                 f"Resume with: python tools/org_yaml_wizard.py {draft_domain} --review"
             )
         sys.exit(1)
+
+    # Nest theme data into ui_support.ui_config.theme
+    theme_data = config.pop("_theme", None)
+    if theme_data:
+        ui = config.setdefault("ui_support", {})
+        ui_config = ui.setdefault("ui_config", {})
+        ui_config["theme"] = theme_data
 
     return config
 
@@ -740,8 +856,8 @@ def main():
         output_dir=args.output_dir,
     )
 
-    # Step 9: Review & Write
-    print("\n=== Step 9: Review & Write ===\n")
+    # Step 10: Review & Write
+    print("\n=== Step 10: Review & Write ===\n")
     # Show clean config without internal keys
     display = {k: v for k, v in config.items() if not k.startswith("_")}
     print("Generated org-setup.yaml:\n")
