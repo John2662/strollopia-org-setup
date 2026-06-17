@@ -34,11 +34,10 @@ ui_support:
   datalogger: 'DL'
   default_language: 'en'
   ui_config:
-    app_preferences:
-      data_logger_only: true
-      data_logger_values:
-        language: en
-        target_map: thrift-stores
-        layout_card: text
-        field_key_array:
-          - richtext: rt1
+    builder:
+      default_target_map: thrift-stores
+    form:
+      language: en
+      layout_card: text
+      field_key_array:
+        - richtext: rt1

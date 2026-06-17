@@ -67,14 +67,13 @@ ui_support:
   datalogger: 'DL'
   default_language: 'en'
   ui_config:
-    app_preferences:
-      data_logger_only: true
-      data_logger_values:
-        language: en
-        target_map: climate-map
-        layout_card: layout1
-        field_key_array:
-          - richtext: rt1
-          - image: i1
-          - audio: a1
-          - video: v1
+    builder:
+      default_target_map: climate-map
+    form:
+      language: en
+      layout_card: layout1
+      field_key_array:
+        - richtext: rt1
+        - image: i1
+        - audio: a1
+        - video: v1

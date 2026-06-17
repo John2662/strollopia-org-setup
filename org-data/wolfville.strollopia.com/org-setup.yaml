@@ -71,12 +71,11 @@ ui_support:
   datalogger: 'DL'
   default_language: 'en'
   ui_config:
-    app_preferences:
-      data_logger_only: true
-      data_logger_values:
-        language: en
-        target_map: downtown
-        layout_card: image
-        field_key_array:
-          - richtext: rt1
-          - image: i1
+    builder:
+      default_target_map: downtown
+    form:
+      language: en
+      layout_card: image
+      field_key_array:
+        - richtext: rt1
+        - image: i1
