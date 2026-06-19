@@ -67,6 +67,17 @@ ui_support:
   datalogger: 'DL'
   default_language: 'en'
   ui_config:
+    identity:
+      app_name: Climate Stories
+    features:
+      enabled_modes:
+        - home
+        - viewer
+        - builder
+        - editor
+        - admin
+      start_mode: home
+      allow_anonymous_builder: false
     builder:
       default_target_map: climate-map
     form:

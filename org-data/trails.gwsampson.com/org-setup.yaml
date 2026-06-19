@@ -50,6 +50,15 @@ ui_support:
   ui_config:
     identity:
       app_name: Annapolis Valley Trails
+    features:
+      enabled_modes:
+        - home
+        - viewer
+        - builder
+        - editor
+        - admin
+      start_mode: home
+      allow_anonymous_builder: false
     builder:
       default_target_map: trail-map
     viewer:
