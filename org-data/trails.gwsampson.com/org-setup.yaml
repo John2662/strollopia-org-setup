@@ -42,6 +42,8 @@ layouts:
 org_maps:
   trail-map:
     is_public: true
+    in_public_viewer_list: true
+    anon_post_target: true
 ui_support:
   datalogger: 'DL'
   default_language: 'en'
