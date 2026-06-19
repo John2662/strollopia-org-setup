@@ -1,0 +1,57 @@
+---
+org_domain_name: trails.gwsampson.com
+viewer: trails.gwsampson.com
+display_name: '"Annapolis Valley Trails"'
+tag_line: '"Find Your Way with GW Sampson"'
+main_admin_email: matt@gwsampson.com
+main_admin_name: Matt Bonnyman
+main_admin_password: Changeme123#
+allows_anonymous: true
+anonymous_settings:
+  period: 3600
+  max_anon: 10
+  org_key: nceruncuerhgv
+restrict_public_map: false
+map_default_lat: 44.9881092234106
+map_default_lng: -64.946310684312487
+categories:
+  Trails:
+    - Rest Area
+    - Trail Head
+    - Trail Junction
+    - Other
+  Natural Features:
+    - Water Fall
+    - Gorge
+    - Lookout
+    - Other
+mediatypes:
+  - richtext
+  - image
+  - audio
+layouts:
+  text:
+    - rt1:richtext
+  image:
+    - rt1:richtext
+    - i1:image
+  layout1:
+    - rt1:richtext
+    - i1:image
+    - a1:audio
+org_maps:
+  trail-map:
+    is_public: true
+ui_support:
+  datalogger: 'DL'
+  default_language: 'en'
+  ui_config:
+    builder:
+      default_target_map: trail-map
+    form:
+      language: en
+      layout_card: layout1
+      field_key_array:
+        - richtext: rt1
+        - image: i1
+        - audio: a1
