@@ -48,8 +48,13 @@ ui_support:
   datalogger: 'DL'
   default_language: 'en'
   ui_config:
+    identity:
+      app_name: Annapolis Valley Trails
     builder:
       default_target_map: trail-map
+    viewer:
+      default_map_pks:
+        - trail-map
     form:
       language: en
       layout_card: layout1
