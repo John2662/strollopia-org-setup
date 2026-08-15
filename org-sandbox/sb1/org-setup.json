@@ -1,0 +1,91 @@
+{
+  "email": "nachiketsingh1080@gmail.com",
+  "name": "Nachiket",
+  "password": "changeme123",
+  "init_payload": {
+    "map_default_lat": 45.088336,
+    "map_default_lng": -64.368221,
+    "display_name": "Data Logger",
+    "tag_line": "Get Your Data Here",
+    "restrict_public_maps": true,
+    "generic_field_naming": {
+      "A": "B"
+    },
+    "anonymous_settings": {
+      "allows_anonymous": true,
+      "period": 3600,
+      "max_anon": 2,
+      "org_key": "abcdefg",
+      "allows_map_creation": true,
+      "allows_poi_append": true
+    },
+    "categories": {
+      "furniture": [
+        "chair",
+        "table"
+      ],
+      "electronic": [
+        "radio",
+        "stereo"
+      ]
+    },
+    "media_types": [
+      "richtext",
+      "image",
+      "audio",
+      "video"
+    ],
+    "layouts": {
+      "text": [
+        "rt1:richtext"
+      ],
+      "image": [
+        "rt1:richtext",
+        "i1:image"
+      ],
+      "audio": [
+        "rt1:richtext",
+        "a1:audio"
+      ],
+      "layout1": [
+        "i1:image",
+        "a1:audio",
+        "rt1:richtext"
+      ]
+    },
+    "default_card_name": "text",
+    "org_maps": {
+      "first-map": {
+        "is_public": true,
+        "map_centre_dynamic": true,
+        "in_public_viewer_list": true,
+        "anon_append_target": true,
+        "tag_list": [
+          "TAG1",
+          "TAG2"
+        ]
+      },
+      "second-map": {
+        "is_public": false,
+        "map_centre_dynamic": true,
+        "in_public_viewer_list": false,
+        "anon_append_target": true,
+        "tag_list": [
+          "TAG1",
+          "TAG3"
+        ]
+      }
+    },
+    "ui_support": {
+      "ui_type_list": [
+        "DL"
+      ],
+      "default_language": "en",
+      "languages": [
+        "fr"
+      ]
+    }
+  }
+}
+
+

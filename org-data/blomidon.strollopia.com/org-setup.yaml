@@ -1,0 +1,45 @@
+---
+org_domain_name: blomidon.strollopia.com
+viewer: blomidon.strollopia.com
+display_name: '"Blomidon Plants"'
+tag_line: '"Find Your Plants Here"'
+main_admin_email: abood67200@gmail.com
+main_admin_name: Abdallah
+main_admin_password: changeme123#
+allows_anonymous: true
+anonymous_settings:
+  period: 3600
+  max_anon: 10
+  org_key: nceruncuerhgv
+restrict_public_map: false
+map_default_lat: 45.083541
+map_default_lng: -64.398827
+categories:
+  Perinnials:
+    - Lavendar
+    - Rose Mary
+    - Thyme
+  Anuals:
+    - Sun Flower
+    - Zinnia
+mediatypes:
+  - richtext
+  - image
+  - audio
+layouts:
+  text:
+    - rt1:richtext
+  image:
+    - rt1:richtext
+    - i1:image
+  layout1:
+    - rt1:richtext
+    - i1:image
+    - a1:audio
+org_maps:
+  plant-map:
+    is_public: true
+ui_support:
+  datalogger: 'DL'
+  builder: 'BL'
+  default_language: 'en'

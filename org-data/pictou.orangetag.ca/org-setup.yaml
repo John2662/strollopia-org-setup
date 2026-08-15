@@ -1,0 +1,26 @@
+---
+org_domain_name: pictou.orangetag.ca
+viewer: pictou.orangetag.ca/viewer
+main_admin_email: deborah.searle@pcssa.ca
+main_admin_name: Deborah Searle
+map_default_lat: 45.6834
+map_default_lng: -62.7153
+display_name: 'Pictou Curbside Audit'
+tag_line: 'Making Audits Easy'
+allows_anonymous: true
+anonymous_settings:
+  period: 3600
+  max_anon: 10
+  org_key: nceruncuerhgv
+restrict_public_map: false
+categories:
+  orange tag: ['chemicals', 'food waste', 'electronics', 'too heavy', 'other']
+  other: ['other']
+mediatypes: ['richtext', 'image', 'audio']
+layouts:
+  report: ['i1:image', 'a1:audio', 'rt1:richtext']
+org_maps:
+  main-map: { 'is_public': true, 'map_centre_dynamic': true }
+ui_support:
+  datalogger: 'DL'
+  default_language: 'en'

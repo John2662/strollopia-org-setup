@@ -1,0 +1,85 @@
+---
+# LangWalk — Language Teaching Org
+# =============================================================
+# Subdomain options (update org_domain_name + DNS CNAME before
+# running the setup wizard):
+#
+#   1. langwalk.strollopia.com       ← recommended
+#   2. lingostroll.strollopia.com
+#   3. walktalk.strollopia.com
+#   4. streetlingo.strollopia.com
+#   5. learnroute.strollopia.com
+#   6. verbpath.strollopia.com
+#   7. lingotrek.strollopia.com
+# =============================================================
+
+org_domain_name: langwalk.strollopia.com
+viewer: langwalk.strollopia.com
+display_name: '"LangWalk"'
+tag_line: '"Learn languages through real-world exploration"'
+
+main_admin_email: des1pyr@gmail.com
+main_admin_name: Despoina Spyropoulou
+main_admin_password: langwalk123#
+
+allows_anonymous: false
+restrict_public_map: true
+
+# Innsbruck city centre — update to your target city
+map_default_lat: 47.2692
+map_default_lng: 11.4041
+
+categories:
+  Language Level:
+    - A1 Beginner
+    - A2 Elementary
+    - B1 Intermediate
+    - B2 Upper Intermediate
+    - C1 Advanced
+  Activity Type:
+    - Listening
+    - Speaking
+    - Writing
+    - Vocabulary
+    - Grammar
+  Location Type:
+    - Market
+    - Transport Hub
+    - Historic Site
+    - Cafe
+    - Park
+    - University
+    - Street
+
+mediatypes:
+  - richtext
+  - image
+  - audio
+
+layouts:
+  text:
+    - rt1:richtext
+  text-audio:
+    - rt1:richtext
+    - a1:audio
+  image:
+    - rt1:richtext
+    - i1:image
+  full:
+    - rt1:richtext
+    - i1:image
+    - a1:audio
+
+org_maps:
+  city-centre:
+    is_public: false
+    in_public_viewer_list: false
+    map_centre_dynamic: true
+  university-campus:
+    is_public: false
+    in_public_viewer_list: false
+    map_centre_dynamic: true
+
+ui_support:
+  guide: 'SG'
+  default_language: 'en'
