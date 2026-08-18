@@ -14,9 +14,18 @@ name, and paths are resolved automatically:
     <map-dir>/media/               → media files
     <map-dir>/../org-setup.yaml    → org credentials + config
 
+Admin credentials (main_admin_email / main_admin_password) can live in
+org-setup.yaml, but for real API imports it's safer to pass them on the
+command line with --email/--password instead of storing them on disk —
+those values override whatever is in the YAML.
+
 Usage:
     # Import a single map
     python strollopia_import.py org-data/kentville.strollopia.com/main-map/
+
+    # Import without storing credentials in org-setup.yaml
+    python strollopia_import.py org-data/kentville.strollopia.com/main-map/ \\
+        --email admin@example.com --password 'secret'
 
     # Dry run
     python strollopia_import.py org-data/kentville.strollopia.com/main-map/ --dry-run
@@ -30,6 +39,7 @@ Usage:
 
 import argparse
 import csv
+import getpass
 import glob
 import logging
 import os
@@ -139,14 +149,27 @@ def load_schema(path):
     return schema
 
 
-def load_org_credentials(path):
-    """Load org credentials YAML (org_domain_name, main_admin_email, main_admin_password)."""
+def load_org_credentials(path, email_override=None, password_override=None):
+    """Load org credentials YAML (org_domain_name, main_admin_email, main_admin_password).
+
+    email_override / password_override take precedence over whatever is in the
+    YAML, so credentials can be supplied on the command line instead of being
+    stored in org-setup.yaml.
+    """
     with open(path, 'r') as f:
         creds = yaml.safe_load(f)
+
+    if email_override:
+        creds['main_admin_email'] = email_override
+    if password_override:
+        creds['main_admin_password'] = password_override
+
     required = ['org_domain_name', 'main_admin_email', 'main_admin_password']
     for key in required:
-        if key not in creds:
-            raise ValueError(f'Missing required key "{key}" in org credentials: {path}')
+        if not creds.get(key):
+            raise ValueError(
+                f'Missing required key "{key}" in org credentials: {path} '
+                f'(supply --email/--password to avoid storing it in the YAML)')
     return creds
 
 
@@ -772,6 +795,14 @@ Examples:
   python strollopia_import.py org-data/kentville.strollopia.com/main-map/ \\
       --schema custom-schema.yaml --data custom-data.tsv
 
+  # Pass admin credentials on the command line instead of org-setup.yaml
+  python strollopia_import.py org-data/kentville.strollopia.com/main-map/ \\
+      --email admin@example.com --password 'secret'
+
+  # Same, but get prompted for the password instead of typing it inline
+  python strollopia_import.py org-data/kentville.strollopia.com/main-map/ \\
+      --email admin@example.com
+
 Environment variables:
   USE_LOCAL_HOST=1   Target local dev server (http://127.0.0.1:8000/)
   USE_PROD=1         Target production (https://prod.strollopia.com/)
@@ -799,6 +830,17 @@ Environment variables:
     parser.add_argument(
         '--org-credentials',
         help='Override: path to org-setup YAML (default: <map-dir>/../org-setup.yaml)',
+    )
+    parser.add_argument(
+        '--email',
+        help='Admin email to log in with. Overrides main_admin_email in org-setup.yaml '
+             '(use this instead of storing credentials in the YAML).',
+    )
+    parser.add_argument(
+        '--password',
+        help='Admin password to log in with. Overrides main_admin_password in '
+             'org-setup.yaml. If omitted and --email is given without this flag, '
+             'you will be prompted (avoids leaking the password via shell history).',
     )
     parser.add_argument(
         '--delimiter', default=None,
@@ -868,8 +910,17 @@ def import_single_map(map_dir, args):
         logger.info(f'Data columns:   {headers}')
         return 0
 
-    # Load org credentials
-    org_creds = load_org_credentials(org_creds_path)
+    # Load org credentials — CLI-supplied email/password take precedence over
+    # the YAML so admin credentials don't need to be stored on disk.
+    password = args.password
+    if args.email and not password and not args.dry_run:
+        password = getpass.getpass(f'Password for {args.email}: ')
+
+    org_creds = load_org_credentials(
+        org_creds_path,
+        email_override=args.email,
+        password_override=password,
+    )
     logger.info(f'Org: {org_creds["org_domain_name"]}')
 
     success = run_import(
