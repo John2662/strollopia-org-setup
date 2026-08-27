@@ -64,9 +64,6 @@ org_maps:
     is_public: true
     in_public_viewer_list: true
     anon_post_target: true
-  business-map:
-    is_public: true
-    in_public_viewer_list: true
 ui_support:
   datalogger: 'DL'
   default_language: 'en'
