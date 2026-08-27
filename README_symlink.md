@@ -30,6 +30,8 @@ org-data/<project-domain>/<map-name>/media/<file>
 1. **Install and sign in to [pCloud Drive](https://www.pcloud.com/download-free-online-cloud-storage.html)**
    The drive should mount so that `/home/john/pCloudDrive/strollopia_org_data` is accessible.
 
+    **remember to set the virtual environment: source env/bin/activate**
+
 2. **Run the setup script** from the repo root to recreate all symlinks:
 
    ```bash

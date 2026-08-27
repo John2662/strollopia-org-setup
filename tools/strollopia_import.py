@@ -50,6 +50,7 @@ from time import sleep
 import yaml
 
 from api_client import (
+    ADMIN_ORG_DOMAIN,
     get_api_base_url,
     get_map_pois,
     get_org_categories,
@@ -636,19 +637,29 @@ def get_existing_poi_names(map_pk, token, org_domain_name):
 
 
 def run_import(org_creds, schema, headers, rows, map_name, media_dir,
-               dry_run=False):
-    """Execute the import process for a single map."""
+               dry_run=False, super_admin=False):
+    """Execute the import process for a single map.
+
+    Login's org_domain_name must identify the org the acting user belongs
+    to, not the org being written to. For a normal org-level admin those
+    are the same org, so no override is needed. For a Django superuser
+    (super_admin=True) the user's org is always ADMIN_ORG_DOMAIN, so the
+    login call uses that while every other API call (maps, categories,
+    layouts, POIs) still targets the org actually being imported into.
+    """
     org_domain_name = org_creds['org_domain_name']
+    login_org_domain = ADMIN_ORG_DOMAIN if super_admin else org_domain_name
     options = schema.get('options', {})
     skip_existing = options.get('skip_existing', True)
     sleep_between = options.get('sleep_between_rows', 2)
 
     # Authenticate
-    logger.info(f'Logging in as {org_creds["main_admin_email"]}...')
+    logger.info(f'Logging in as {org_creds["main_admin_email"]} '
+                f'(org_domain_name={login_org_domain})...')
     token = login(
         email=org_creds['main_admin_email'],
         password=org_creds['main_admin_password'],
-        org_domain_name=org_domain_name,
+        org_domain_name=login_org_domain,
     )
     logger.info('Login successful.')
 
@@ -843,6 +854,17 @@ Environment variables:
              'you will be prompted (avoids leaking the password via shell history).',
     )
     parser.add_argument(
+        '--super-admin', action='store_true',
+        help="Log in as a Django superuser instead of an org-level admin. "
+             "The org_domain_name on login must always be the org the "
+             f"acting user belongs to — for a superuser that's the default "
+             f"org ('{ADMIN_ORG_DOMAIN}'), never the org being imported "
+             "into. This flag makes the login call use that instead of the "
+             "target org's domain. Only affects login — map/category/POI "
+             "calls still target the org from org-setup.yaml, since that's "
+             "the org actually being written to.",
+    )
+    parser.add_argument(
         '--delimiter', default=None,
         choices=['tab', 'comma'],
         help='Override data file delimiter (default: auto-detect from extension)',
@@ -931,6 +953,7 @@ def import_single_map(map_dir, args):
         map_name=map_name,
         media_dir=media_dir,
         dry_run=args.dry_run,
+        super_admin=args.super_admin,
     )
 
     return 0 if success else 1
