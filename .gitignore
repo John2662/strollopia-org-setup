@@ -5,3 +5,7 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+
+# media/ dirs are pCloud symlinks (see README_symlink.md) — never commit real
+# binaries here even if a symlink is temporarily replaced by real files
+org-data/*/*/media/*
