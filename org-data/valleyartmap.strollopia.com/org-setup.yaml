@@ -3,10 +3,10 @@ org_domain_name: valleyartmap.strollopia.com
 viewer: https://valleyartmap.viewer.strollopia.com
 display_name: '"Valley Art Map"'
 tag_line: '"Explore public art in the Annapolis Valley"'
-main_admin_email: john2662@gmail.com
-main_admin_name: Admin
-main_admin_password: changeme123
-allows_anonymous: true
+main_admin_email: john@strollopia.com
+main_admin_name: John Read
+main_admin_password: UosLHR_slc0mMAqIekUx
+allows_anonymous: false
 anonymous_settings:
   period: 3600
   max_anon: 10
