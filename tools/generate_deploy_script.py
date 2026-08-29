@@ -49,7 +49,6 @@ def generate_deploy_script(org_slug, display_name, map_id, sites_repo, output_pa
     """
     site_dir = os.path.join("sites", org_slug)
     kv_title = f"{org_slug}-SPLASH_CONTENT"
-    # First apply format() substitutions, then handle literal placeholder tokens
     script = DEPLOY_SCRIPT_TEMPLATE.format(
         sites_repo=sites_repo,
         site_dir=site_dir,
@@ -58,10 +57,6 @@ def generate_deploy_script(org_slug, display_name, map_id, sites_repo, output_pa
         display_name=display_name,
         kv_title=kv_title,
     )
-    # Now substitute the literal placeholder tokens that remain in the sed patterns
-    script = script.replace("REPLACE_MAP_ID", str(map_id))
-    script = script.replace("REPLACE_WITH_SITE_SLUG", org_slug)
-    script = script.replace("Your Site Name", display_name)
     if output_path:
         with open(output_path, "w") as f:
             f.write(script)
