@@ -49,7 +49,11 @@ building the deploy-and-verify leg that doesn't exist yet.
   `zone:write`-scoped API token we don't currently hold).
 - Sub-project C's "generic multi-org admin at `map-admin.strollopia.com`"
   idea — org_domain_name transition itself is already built and tested; the
-  admin portal is a future idea, not designed here.
+  admin portal is a future idea, not designed here. Note for whoever designs
+  it: `strollopia-native`'s `screens/OrgPickerScreen.js` already implements
+  the multi-org login/selection workflow (email+password resolving to a list
+  of orgs, user picks one) against the API, which already handles this on
+  the backend — that flow should be reused rather than rebuilt.
 
 ## Repo Reconciliation
 
