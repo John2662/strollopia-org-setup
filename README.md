@@ -26,20 +26,6 @@ strollopia-org-setup/
 The directory name under each org **is** the org map name. The import script
 derives map name, media paths, and org credentials from the directory structure.
 
-## Go-Live Pipeline (New Towns)
-
-For a brand-new town with no existing data, `go_live.py` chains discovery,
-org creation, and import into one command, then generates the Cloudflare
-deploy script:
-
-```bash
-python tools/go_live.py "Kentville, NS" --sites-repo ../strollopia-sites
-```
-
-Each stage is also runnable standalone with its own tool below, the same
-way it's always been done — `go_live.py` only sequences them and stops on
-the first failure. See `CLAUDE.md` for the full command reference.
-
 ## Setting Up a New Organization
 
 Use the interactive wizard to create the `org-setup.yaml` configuration file for
@@ -66,6 +52,20 @@ directory structure under `org-data/`.
 
 For a detailed explanation of every wizard step (suitable for end-users and the
 website team), see **[wizard-guide.txt](wizard-guide.txt)**.
+
+## Go-Live Pipeline (New Towns)
+
+For a brand-new town with no existing data, `go_live.py` chains discovery,
+org creation, and import into one command, then generates the Cloudflare
+deploy script:
+
+```bash
+python tools/go_live.py "Kentville, NS" --sites-repo ../strollopia-sites
+```
+
+Each stage is also runnable standalone with its own tool below, the same
+way it's always been done — `go_live.py` only sequences them and stops on
+the first failure. See `CLAUDE.md` for the full command reference.
 
 ## Posting an Org to the Server
 

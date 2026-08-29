@@ -53,7 +53,7 @@ python -m pytest tests/ -v
 
 ### Directory Convention
 
-Directory names are **stable slugs**, not domain names — e.g. `org-data/kentville/`, never `org-data/kentville.strollopia.com/`. The runtime `org_domain_name` lives inside `org-setup.yaml` and is the authoritative source, so an org can relaunch under a new domain by editing that one field, without renaming its directory or losing git history.
+Orgs created by the `go_live.py`/`city_discover.py` pipeline use **stable slugs** for their directory name, not domain names — e.g. `org-data/kentville/`, derived from the domain via `domain_to_slug()` in `city_discover.py`. Existing `org-data/` entries created before this pipeline (via `org_yaml_wizard.py`) predate this convention and remain domain-named (e.g. `org-data/kentville.strollopia.com/`) — both forms coexist on disk today. Either way, the runtime `org_domain_name` lives inside `org-setup.yaml` and is the authoritative source, so an org can relaunch under a new domain by editing that one field, without renaming its directory or losing git history. The tools operate on whatever directory they're pointed at and don't require the directory name to match the domain.
 
 ```
 org-data/

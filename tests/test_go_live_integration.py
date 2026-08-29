@@ -27,7 +27,7 @@ def test_city_discover_output_is_importable(tmp_path):
         "hours_mon": "closed", "hours_tue": "closed", "hours_wed": "closed",
         "hours_thu": "closed", "hours_fri": "closed", "hours_sat": "closed",
         "hours_sun": "closed", "image_file": "",
-        "_source": "google", "_place_id": "abc", "_photo_reference": None,
+        "_source": "google", "_place_id": None, "_photo_reference": None,
     }
     with patch("city_discover.geocode_city", return_value=geocode_result), \
          patch("city_discover.discover_google", return_value=[fake_place]), \
