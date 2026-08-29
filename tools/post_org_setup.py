@@ -4,8 +4,11 @@
 Can be run standalone or called from the wizard.
 
 Standalone usage:
-    python tools/post_org_setup.py myorg.strollopia.com
-    python tools/post_org_setup.py myorg.strollopia.com --output-dir org-data/
+    python tools/post_org_setup.py kentville
+    python tools/post_org_setup.py kentville --output-dir org-data/
+
+The org_slug is the directory label (e.g. 'kentville'), not the domain name.
+The runtime org_domain_name is read from the org-setup.yaml inside that directory.
 """
 
 import argparse
@@ -16,10 +19,11 @@ import sys
 import yaml
 
 from api_client import admin_login, initialize_org_from_yaml, login, print_api_base_url
+from strollopia_import import find_schemas_in_map_dir, find_data_path_for_schema
 
 
 def check_org_maps_have_data(yaml_path):
-    """Warn about any org_maps entry with no import-schema.yaml/map-data.tsv yet.
+    """Warn about any org_maps entry with no ready import-schema/map-data yet.
 
     initialize_org_from_yaml will happily create a map with no content --
     the gap only surfaces later, as a confusing failure in the import step.
@@ -34,12 +38,18 @@ def check_org_maps_have_data(yaml_path):
     incomplete = []
     for map_name in org_maps:
         map_dir = os.path.join(map_root, map_name)
-        schema = os.path.join(map_dir, 'import-schema.yaml')
-        data = os.path.join(map_dir, 'map-data.tsv')
-        if not (os.path.exists(schema) and os.path.exists(data)):
+        ready = False
+        for schema_path in find_schemas_in_map_dir(map_dir):
+            try:
+                find_data_path_for_schema(map_dir, schema_path)
+                ready = True
+                break
+            except FileNotFoundError:
+                continue
+        if not ready:
             incomplete.append(map_name)
     if incomplete:
-        print("WARNING: these org_maps entries have no import-schema.yaml/map-data.tsv yet:")
+        print("WARNING: these org_maps entries have no ready import-schema/map-data yet:")
         for name in incomplete:
             print(f"  - {name}")
         print("They'll be created empty on the server with nothing to import.")
@@ -118,8 +128,8 @@ def main():
         description="Post an org-setup.yaml to the Strollopia server."
     )
     parser.add_argument(
-        "org_domain_name",
-        help="Org domain name (e.g. myorg.strollopia.com)",
+        "org_slug",
+        help="Directory label for this org (e.g. 'kentville'). The runtime domain is read from org-setup.yaml.",
     )
     parser.add_argument(
         "--output-dir",
@@ -128,12 +138,15 @@ def main():
     )
     args = parser.parse_args()
 
-    yaml_path = os.path.join(args.output_dir, args.org_domain_name, "org-setup.yaml")
+    yaml_path = os.path.join(args.output_dir, args.org_slug, "org-setup.yaml")
     if not os.path.exists(yaml_path):
         print(f"Error: file not found: {yaml_path}")
         sys.exit(1)
 
-    print(f"\n=== Post Org Setup: {args.org_domain_name} ===\n")
+    with open(yaml_path) as f:
+        org_domain_name = (yaml.safe_load(f) or {}).get('org_domain_name', args.org_slug)
+
+    print(f"\n=== Post Org Setup: {org_domain_name} (slug: {args.org_slug}) ===\n")
     print(f"YAML file: {yaml_path}\n")
 
     success = post_org_setup(yaml_path)
