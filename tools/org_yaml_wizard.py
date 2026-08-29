@@ -570,22 +570,22 @@ STEP_NAMES = {
 }
 
 
-def _draft_path(output_dir, org_domain_name):
+def _draft_path(output_dir, org_slug):
     """Return path to the draft file for an org."""
-    return os.path.join(output_dir, org_domain_name, DRAFT_FILENAME)
+    return os.path.join(output_dir, org_slug, DRAFT_FILENAME)
 
 
-def _save_draft(config, output_dir, org_domain_name):
+def _save_draft(config, output_dir, org_slug):
     """Save current wizard state to draft file."""
-    draft = _draft_path(output_dir, org_domain_name)
+    draft = _draft_path(output_dir, org_slug)
     os.makedirs(os.path.dirname(draft), exist_ok=True)
     with open(draft, "w") as f:
         yaml.dump(config, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
 
 
-def _load_draft(output_dir, org_domain_name):
+def _load_draft(output_dir, org_slug):
     """Load draft file if it exists, return (config, last_completed_step) or (None, 0)."""
-    draft = _draft_path(output_dir, org_domain_name)
+    draft = _draft_path(output_dir, org_slug)
     if not os.path.exists(draft):
         return None, 0
     with open(draft) as f:
@@ -594,9 +594,9 @@ def _load_draft(output_dir, org_domain_name):
     return config, step
 
 
-def _delete_draft(output_dir, org_domain_name):
+def _delete_draft(output_dir, org_slug):
     """Remove draft file if it exists."""
-    draft = _draft_path(output_dir, org_domain_name)
+    draft = _draft_path(output_dir, org_slug)
     if os.path.exists(draft):
         os.remove(draft)
 
@@ -614,7 +614,7 @@ def _deep_merge(base, override):
             base[key] = value
 
 
-def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-data/"):
+def run_wizard(defaults, existing=None, org_slug=None, org_domain_name=None, output_dir="org-data/"):
     """Run wizard steps and return the complete org config dict.
 
     Parameters
@@ -625,6 +625,11 @@ def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-da
         Previously saved config (for --edit or --resume mode).  Every value
         in this dict is offered as the default for its prompt so the user
         can press Enter to keep it or retype to correct it.
+    org_slug : str | None
+        Directory label for this org (e.g. 'kentville'). Used for draft
+        saving and the output directory — separate from the runtime domain,
+        so an org can move to a new domain later without renaming its
+        directory or losing draft/git history.
     org_domain_name : str | None
         Pre-fill for Step 1's domain prompt.
     output_dir : str
@@ -642,8 +647,10 @@ def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-da
 
     config = {}
 
-    # Resolve the domain for draft saving — needed even when resuming
-    draft_domain = org_domain_name or existing.get("org_domain_name")
+    # The slug is fixed for the whole wizard session — it's the directory
+    # label, not the domain, and doesn't change when the user edits the
+    # domain in step 1.
+    draft_slug = org_slug or existing.get("_org_slug")
 
     step_funcs = {
         1: lambda: step_org_identity(defaults, existing, org_domain_name=org_domain_name),
@@ -662,26 +669,28 @@ def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-da
             result = step_funcs[step_num]()
             _deep_merge(config, result)
 
-            # After step 1, we know the domain name for draft saving
-            if step_num == 1:
-                draft_domain = config.get("org_domain_name", draft_domain)
+            # After step 1, we know the slug for draft saving (if not already set)
+            if step_num == 1 and draft_slug is None:
+                domain = config.get("org_domain_name", "")
+                draft_slug = domain.split(".")[0] if domain else None
 
             # Save draft after each completed step
-            if draft_domain:
+            if draft_slug:
                 draft_config = dict(config)
+                draft_config["_org_slug"] = draft_slug
                 draft_config["_wizard_step"] = step_num
-                _save_draft(draft_config, output_dir, draft_domain)
+                _save_draft(draft_config, output_dir, draft_slug)
 
     except (KeyboardInterrupt, EOFError):
         print("\n\nInterrupted.")
-        if draft_domain:
-            draft = _draft_path(output_dir, draft_domain)
+        if draft_slug:
+            draft = _draft_path(output_dir, draft_slug)
             if os.path.exists(draft):
                 print(f"Draft saved to: {draft}")
             else:
                 print("No steps were completed. Nothing saved.")
             print(
-                f"Resume with: python tools/org_yaml_wizard.py {draft_domain} --review"
+                f"Resume with: python tools/org_yaml_wizard.py {draft_slug} --review"
             )
         sys.exit(1)
 
@@ -692,13 +701,20 @@ def run_wizard(defaults, existing=None, org_domain_name=None, output_dir="org-da
         ui_config = ui.setdefault("ui_config", {})
         ui_config["theme"] = theme_data
 
+    if draft_slug:
+        config["_org_slug"] = draft_slug
+
     return config
 
 
 def write_org_setup(config, output_dir):
     """Write org-setup.yaml and create directory structure."""
-    org_name = config["org_domain_name"]
-    org_dir = os.path.join(output_dir, org_name)
+    # Directory label: use the explicit slug if set, otherwise fall back to
+    # the domain's first label. This decouples the directory name from the
+    # runtime org_domain_name so orgs can be relaunched under a different
+    # domain without renaming directories or losing git history.
+    org_slug = config.get("_org_slug") or config["org_domain_name"].split(".")[0]
+    org_dir = os.path.join(output_dir, org_slug)
 
     # Create org directory
     os.makedirs(org_dir, exist_ok=True)
@@ -759,14 +775,15 @@ def main():
         description="CLI wizard to build org-setup.yaml for Strollopia organizations."
     )
     parser.add_argument(
-        "org_domain_name",
+        "org_slug",
         nargs="?",
-        help="Org domain name (e.g. myorg.strollopia.com). Required unless --edit is used.",
+        help="Directory label for this org (e.g. 'kentville'). The runtime "
+             "domain is set in step 1. Required unless --edit is used.",
     )
     parser.add_argument(
         "--review",
         action="store_true",
-        help="Re-run the wizard with previous answers as defaults so you can review and correct them",
+        help="Re-run the wizard with previous answers as defaults so you can review and correct them. Requires org_slug.",
     )
     parser.add_argument(
         "--output-dir",
@@ -787,11 +804,11 @@ def main():
     args = parser.parse_args()
 
     # Validate argument combinations
-    if not args.edit and not args.org_domain_name:
-        parser.error("org_domain_name is required unless --edit is provided")
+    if not args.edit and not args.org_slug:
+        parser.error("org_slug is required unless --edit is provided")
 
-    if args.review and not args.org_domain_name:
-        parser.error("org_domain_name is required with --review")
+    if args.review and not args.org_slug:
+        parser.error("org_slug is required with --review")
 
     if args.review and args.edit:
         parser.error("--review and --edit cannot be used together")
@@ -805,42 +822,51 @@ def main():
         print(f"Warning: defaults file not found at {defaults_path}, using built-in defaults.")
         defaults = {}
 
-    # Determine org_domain_name and existing config
+    # Determine org_slug, domain default, and existing config
     existing = {}
-    org_domain_name = args.org_domain_name
+    org_slug = args.org_slug
+    # Domain default for step 1: if the slug looks like a full domain use it
+    # as-is, else suggest <slug>.strollopia.com so the user can accept or override.
+    domain_default = org_slug if (org_slug and "." in org_slug) else (
+        f"{org_slug}.strollopia.com" if org_slug else None
+    )
 
     if args.edit:
-        # --edit mode: derive domain from existing YAML
+        # --edit mode: derive slug from existing YAML or the directory containing it
         if not os.path.exists(args.edit):
             print(f"Error: file not found: {args.edit}")
             sys.exit(1)
         with open(args.edit) as f:
             existing = yaml.safe_load(f) or {}
-        org_domain_name = existing.get("org_domain_name")
+        org_slug = existing.get("_org_slug") or os.path.basename(
+            os.path.dirname(os.path.abspath(args.edit))
+        )
+        domain_default = existing.get("org_domain_name")
         print(f"Loaded existing config from {args.edit}")
 
     elif args.review:
         # --review mode: load draft or finished org-setup.yaml, re-run all steps with saved values
-        draft_config, last_step = _load_draft(args.output_dir, org_domain_name)
+        draft_config, last_step = _load_draft(args.output_dir, org_slug)
         if draft_config is not None:
             existing = draft_config
-            print(f"Loaded draft for {org_domain_name} (completed through step {last_step}: {STEP_NAMES.get(last_step, '?')})")
+            print(f"Loaded draft for {org_slug} (completed through step {last_step}: {STEP_NAMES.get(last_step, '?')})")
         else:
             # No draft — try the finished org-setup.yaml
-            yaml_path = os.path.join(args.output_dir, org_domain_name, "org-setup.yaml")
+            yaml_path = os.path.join(args.output_dir, org_slug, "org-setup.yaml")
             if not os.path.exists(yaml_path):
-                print(f"Error: no draft or org-setup.yaml found for {org_domain_name}")
-                print(f"  Looked for: {_draft_path(args.output_dir, org_domain_name)}")
+                print(f"Error: no draft or org-setup.yaml found for slug '{org_slug}'")
+                print(f"  Looked for: {_draft_path(args.output_dir, org_slug)}")
                 print(f"         and: {yaml_path}")
                 sys.exit(1)
             with open(yaml_path) as f:
                 existing = yaml.safe_load(f) or {}
             print(f"Loaded existing config from {yaml_path}")
+        domain_default = existing.get("org_domain_name", domain_default)
         print("All steps will be re-run with your previous answers as defaults.")
 
     else:
         # New org: check if directory already exists
-        org_dir = os.path.join(args.output_dir, org_domain_name)
+        org_dir = os.path.join(args.output_dir, org_slug)
         if os.path.isdir(org_dir):
             print(f"Warning: directory already exists: {org_dir}")
             print("  Existing files will be preserved, org-setup.yaml will be overwritten.")
@@ -852,7 +878,8 @@ def main():
     config = run_wizard(
         defaults,
         existing,
-        org_domain_name=org_domain_name,
+        org_slug=org_slug,
+        org_domain_name=domain_default,
         output_dir=args.output_dir,
     )
 
@@ -869,10 +896,11 @@ def main():
         print(f"\nWritten to: {path}")
 
         # Delete draft file on successful write
-        _delete_draft(args.output_dir, config["org_domain_name"])
+        final_slug = config.get("_org_slug") or config["org_domain_name"].split(".")[0]
+        _delete_draft(args.output_dir, final_slug)
 
         # List created directories
-        org_dir = os.path.join(args.output_dir, config["org_domain_name"])
+        org_dir = os.path.join(args.output_dir, final_slug)
         print(f"Org directory: {org_dir}")
         for map_name in config.get("org_maps", {}):
             print(f"  Map directory: {os.path.join(org_dir, map_name)}/")
