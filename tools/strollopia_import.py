@@ -73,8 +73,50 @@ DEFAULT_USER_NAME = 'Imported User'
 
 # ── Directory convention helpers ─────────────────────────────────
 
-def resolve_map_dir_paths(map_dir):
+def find_schemas_in_map_dir(map_dir):
+    """Return the ordered list of schema files to run for a map directory.
+
+    If language-specific schemas exist (import-schema.de.yaml, import-schema.en.yaml,
+    etc.) those are returned sorted alphabetically. Otherwise falls back to the
+    legacy import-schema.yaml. Never returns both.
+    """
+    lang_schemas = sorted(glob.glob(os.path.join(map_dir, 'import-schema.*.yaml')))
+    if lang_schemas:
+        return lang_schemas
+    legacy = os.path.join(map_dir, 'import-schema.yaml')
+    if os.path.isfile(legacy):
+        return [legacy]
+    return []
+
+
+def find_data_path_for_schema(map_dir, schema_path):
+    """Return (data_path, delimiter) for a given schema file.
+
+    A language-specific schema (import-schema.<lang>.yaml) pairs with a
+    same-language data file (map-data.<lang>.tsv/.csv). The legacy
+    import-schema.yaml pairs with the legacy map-data.tsv/.csv. Prefers
+    .tsv, falls back to .csv.
+    """
+    schema_name = os.path.basename(schema_path)
+    match = re.match(r'^import-schema\.(.+)\.yaml$', schema_name)
+    lang_suffix = f'.{match.group(1)}' if match else ''
+    tsv = os.path.join(map_dir, f'map-data{lang_suffix}.tsv')
+    csv_path = os.path.join(map_dir, f'map-data{lang_suffix}.csv')
+    if os.path.isfile(tsv):
+        return tsv, '\t'
+    if os.path.isfile(csv_path):
+        return csv_path, ','
+    raise FileNotFoundError(
+        f'No map-data{lang_suffix}.tsv or map-data{lang_suffix}.csv found in: {map_dir}')
+
+
+def resolve_map_dir_paths(map_dir, schema_path=None):
     """Resolve schema, data, media, and org-setup paths from a map directory.
+
+    If schema_path is given, it's used directly (the multi-schema --all-maps
+    case, where the caller already knows which schema this run is for).
+    Otherwise resolves to the legacy import-schema.yaml if present, else the
+    first language-specific schema found (sorted alphabetically).
 
     Returns dict with keys: map_dir, map_name, schema, data, delimiter,
     media_dir, org_credentials.
@@ -86,25 +128,17 @@ def resolve_map_dir_paths(map_dir):
     map_name = os.path.basename(map_dir)
     org_dir = os.path.dirname(map_dir)
 
-    # Schema
-    schema_path = os.path.join(map_dir, 'import-schema.yaml')
-    if not os.path.isfile(schema_path):
-        raise FileNotFoundError(f'Schema not found: {schema_path}')
+    if schema_path is None:
+        legacy = os.path.join(map_dir, 'import-schema.yaml')
+        if os.path.isfile(legacy):
+            schema_path = legacy
+        else:
+            candidates = find_schemas_in_map_dir(map_dir)
+            if not candidates:
+                raise FileNotFoundError(f'No schema found in: {map_dir}')
+            schema_path = candidates[0]
 
-    # Data file — prefer .tsv, fall back to .csv
-    data_path = None
-    delimiter = '\t'
-    tsv = os.path.join(map_dir, 'map-data.tsv')
-    csv_path = os.path.join(map_dir, 'map-data.csv')
-    if os.path.isfile(tsv):
-        data_path = tsv
-        delimiter = '\t'
-    elif os.path.isfile(csv_path):
-        data_path = csv_path
-        delimiter = ','
-    else:
-        raise FileNotFoundError(
-            f'No map-data.tsv or map-data.csv found in: {map_dir}')
+    data_path, delimiter = find_data_path_for_schema(map_dir, schema_path)
 
     # Media directory (may not exist if no media)
     media_dir = os.path.join(map_dir, 'media')
@@ -128,16 +162,15 @@ def resolve_map_dir_paths(map_dir):
 def find_map_dirs(org_dir):
     """Find all map directories under an org directory.
 
-    A map directory is any subdirectory that contains an import-schema.yaml.
+    A map directory is any subdirectory that contains an import-schema.yaml
+    or one or more import-schema.<lang>.yaml files.
     """
     org_dir = os.path.abspath(org_dir)
     map_dirs = []
     for entry in sorted(os.listdir(org_dir)):
         entry_path = os.path.join(org_dir, entry)
-        if os.path.isdir(entry_path):
-            schema = os.path.join(entry_path, 'import-schema.yaml')
-            if os.path.isfile(schema):
-                map_dirs.append(entry_path)
+        if os.path.isdir(entry_path) and find_schemas_in_map_dir(entry_path):
+            map_dirs.append(entry_path)
     return map_dirs
 
 
@@ -885,9 +918,9 @@ Environment variables:
     return parser.parse_args(argv)
 
 
-def import_single_map(map_dir, args):
+def import_single_map(map_dir, args, schema_override=None):
     """Run import for a single map directory. Returns 0 on success, 1 on error."""
-    paths = resolve_map_dir_paths(map_dir)
+    paths = resolve_map_dir_paths(map_dir, schema_path=schema_override)
     map_name = paths['map_name']
 
     # Apply overrides
@@ -978,20 +1011,26 @@ def main(argv=None):
         map_dirs = find_map_dirs(org_dir)
         if not map_dirs:
             logger.error(f'No map directories found in: {org_dir}')
-            logger.error('(A map directory must contain an import-schema.yaml)')
+            logger.error('(A map directory must contain import-schema.yaml or import-schema.<lang>.yaml)')
             return 1
 
-        logger.info(f'Found {len(map_dirs)} map(s) in {org_dir}:')
-        for d in map_dirs:
-            logger.info(f'  {os.path.basename(d)}/')
+        # Build (map_dir, schema_path) pairs — one entry per schema file per map
+        runs = []
+        for map_dir in map_dirs:
+            for schema_path in find_schemas_in_map_dir(map_dir):
+                runs.append((map_dir, schema_path))
+
+        logger.info(f'Found {len(map_dirs)} map(s), {len(runs)} import run(s) in {org_dir}:')
+        for map_dir, schema_path in runs:
+            logger.info(f'  {os.path.basename(map_dir)}/ [{os.path.basename(schema_path)}]')
         logger.info('')
 
         overall_ok = True
-        for map_dir in map_dirs:
+        for map_dir, schema_path in runs:
             logger.info(f'{"=" * 60}')
-            logger.info(f'Importing map: {os.path.basename(map_dir)}')
+            logger.info(f'Importing: {os.path.basename(map_dir)} [{os.path.basename(schema_path)}]')
             logger.info(f'{"=" * 60}')
-            result = import_single_map(map_dir, args)
+            result = import_single_map(map_dir, args, schema_override=schema_path)
             if result != 0:
                 overall_ok = False
 
