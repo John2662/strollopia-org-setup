@@ -36,8 +36,18 @@ building the deploy-and-verify leg that doesn't exist yet.
   - `--source {google,template}` — POI data source. Only `google` (via
     `city_discover.py`) is implemented; `template` stops cleanly, pointing at
     a not-yet-built Excel/CSV template path.
+- Threading `city_discover.py`'s existing `--languages` flag through
+  `go_live.py` unchanged (it's already multi-language capable — one TSV +
+  schema pair per language) so multi-language POI data isn't blocked later
+  by this plan's own CLI surface.
 
 **Out of scope (explicitly deferred):**
+- Localizing the trial site itself (`_template`'s `index.html`/`admin.html`
+  copy) and the deploy-script/live-check messaging — stays English-only for
+  this phase. The API's map data model and the PWA already handle
+  multi-language content; when the simple-map template needs this, look at
+  reusing whichever mechanism they use for language-scoped content/strings
+  rather than inventing a third approach.
 - PWA deploy automation (Vercel + data_logger/strollopia_pwa setup).
 - The org-supplied Excel/CSV template itself — including the eventual
   requirement that its columns be derived from a chosen `LayoutCard`'s
