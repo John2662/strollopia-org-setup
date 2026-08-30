@@ -10,7 +10,7 @@ allows_anonymous: false
 anonymous_settings:
   period: 3600
   max_anon: 10
-  org_key: 8CFu8rWFvMBH0ebc
+  org_key: 8CFu8rWFvMBH0e
 map_default_lat: 45.0723417
 map_default_lng: -64.4457453
 restrict_public_map: false

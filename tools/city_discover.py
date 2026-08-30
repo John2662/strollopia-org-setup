@@ -651,7 +651,10 @@ def write_org_setup(org_dir, org_domain, geocode, preset_names, languages, force
     }
     default_map = PRESETS[preset_names[0]]["dir_name"] if preset_names else "main-map"
     default_lang = languages[0] if languages else "en"
-    org_key = "".join(random.choices(string.ascii_letters + string.digits, k=16))
+    # Must fit core.models.ORG_KEY_LEN (14) in strollopia-api - a longer
+    # value throws an unhandled "value too long for type character
+    # varying(14)" DataError server-side (found by actually posting an org).
+    org_key = "".join(random.choices(string.ascii_letters + string.digits, k=14))
 
     config = {
         "org_domain_name": org_domain,

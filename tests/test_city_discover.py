@@ -546,6 +546,8 @@ def test_write_org_setup_creates_file():
 
         assert config["org_domain_name"] == "at-tirol-innsbruck.strollopia.com"
         assert config["viewer"] == "https://at-tirol-innsbruck.viewer.strollopia.com"
+        # Must fit core.models.ORG_KEY_LEN (14) in strollopia-api
+        assert len(config["anonymous_settings"]["org_key"]) == 14
         assert config["map_default_lat"] == 47.2692
         assert config["display_name"] == "Innsbruck"
         assert "business-map" in config["org_maps"]
