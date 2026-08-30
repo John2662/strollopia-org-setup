@@ -61,12 +61,16 @@ layouts:
 org_maps:
   business-map:
     is_public: true
+    in_public_viewer_list: true
   landmark-map:
     is_public: true
+    in_public_viewer_list: true
   public-art-map:
     is_public: true
+    in_public_viewer_list: true
   park-map:
     is_public: true
+    in_public_viewer_list: true
 ui_support:
   datalogger: DL
   default_language: en

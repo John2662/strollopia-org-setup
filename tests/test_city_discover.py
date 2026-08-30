@@ -552,6 +552,10 @@ def test_write_org_setup_creates_file():
         assert config["display_name"] == "Innsbruck"
         assert "business-map" in config["org_maps"]
         assert "landmark-map" in config["org_maps"]
+        # Both flags required - the org-policy API's public_org_maps list
+        # (what strollopia_import.py resolves map pks from) filters on
+        # in_public_viewer_list specifically, not is_public.
+        assert config["org_maps"]["business-map"] == {"is_public": True, "in_public_viewer_list": True}
         assert "Business" in config["categories"]
         assert "Landmark" in config["categories"]
         assert config["ui_support"]["default_language"] == "de"

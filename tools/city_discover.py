@@ -646,7 +646,12 @@ def write_org_setup(org_dir, org_domain, geocode, preset_names, languages, force
 
     city_name = geocode["city"]
     org_maps = {
-        PRESETS[name]["dir_name"]: {"is_public": True}
+        # is_public alone isn't enough - the org-policy API's
+        # public_org_maps list (what strollopia_import.py resolves map
+        # pks from) filters on in_public_viewer_list specifically
+        # (see org/views.py). Found by actually importing into a real
+        # org: the map existed but was invisible to the import tool.
+        PRESETS[name]["dir_name"]: {"is_public": True, "in_public_viewer_list": True}
         for name in preset_names
     }
     default_map = PRESETS[preset_names[0]]["dir_name"] if preset_names else "main-map"
