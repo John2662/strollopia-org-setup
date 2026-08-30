@@ -70,8 +70,7 @@ org_maps:
 ui_support:
   datalogger: DL
   default_language: en
-  languages:
-  - en
+  languages: []
   ui_config:
     identity:
       app_name: New Minas

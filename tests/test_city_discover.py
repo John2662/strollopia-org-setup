@@ -553,10 +553,32 @@ def test_write_org_setup_creates_file():
         assert "Business" in config["categories"]
         assert "Landmark" in config["categories"]
         assert config["ui_support"]["default_language"] == "de"
-        assert config["ui_support"]["languages"] == ["de", "en"]
+        # Excludes the default - see test_write_org_setup_languages_excludes_default
+        assert config["ui_support"]["languages"] == ["en"]
         # Password placeholder is present for operator to fill in
         assert "main_admin_email" in config
         assert config["main_admin_password"] == "changeme123"
+
+
+def test_write_org_setup_languages_excludes_default():
+    # The API's UiPage.generate_categories_page does [default_language] +
+    # languages - including the default in languages too makes it process
+    # twice and hit a duplicate-key error server-side (found by actually
+    # posting a single-language org and getting an HTTP 500).
+    with tempfile.TemporaryDirectory() as tmpdir:
+        geocode = {"lat": 45.07, "lng": -64.45,
+                   "country_code": "CA", "state": "Nova Scotia", "city": "New Minas"}
+        write_org_setup(
+            org_dir=tmpdir,
+            org_domain="ca-nova-scotia-new-minas.strollopia.com",
+            geocode=geocode,
+            preset_names=["businesses"],
+            languages=["en"],
+        )
+        with open(os.path.join(tmpdir, "org-setup.yaml")) as f:
+            config = yaml.safe_load(f)
+        assert config["ui_support"]["default_language"] == "en"
+        assert config["ui_support"]["languages"] == []
 
 
 def test_write_org_setup_skips_existing_without_force():

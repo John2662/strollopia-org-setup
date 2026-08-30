@@ -676,7 +676,11 @@ def write_org_setup(org_dir, org_domain, geocode, preset_names, languages, force
         "ui_support": {
             "datalogger": "DL",
             "default_language": default_lang,
-            "languages": languages,
+            # Additional languages beyond the default only - the API's
+            # UiPage.generate_categories_page does [default_language] +
+            # languages, so including the default here too processes it
+            # twice and hits a duplicate-key error server-side.
+            "languages": [lang for lang in languages if lang != default_lang],
             "ui_config": {
                 "identity": {"app_name": city_name},
                 "features": {
