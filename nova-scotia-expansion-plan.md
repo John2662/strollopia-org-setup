@@ -100,8 +100,13 @@ that org — no HTML required.
 
 ## Tracking
 
-Recommend a simple running log (town, phase, date discovery ran, date
-posted live, outreach contact + date, response) — not built here, since
-the "few dozen manual sells" phase this is meant to prove out is explicitly
-supposed to stay lightweight per the original go-live pipeline discussion.
-A spreadsheet is enough until volume says otherwise.
+`nova-scotia-expansion-tracking.csv` (repo root) has one row per town above,
+pre-populated with `phase`, the `slug`/`domain` `city_discover.py` will
+generate for it, and empty columns to fill in as each town moves through
+the pipeline: `discovery_date`, `posted_live_date`, `outreach_contact`,
+`outreach_date`, `response` (free text, but consider a small fixed
+vocabulary like `not_started`/`contacted`/`interested`/`declined`/
+`converted` if this gets read by tooling later), and `notes`. Plain CSV
+deliberately, so it stays lightweight for the "few dozen manual sells"
+phase while being a one-line `csv.DictReader` away from a real tracking
+tool if volume ever justifies building one.
