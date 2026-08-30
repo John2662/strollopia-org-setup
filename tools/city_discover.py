@@ -655,6 +655,7 @@ def write_org_setup(org_dir, org_domain, geocode, preset_names, languages, force
 
     config = {
         "org_domain_name": org_domain,
+        "viewer": f"https://{domain_to_slug(org_domain)}.viewer.strollopia.com",
         "display_name": city_name,
         "tag_line": f"Explore {city_name}",
         "main_admin_email": "",

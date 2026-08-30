@@ -545,6 +545,7 @@ def test_write_org_setup_creates_file():
             config = yaml.safe_load(f)
 
         assert config["org_domain_name"] == "at-tirol-innsbruck.strollopia.com"
+        assert config["viewer"] == "https://at-tirol-innsbruck.viewer.strollopia.com"
         assert config["map_default_lat"] == 47.2692
         assert config["display_name"] == "Innsbruck"
         assert "business-map" in config["org_maps"]
