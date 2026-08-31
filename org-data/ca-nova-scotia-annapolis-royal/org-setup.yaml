@@ -1,0 +1,104 @@
+---
+org_domain_name: ca-nova-scotia-annapolis-royal.strollopia.com
+viewer: https://ca-nova-scotia-annapolis-royal.viewer.strollopia.com
+display_name: Annapolis Royal
+tag_line: Explore Annapolis Royal
+main_admin_name: John Read
+allows_anonymous: true
+anonymous_settings:
+  period: 3600
+  max_anon: 10
+  org_key: 28AcqBFWcah4iW
+map_default_lat: 44.7439614
+map_default_lng: -65.5196358
+restrict_public_map: false
+categories:
+  Business:
+  - Restaurant
+  - Cafe
+  - Bar
+  - Food
+  - Shops
+  - Health
+  - Finance
+  - Services
+  - Accommodation
+  - Automotive
+  - Business
+  Landmark:
+  - Museum
+  - Gallery
+  - Library
+  - Religious
+  - Civic
+  - Historic
+  - Education
+  - Cultural
+  - Landmark
+  Art:
+  - Mural
+  - Sculpture
+  - Statue
+  - Installation
+  - Public Art
+  Nature:
+  - Park
+  - Garden
+  - Reserve
+  - Camping
+  - Natural Feature
+mediatypes:
+- richtext
+- image
+layouts:
+  text:
+  - rt1:richtext
+  image:
+  - rt1:richtext
+  - i1:image
+org_maps:
+  main-map:
+    is_public: true
+    in_public_viewer_list: true
+ui_support:
+  datalogger: DL
+  default_language: en
+  languages: []
+  ui_config:
+    identity:
+      app_name: Annapolis Royal
+    features:
+      enabled_modes:
+      - home
+      - viewer
+      start_mode: home
+      allow_anonymous_builder: false
+      allow_anonymous_map_creation: false
+    builder:
+      default_target_map: main-map
+      show_appender: false
+      show_map_designer: false
+      show_route_builder: false
+    viewer:
+      default_map_pks:
+      - main-map
+      show_routes_link: false
+    form:
+      layout_card: image
+      language: en
+      field_key_array:
+      - richtext: rt1
+      - image: i1
+    routes:
+      speed_presets: []
+      point_types: []
+      allow_osm_import: false
+    links:
+      terms_url: ''
+      survey_url: ''
+      brochure_url: ''
+      support_url: ''
+      splash_background_image: ''
+    api:
+      upload_max_filesize_mb: 10
+      upload_max_dimension_px: 1920
