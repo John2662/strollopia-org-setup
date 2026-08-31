@@ -3,9 +3,7 @@ org_domain_name: ca-nova-scotia-new-minas.strollopia.com
 viewer: https://ca-nova-scotia-new-minas.viewer.strollopia.com
 display_name: New Minas
 tag_line: Explore New Minas
-main_admin_email: john2662@gmail.com
 main_admin_name: John Read
-main_admin_password: Hj5tioAzPSH3du
 allows_anonymous: false
 anonymous_settings:
   period: 3600
@@ -59,16 +57,7 @@ layouts:
   - rt1:richtext
   - i1:image
 org_maps:
-  business-map:
-    is_public: true
-    in_public_viewer_list: true
-  landmark-map:
-    is_public: true
-    in_public_viewer_list: true
-  public-art-map:
-    is_public: true
-    in_public_viewer_list: true
-  park-map:
+  main-map:
     is_public: true
     in_public_viewer_list: true
 ui_support:
@@ -86,13 +75,13 @@ ui_support:
       allow_anonymous_builder: false
       allow_anonymous_map_creation: false
     builder:
-      default_target_map: business-map
+      default_target_map: main-map
       show_appender: false
       show_map_designer: false
       show_route_builder: false
     viewer:
       default_map_pks:
-      - business-map
+      - main-map
       show_routes_link: false
     form:
       layout_card: image
