@@ -17,6 +17,7 @@ import math
 import os
 import random
 import re
+import secrets
 import string
 import sys
 import time
@@ -182,6 +183,25 @@ def domain_to_slug(domain):
     return domain.split(".")[0]
 
 
+def generate_admin_email(city_name):
+    """Generate a per-town admin email: {townname}{4 random digits}@strollopia.com.
+
+    Uses the strollopia.com catch-all. The random digit suffix keeps the
+    address from being guessable from the town name alone (e.g. by someone
+    at a neighboring town poking at an obvious admin@ address), even though
+    the naming pattern itself is public.
+    """
+    local = slugify(city_name).replace("-", "")
+    suffix = "".join(secrets.choice(string.digits) for _ in range(4))
+    return f"{local}{suffix}@strollopia.com"
+
+
+def generate_admin_password(length=16):
+    """Generate a random admin password using a cryptographically secure RNG."""
+    alphabet = string.ascii_letters + string.digits
+    return "".join(secrets.choice(alphabet) for _ in range(length))
+
+
 # ── Geometry & Deduplication ──────────────────────────────────────────────────
 
 def haversine_m(lat1, lng1, lat2, lng2):
@@ -221,6 +241,29 @@ def deduplicate(google_places, osm_places, threshold_m=DEDUP_THRESHOLD_M):
             kept.append(place)
             osm_google_coords.append((place["lat"], place["lng"]))
 
+    return kept
+
+
+def dedup_by_place_id(places):
+    """Remove places whose Google place_id was already seen earlier in the list.
+
+    Used to merge multiple presets' results into one map: a single Google
+    place can carry several `types` (e.g. a well-known cafe tagged as both
+    "cafe" and "tourist_attraction"), so two different presets' Nearby
+    Search calls can each return it even though their type lists don't
+    literally overlap. First occurrence wins. Places without a place_id
+    (OSM-sourced) are never considered duplicates of each other here --
+    within-preset haversine dedup already handled those.
+    """
+    seen_ids = set()
+    kept = []
+    for place in places:
+        pid = place.get("_place_id")
+        if pid is not None:
+            if pid in seen_ids:
+                continue
+            seen_ids.add(pid)
+        kept.append(place)
     return kept
 
 
@@ -645,16 +688,20 @@ def write_org_setup(org_dir, org_domain, geocode, preset_names, languages, force
         return
 
     city_name = geocode["city"]
+    # All presets' POIs are written into one combined map (see run()) so the
+    # existing category-filter UI in the embed widget can do the "which
+    # type of point" job in one embedded map, instead of splitting business/
+    # landmark/art/nature into 4 maps the site can only ever show one of at
+    # a time.
     org_maps = {
         # is_public alone isn't enough - the org-policy API's
         # public_org_maps list (what strollopia_import.py resolves map
         # pks from) filters on in_public_viewer_list specifically
         # (see org/views.py). Found by actually importing into a real
         # org: the map existed but was invisible to the import tool.
-        PRESETS[name]["dir_name"]: {"is_public": True, "in_public_viewer_list": True}
-        for name in preset_names
+        "main-map": {"is_public": True, "in_public_viewer_list": True},
     }
-    default_map = PRESETS[preset_names[0]]["dir_name"] if preset_names else "main-map"
+    default_map = "main-map"
     default_lang = languages[0] if languages else "en"
     # Must fit core.models.ORG_KEY_LEN (14) in strollopia-api - a longer
     # value throws an unhandled "value too long for type character
@@ -666,9 +713,7 @@ def write_org_setup(org_dir, org_domain, geocode, preset_names, languages, force
         "viewer": f"https://{domain_to_slug(org_domain)}.viewer.strollopia.com",
         "display_name": city_name,
         "tag_line": f"Explore {city_name}",
-        "main_admin_email": "",
         "main_admin_name": "Admin",
-        "main_admin_password": "changeme123",
         "allows_anonymous": True,
         "anonymous_settings": {"period": 3600, "max_anon": 10, "org_key": org_key},
         "map_default_lat": geocode["lat"],
@@ -722,13 +767,28 @@ def write_org_setup(org_dir, org_domain, geocode, preset_names, languages, force
         },
     }
 
+    # main_admin_email/main_admin_password go in a separate, gitignored
+    # sidecar rather than org-setup.yaml itself, so the real admin
+    # credentials never end up committed to git (org-setup.yaml is
+    # committed; org-setup.secrets.yaml is not -- see .gitignore).
+    admin_email = generate_admin_email(city_name)
+    admin_password = generate_admin_password()
+    secrets_config = {
+        "main_admin_email": admin_email,
+        "main_admin_password": admin_password,
+    }
+    secrets_yaml_path = os.path.join(org_dir, "org-setup.secrets.yaml")
+
     os.makedirs(org_dir, exist_ok=True)
     with open(yaml_path, "w", encoding="utf-8") as f:
         f.write("---\n")
         yaml.dump(config, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+    with open(secrets_yaml_path, "w", encoding="utf-8") as f:
+        f.write("---\n")
+        yaml.dump(secrets_config, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
 
     print(f"  Written: {yaml_path}")
-    print(f"  ! Fill in main_admin_email before running post_org_setup.py")
+    print(f"  Written: {secrets_yaml_path} (gitignored -- real admin email/password)")
 
 
 def run(city, api_key, domain, languages, preset_names, init, no_photos, force, output_dir):
@@ -750,13 +810,20 @@ def run(city, api_key, domain, languages, preset_names, init, no_photos, force, 
 
     center = {"lat": geocode["lat"], "lng": geocode["lng"]}
     bbox = geocode["bbox"]
+
+    # All presets discover into one combined map -- see write_org_setup for
+    # why (the embed widget can only ever show one Map at a time, but
+    # already has a full category filter for showing several types of
+    # point within that one map).
+    map_dir = os.path.join(org_dir, "main-map")
+    media_dir = os.path.join(map_dir, "media")
+    os.makedirs(media_dir, exist_ok=True)
+
+    all_places = []
     summary_rows = []
 
     for preset_name in preset_names:
         preset = PRESETS[preset_name]
-        map_dir = os.path.join(org_dir, preset["dir_name"])
-        media_dir = os.path.join(map_dir, "media")
-        os.makedirs(media_dir, exist_ok=True)
 
         # 3. Discover places
         if preset["osm_primary"] or not api_key:
@@ -771,69 +838,75 @@ def run(city, api_key, domain, languages, preset_names, init, no_photos, force, 
             osm_places = discover_osm(preset, bbox, language=languages[0])
 
         places = deduplicate(google_places, osm_places)
-        print(f"[{preset['dir_name']}] {len(places)} unique places after dedup")
-
+        print(f"[{preset['dir_name']}] {len(places)} unique places after dedup\n")
         if not places:
             print(f"[{preset['dir_name']}] Warning: zero places found\n")
-            summary_rows.append((preset["dir_name"], 0, languages))
-            continue
 
-        # 4. Enrich and write per language
-        for language in languages:
-            print(f"[{preset['dir_name']}/{language}] Enriching {len(places)} places...")
-            enriched = []
-            for i, place in enumerate(places, 1):
-                p = dict(place)
-                p = enrich_place(p, api_key, language)
-                # Set image_file from slugified name
-                if p.get("_photo_reference") and not no_photos:
-                    filename = slugify(p["name"]) + ".jpg"
-                    p["image_file"] = filename
-                enriched.append(p)
-                if i % 10 == 0 or i == len(places):
-                    print(f"\r[{preset['dir_name']}/{language}] {i}/{len(places)}", end="", flush=True)
-            print()
+        summary_rows.append((preset["dir_name"], len(places)))
+        all_places.extend(places)
 
-            # 5. Download photos (once, for first language only)
-            has_photos = False
-            if not no_photos and api_key and language == languages[0]:
-                print(f"[{preset['dir_name']}] Downloading photos...")
-                for p in enriched:
-                    if p.get("_photo_reference") and p.get("image_file"):
-                        dest = os.path.join(media_dir, p["image_file"])
-                        if download_photo(p["_photo_reference"], api_key, dest):
-                            has_photos = True
-            elif not no_photos and language == languages[0]:
-                # No API key — check if any media already exists
-                has_photos = bool(os.listdir(media_dir))
-            else:
-                has_photos = bool(os.listdir(media_dir))
+    # 4. Cross-preset dedup: a place can carry several Google `types`, so
+    # two different presets' searches can each return it even without
+    # identical type lists (see dedup_by_place_id). First preset wins.
+    combined_count = len(all_places)
+    all_places = dedup_by_place_id(all_places)
+    cross_dupes = combined_count - len(all_places)
+    if cross_dupes:
+        print(f"[main-map] Removed {cross_dupes} cross-preset duplicate(s)\n")
 
-            # 6. Write TSV and schema
-            print(f"[{preset['dir_name']}/{language}] Writing files...")
-            write_tsv(enriched, map_dir, language, force=force)
-            write_schema(map_dir, language, has_photos=has_photos and not no_photos, force=force)
-
-        summary_rows.append((preset["dir_name"], len(places), languages))
+    # 5. Enrich and write per language, into the one combined map
+    for language in languages:
+        print(f"[main-map/{language}] Enriching {len(all_places)} places...")
+        enriched = []
+        for i, place in enumerate(all_places, 1):
+            p = dict(place)
+            p = enrich_place(p, api_key, language)
+            # Set image_file from slugified name
+            if p.get("_photo_reference") and not no_photos:
+                filename = slugify(p["name"]) + ".jpg"
+                p["image_file"] = filename
+            enriched.append(p)
+            if i % 10 == 0 or i == len(all_places):
+                print(f"\r[main-map/{language}] {i}/{len(all_places)}", end="", flush=True)
         print()
 
-    # 7. Optionally write org-setup.yaml
+        # 6. Download photos (once, for first language only)
+        has_photos = False
+        if not no_photos and api_key and language == languages[0]:
+            print("[main-map] Downloading photos...")
+            for p in enriched:
+                if p.get("_photo_reference") and p.get("image_file"):
+                    dest = os.path.join(media_dir, p["image_file"])
+                    if download_photo(p["_photo_reference"], api_key, dest):
+                        has_photos = True
+        elif not no_photos and language == languages[0]:
+            # No API key — check if any media already exists
+            has_photos = bool(os.listdir(media_dir))
+        else:
+            has_photos = bool(os.listdir(media_dir))
+
+        # 7. Write TSV and schema
+        print(f"[main-map/{language}] Writing files...")
+        write_tsv(enriched, map_dir, language, force=force)
+        write_schema(map_dir, language, has_photos=has_photos and not no_photos, force=force)
+
+    print()
+
+    # 8. Optionally write org-setup.yaml
     if init:
         print("[org-setup] Writing org-setup.yaml...")
         write_org_setup(org_dir, domain, geocode, preset_names, languages, force=force)
 
-    # 8. Print summary
+    # 9. Print summary
     print(f"\n✓ Discovery complete: {domain}")
-    for map_name, count, langs in summary_rows:
-        lang_str = ", ".join(langs)
-        print(f"  {map_name:<20} {count:>4} POIs  ({lang_str})")
+    for preset_dir, count in summary_rows:
+        print(f"  {preset_dir:<20} {count:>4} found")
+    if cross_dupes:
+        print(f"  {'(cross-preset dupes)':<20} {-cross_dupes:>4} removed")
+    print(f"  {'main-map (combined)':<20} {len(all_places):>4} POIs  ({', '.join(languages)})")
 
     print(f"\nNext steps:")
-    if init:
-        print(f"  1. Fill in main_admin_email in {org_dir}/org-setup.yaml")
-        print(f"  2. python tools/post_org_setup.py {org_slug}")
-    else:
-        print(f"  python tools/post_org_setup.py {org_slug}")
+    print(f"  python tools/post_org_setup.py {org_slug}")
     print(f"  python tools/strollopia_import.py {os.path.join(output_dir, org_slug)}/ --all-maps")
 
     return {

@@ -11,4 +11,8 @@ build/
 # binaries here even if a symlink is temporarily replaced by real files
 org-data/*/*/media/*
 
+# real admin email/password for each org — see city_discover.py's
+# write_org_setup and post_org_setup.py's load_org_config
+org-data/*/org-setup.secrets.yaml
+
 .worktrees/

@@ -9,7 +9,8 @@ from unittest.mock import patch, MagicMock
 from city_discover import (
     PRESETS, slugify, make_domain, domain_to_slug,
     parse_google_hours, build_description,
-    haversine_m, deduplicate,
+    haversine_m, deduplicate, dedup_by_place_id,
+    generate_admin_email, generate_admin_password,
     geocode_city, discover_osm,
     discover_google, enrich_place, download_photo,
     write_tsv, write_schema, write_org_setup,
@@ -85,6 +86,68 @@ def test_slugify_german_sharp_s():
 def test_slugify_ligatures():
     assert slugify("œuvre") == "oeuvre"
     assert slugify("Ærø") == "aero"
+
+
+def test_generate_admin_email_format():
+    email = generate_admin_email("New Minas")
+    local, domain = email.split("@")
+    assert domain == "strollopia.com"
+    assert local[:-4] == "newminas"
+    assert local[-4:].isdigit()
+
+
+def test_generate_admin_email_strips_spaces_and_accents():
+    email = generate_admin_email("São Paulo")
+    local = email.split("@")[0]
+    assert local[:-4] == "saopaulo"
+
+
+def test_generate_admin_email_is_randomized():
+    emails = {generate_admin_email("Kentville") for _ in range(20)}
+    # 4-digit suffix means collisions are possible but vanishingly unlikely
+    # across 20 draws - this just confirms it isn't a fixed/deterministic value.
+    assert len(emails) > 1
+
+
+def test_generate_admin_password_length_and_charset():
+    import string
+    password = generate_admin_password()
+    assert len(password) == 16
+    assert all(c in string.ascii_letters + string.digits for c in password)
+
+
+def test_generate_admin_password_is_randomized():
+    passwords = {generate_admin_password() for _ in range(10)}
+    assert len(passwords) == 10
+
+
+def test_dedup_by_place_id_removes_duplicate():
+    places = [
+        {"name": "Old Fort", "_place_id": "ChIJshared"},
+        {"name": "Old Fort", "_place_id": "ChIJshared"},
+    ]
+    result = dedup_by_place_id(places)
+    assert len(result) == 1
+
+
+def test_dedup_by_place_id_keeps_first_occurrence():
+    places = [
+        {"name": "Landmark version", "_place_id": "ChIJshared", "category": "Landmark"},
+        {"name": "Art version", "_place_id": "ChIJshared", "category": "Art"},
+    ]
+    result = dedup_by_place_id(places)
+    assert len(result) == 1
+    assert result[0]["category"] == "Landmark"
+
+
+def test_dedup_by_place_id_keeps_places_without_place_id():
+    # OSM-sourced places have no place_id - never treated as duplicates here.
+    places = [
+        {"name": "OSM Mural A", "_place_id": None},
+        {"name": "OSM Mural B", "_place_id": None},
+    ]
+    result = dedup_by_place_id(places)
+    assert len(result) == 2
 
 
 def test_haversine_same_point():
@@ -550,20 +613,46 @@ def test_write_org_setup_creates_file():
         assert len(config["anonymous_settings"]["org_key"]) == 14
         assert config["map_default_lat"] == 47.2692
         assert config["display_name"] == "Innsbruck"
-        assert "business-map" in config["org_maps"]
-        assert "landmark-map" in config["org_maps"]
+        # All presets' POIs are merged into one map, not one map per preset -
+        # see write_org_setup's docstring / city_discover.run.
+        assert set(config["org_maps"].keys()) == {"main-map"}
         # Both flags required - the org-policy API's public_org_maps list
         # (what strollopia_import.py resolves map pks from) filters on
         # in_public_viewer_list specifically, not is_public.
-        assert config["org_maps"]["business-map"] == {"is_public": True, "in_public_viewer_list": True}
+        assert config["org_maps"]["main-map"] == {"is_public": True, "in_public_viewer_list": True}
+        assert config["ui_support"]["ui_config"]["builder"]["default_target_map"] == "main-map"
+        assert config["ui_support"]["ui_config"]["viewer"]["default_map_pks"] == ["main-map"]
         assert "Business" in config["categories"]
         assert "Landmark" in config["categories"]
         assert config["ui_support"]["default_language"] == "de"
         # Excludes the default - see test_write_org_setup_languages_excludes_default
         assert config["ui_support"]["languages"] == ["en"]
-        # Password placeholder is present for operator to fill in
-        assert "main_admin_email" in config
-        assert config["main_admin_password"] == "changeme123"
+        # Admin credentials are NOT in org-setup.yaml - they live in the
+        # gitignored secrets sidecar (see test_write_org_setup_writes_secrets_sidecar)
+        assert "main_admin_email" not in config
+        assert "main_admin_password" not in config
+
+
+def test_write_org_setup_writes_secrets_sidecar():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        geocode = {"lat": 45.07, "lng": -64.45,
+                   "country_code": "CA", "state": "Nova Scotia", "city": "New Minas"}
+        write_org_setup(
+            org_dir=tmpdir,
+            org_domain="ca-nova-scotia-new-minas.strollopia.com",
+            geocode=geocode,
+            preset_names=["businesses"],
+            languages=["en"],
+        )
+        secrets_path = os.path.join(tmpdir, "org-setup.secrets.yaml")
+        assert os.path.exists(secrets_path)
+        with open(secrets_path) as f:
+            secrets_config = yaml.safe_load(f)
+
+        email = secrets_config["main_admin_email"]
+        assert email.split("@")[1] == "strollopia.com"
+        assert email.split("@")[0][:-4] == "newminas"
+        assert len(secrets_config["main_admin_password"]) == 16
 
 
 def test_write_org_setup_languages_excludes_default():
@@ -636,3 +725,56 @@ def test_run_returns_org_slug_domain_and_display_name(tmp_path):
     assert result["domain"] == "at-tirol-innsbruck.strollopia.com"
     assert result["display_name"] == "Innsbruck"
     assert result["org_dir"] == str(tmp_path / "at-tirol-innsbruck")
+
+
+def _place(name, place_id, category, subcategory):
+    return {
+        "name": name, "lat": 47.27, "lng": 11.40,
+        "category": category, "subcategory": subcategory,
+        "description": "", "phone": "", "website": "", "address": "",
+        "hours_mon": "", "hours_tue": "", "hours_wed": "", "hours_thu": "",
+        "hours_fri": "", "hours_sat": "", "hours_sun": "",
+        "image_file": "", "_source": "google",
+        "_place_id": place_id, "_photo_reference": None,
+    }
+
+
+def test_run_merges_presets_into_single_main_map(tmp_path):
+    geocode_result = {
+        "lat": 47.2692, "lng": 11.4041,
+        "country_code": "AT", "state": "Tirol", "city": "Innsbruck",
+        "bbox": (47.24, 11.36, 47.30, 11.45),
+    }
+
+    def fake_discover_google(preset, center, api_key, language="en"):
+        if preset["dir_name"] == "business-map":
+            return [_place("Cafe Landmark", "ChIJshared", "Business", "Cafe")]
+        if preset["dir_name"] == "landmark-map":
+            # Same real place, also returned by the landmarks search (a
+            # cafe can carry a "tourist_attraction" type in Google's data).
+            return [_place("Cafe Landmark", "ChIJshared", "Landmark", "Historic")]
+        return []
+
+    with patch("city_discover.geocode_city", return_value=geocode_result), \
+         patch("city_discover.discover_google", side_effect=fake_discover_google), \
+         patch("city_discover.discover_osm", return_value=[]), \
+         patch("city_discover.enrich_place", side_effect=lambda p, api_key, language="en": p):
+        run(
+            city="Innsbruck, Austria", api_key="fake-key", domain=None,
+            languages=["en"], preset_names=["businesses", "landmarks"],
+            init=False, no_photos=True, force=False,
+            output_dir=str(tmp_path),
+        )
+
+    org_dir = tmp_path / "at-tirol-innsbruck"
+    assert (org_dir / "main-map").is_dir()
+    assert not (org_dir / "business-map").exists()
+    assert not (org_dir / "landmark-map").exists()
+
+    with open(org_dir / "main-map" / "map-data.en.tsv") as f:
+        rows = f.readlines()
+    # header + 1 deduped row (both presets returned the same place_id;
+    # businesses ran first, so its category wins)
+    assert len(rows) == 2
+    assert "Business" in rows[1]
+    assert "Cafe" in rows[1]

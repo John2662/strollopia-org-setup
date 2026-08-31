@@ -4,7 +4,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'tools'))
 
 import yaml
-from post_org_setup import check_org_maps_have_data
+from post_org_setup import check_org_maps_have_data, load_org_config, secrets_path_for
 
 
 def _write_org_setup(org_dir, org_maps):
@@ -13,6 +13,45 @@ def _write_org_setup(org_dir, org_maps):
     with open(yaml_path, "w") as f:
         yaml.dump({"org_domain_name": "test.strollopia.com", "org_maps": org_maps}, f)
     return yaml_path
+
+
+def test_load_org_config_merges_secrets_sidecar(tmp_path):
+    yaml_path = tmp_path / "org-setup.yaml"
+    yaml_path.write_text(yaml.dump({
+        "org_domain_name": "test.strollopia.com",
+        "main_admin_name": "Admin",
+    }))
+    (tmp_path / "org-setup.secrets.yaml").write_text(yaml.dump({
+        "main_admin_email": "newminas1234@strollopia.com",
+        "main_admin_password": "RealPassword123",
+    }))
+
+    config = load_org_config(str(yaml_path))
+
+    assert config["org_domain_name"] == "test.strollopia.com"
+    assert config["main_admin_email"] == "newminas1234@strollopia.com"
+    assert config["main_admin_password"] == "RealPassword123"
+
+
+def test_load_org_config_without_secrets_sidecar(tmp_path):
+    # Orgs set up before the sidecar existed still carry credentials
+    # directly in org-setup.yaml - must keep working with no sidecar present.
+    yaml_path = tmp_path / "org-setup.yaml"
+    yaml_path.write_text(yaml.dump({
+        "org_domain_name": "test.strollopia.com",
+        "main_admin_email": "legacy@example.com",
+        "main_admin_password": "changeme123",
+    }))
+
+    config = load_org_config(str(yaml_path))
+
+    assert config["main_admin_email"] == "legacy@example.com"
+    assert config["main_admin_password"] == "changeme123"
+
+
+def test_secrets_path_for():
+    path = secrets_path_for("org-data/newminas/org-setup.yaml")
+    assert path == "org-data/newminas/org-setup.secrets.yaml"
 
 
 def test_check_org_maps_have_data_passes_for_legacy_schema(tmp_path, capsys):

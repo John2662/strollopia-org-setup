@@ -108,7 +108,9 @@ def main(argv=None):
         return 1
 
     org_policy = get_org_policy(domain)
-    primary_map_dir = city_discover.PRESETS[preset_names[0]]["dir_name"]
+    # All presets discover into one combined "main-map" (see
+    # city_discover.write_org_setup) regardless of which presets were run.
+    primary_map_dir = "main-map"
     map_id = get_map_pk_from_policy(org_policy, primary_map_dir)
     if map_id is None:
         print(f"Could not find map pk for '{primary_map_dir}' in org policy -- "

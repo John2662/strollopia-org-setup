@@ -42,7 +42,9 @@ def test_city_discover_output_is_importable(tmp_path):
     org_dir = result["org_dir"]
     map_dirs = find_map_dirs(org_dir)
     assert len(map_dirs) == 1
-    assert os.path.basename(map_dirs[0]) == "business-map"
+    # All presets discover into one combined main-map now -- see
+    # city_discover.write_org_setup.
+    assert os.path.basename(map_dirs[0]) == "main-map"
 
     # Both languages produced a schema+data pair strollopia_import can resolve
     paths_en = resolve_map_dir_paths(map_dirs[0], schema_path=os.path.join(map_dirs[0], "import-schema.en.yaml"))

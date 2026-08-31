@@ -8,6 +8,7 @@ media file upload, and POI creation via the existing REST API.
 import os
 import mimetypes
 import requests
+import yaml
 
 
 # ── Server targeting ──────────────────────────────────────────────
@@ -66,18 +67,25 @@ def admin_login(email, password):
     return data['token_key']
 
 
-def initialize_org_from_yaml(yaml_path, token):
-    """Upload an org-setup.yaml file to create/initialize an organization.
+def initialize_org_from_config(config, filename, token):
+    """Upload an org config dict to create/initialize an organization.
+
+    The caller builds `config` in memory (typically org-setup.yaml merged
+    with its gitignored org-setup.secrets.yaml sidecar) rather than passing
+    a path -- that way the real admin password never has to be written out
+    to a combined file on disk first.
 
     Returns (success: bool, response_data: dict or str).
     """
     headers = {'Authorization': f'Token {token}'}
-    with open(yaml_path, 'rb') as f:
-        resp = requests.post(
-            f'{get_api_base_url()}api/core/admin/organizations/initialize/yaml/',
-            headers=headers,
-            files={'file': (os.path.basename(yaml_path), f, 'text/yaml')},
-        )
+    yaml_bytes = yaml.dump(
+        config, default_flow_style=False, sort_keys=False, allow_unicode=True
+    ).encode('utf-8')
+    resp = requests.post(
+        f'{get_api_base_url()}api/core/admin/organizations/initialize/yaml/',
+        headers=headers,
+        files={'file': (filename, yaml_bytes, 'text/yaml')},
+    )
     try:
         data = resp.json()
     except Exception:
