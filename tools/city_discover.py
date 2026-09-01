@@ -282,7 +282,12 @@ def parse_google_hours(periods):
         open_time = period["open"]["time"]
         open_fmt = f"{open_time[:2]}:{open_time[2:]}"
         if "close" not in period:
-            close_fmt = "24:00"
+            # A 24-hour day (Google omits "close" entirely). "24:00" looks
+            # like the natural value but Django's TimeField only accepts
+            # hour 00-23 -- "value has wrong format" at import time (found
+            # by actually importing a real 24-hour Tim Hortons). Use the
+            # last valid moment of the day instead.
+            close_fmt = "23:59"
         else:
             close_time = period["close"]["time"]
             close_fmt = f"{close_time[:2]}:{close_time[2:]}"

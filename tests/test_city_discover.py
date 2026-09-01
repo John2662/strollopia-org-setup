@@ -204,10 +204,13 @@ def test_parse_google_hours_basic():
 
 
 def test_parse_google_hours_24h():
-    # 24-hour place has open period with no close key
+    # 24-hour place has open period with no close key. "24:00" would look
+    # natural but Django's TimeField rejects hour 24 ("wrong format" at
+    # import time) -- found by actually importing a real 24-hour Tim
+    # Hortons. Must stay within 00:00-23:59.
     periods = [{"open": {"day": 0, "time": "0000"}}]
     result = parse_google_hours(periods)
-    assert result["hours_sun"] == "F: 00:00 T: 24:00"
+    assert result["hours_sun"] == "F: 00:00 T: 23:59"
 
 
 def test_parse_google_hours_empty():
