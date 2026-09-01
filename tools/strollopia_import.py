@@ -14,10 +14,11 @@ name, and paths are resolved automatically:
     <map-dir>/media/               → media files
     <map-dir>/../org-setup.yaml    → org credentials + config
 
-Admin credentials (main_admin_email / main_admin_password) can live in
-org-setup.yaml, but for real API imports it's safer to pass them on the
-command line with --email/--password instead of storing them on disk —
-those values override whatever is in the YAML.
+Admin credentials (main_admin_email / main_admin_password) normally live in
+the gitignored org-setup.secrets.yaml sidecar next to org-setup.yaml (see
+city_discover.py / org_config.py), not in org-setup.yaml itself. --email/
+--password on the command line override either file if you'd rather not
+store them on disk at all.
 
 Usage:
     # Import a single map
@@ -64,6 +65,7 @@ from api_client import (
     upload_media_file,
     user_list,
 )
+from org_config import load_org_config
 
 logger = logging.getLogger('strollopia_import')
 
@@ -184,14 +186,15 @@ def load_schema(path):
 
 
 def load_org_credentials(path, email_override=None, password_override=None):
-    """Load org credentials YAML (org_domain_name, main_admin_email, main_admin_password).
+    """Load org credentials (org_domain_name, main_admin_email, main_admin_password).
 
-    email_override / password_override take precedence over whatever is in the
-    YAML, so credentials can be supplied on the command line instead of being
-    stored in org-setup.yaml.
+    main_admin_email/main_admin_password normally live in the gitignored
+    org-setup.secrets.yaml sidecar next to org-setup.yaml, not in
+    org-setup.yaml itself (see city_discover.py / org_config.py) -- this
+    merges both. email_override / password_override take precedence over
+    either file, so credentials can be supplied on the command line instead.
     """
-    with open(path, 'r') as f:
-        creds = yaml.safe_load(f)
+    creds = load_org_config(path)
 
     if email_override:
         creds['main_admin_email'] = email_override

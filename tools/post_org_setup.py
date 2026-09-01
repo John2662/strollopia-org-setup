@@ -19,31 +19,8 @@ import sys
 import yaml
 
 from api_client import admin_login, initialize_org_from_config, login, print_api_base_url
+from org_config import load_org_config
 from strollopia_import import find_schemas_in_map_dir, find_data_path_for_schema
-
-
-def secrets_path_for(yaml_path):
-    """Return the gitignored secrets sidecar path next to a given org-setup.yaml."""
-    return os.path.join(os.path.dirname(yaml_path), "org-setup.secrets.yaml")
-
-
-def load_org_config(yaml_path):
-    """Load org-setup.yaml merged with its secrets sidecar, if one exists.
-
-    main_admin_email/main_admin_password live in the gitignored
-    org-setup.secrets.yaml (see city_discover.py) rather than the committed
-    org-setup.yaml, so anything that needs those fields must go through
-    this rather than loading yaml_path alone. Orgs set up before the
-    sidecar existed still carry those fields directly in org-setup.yaml,
-    which this also handles fine since the sidecar is optional.
-    """
-    with open(yaml_path) as f:
-        config = yaml.safe_load(f) or {}
-    secrets_path = secrets_path_for(yaml_path)
-    if os.path.exists(secrets_path):
-        with open(secrets_path) as f:
-            config.update(yaml.safe_load(f) or {})
-    return config
 
 
 def check_org_maps_have_data(yaml_path):
