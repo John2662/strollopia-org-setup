@@ -269,14 +269,30 @@ def post_poi(poi_geojson, token, org_domain_name):
         return False, f'HTTP {resp.status_code}: {error_data}'
 
 
-def get_map_pois(map_pk, token, org_domain_name):
-    """Fetch existing POIs for a map. Used for skip_existing checks."""
-    endpoint = f'{get_api_base_url()}api/content/maps/{map_pk}/?org_domain_name={org_domain_name}'
+def get_map_pois(token, org_domain_name):
+    """Fetch existing POIs for the authenticated user's map(s). Used for
+    skip_existing checks.
+
+    Deliberately does NOT use /api/content/maps/<pk>/ -- that endpoint
+    serves a pre-rendered map_json snapshot that doesn't reflect recently
+    created POIs promptly (confirmed by actually importing: it returned 0
+    POIs immediately after 223 had just been created). Re-running an
+    import against that stale view made skip_existing think nothing
+    existed yet, silently re-creating ~240 duplicate POIs. /api/content/
+    pois/ is a live, per-object endpoint and doesn't have this problem.
+
+    It's scoped to maps the authenticated user owns rather than a specific
+    map_pk, which for this pipeline's one-map-per-org orgs is exactly the
+    map being imported into. If an org ever has more than one map again,
+    this would need to filter by map_pk too (the list endpoint doesn't
+    currently expose owning_map, so that'd need per-item detail calls).
+    """
+    endpoint = f'{get_api_base_url()}api/content/pois/?org_domain_name={org_domain_name}'
     headers = {'Authorization': f'Token {token}'}
     resp = requests.get(endpoint, headers=headers)
     if resp.status_code != 200:
         return []
-    data = resp.json()
-    # The map detail endpoint returns pois in the map_json.pois array
-    pois = data.get('map_json', {}).get('pois', [])
-    return pois
+    items = resp.json()
+    # This list endpoint returns {'pk': ..., 'name': ...} per item -- shape
+    # it like the GeoJSON-feature 'properties.name' callers expect.
+    return [{'properties': {'name': item.get('name', '')}} for item in items]

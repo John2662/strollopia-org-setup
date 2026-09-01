@@ -660,9 +660,9 @@ def resolve_layout_card(row, schema, org_layouts):
     return card_pk, layout_fields
 
 
-def get_existing_poi_names(map_pk, token, org_domain_name):
+def get_existing_poi_names(token, org_domain_name):
     """Fetch existing POI names for a map (for skip_existing)."""
-    pois = get_map_pois(map_pk, token, org_domain_name)
+    pois = get_map_pois(token, org_domain_name)
     names = set()
     for poi in pois:
         props = poi.get('properties', {})
@@ -722,7 +722,7 @@ def run_import(org_creds, schema, headers, rows, map_name, media_dir,
     # Build cache of existing POI names (for skip_existing)
     existing_names = set()
     if skip_existing:
-        existing_names = get_existing_poi_names(map_pk, token, org_domain_name)
+        existing_names = get_existing_poi_names(token, org_domain_name)
 
     # Process rows
     total = len(rows)
@@ -783,8 +783,17 @@ def run_import(org_creds, schema, headers, rows, map_name, media_dir,
             if ok:
                 logger.info(f'  SUCCESS: POI "{poi_name}" created.')
                 success_count += 1
-                # Add to existing names cache
-                existing_names.add(poi_name.strip().lower())
+                # Deliberately NOT adding poi_name to existing_names here.
+                # existing_names is meant to catch rows already imported by
+                # a PREVIOUS run -- growing it during this run caused two
+                # real, distinct New Minas locations sharing a brand name
+                # (a second Irving Oil, two extra Little Library branches)
+                # to be wrongly skipped as "duplicates" of an earlier row
+                # in the same file. Upstream discovery (city_discover.py's
+                # dedup_by_place_id / haversine dedup) already guarantees
+                # every row in a generated TSV is a genuinely distinct POI,
+                # so there's no correctness reason to self-dedupe by name
+                # within a single run.
             else:
                 logger.error(f'  FAILED: {resp_data}')
                 error_count += 1
