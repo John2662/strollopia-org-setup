@@ -88,6 +88,12 @@ safe to copy in full. The `Status` column is one of:
 ```
 === Go-live checklist: ca-nova-scotia-annapolis-royal (ca-nova-scotia-annapolis-royal.strollopia.com) ===
 
+cd /home/john/strollopia_git_hub/strollopia-org-setup
+source .env/bin/activate
+export USE_PROD=1
+-- run those three first; every command below targets prod, needs the
+   venv active, and assumes that working directory.
+
 ┌─────┬────────────────────┬────────────────────────────────────────────────────────────────────────────┬────────────────────────────┐
 │ #   │ Status             │ Step                                                                       │ Who                        │
 ├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
@@ -118,10 +124,16 @@ to check yet. That's expected, not a sign of a problem.
 ```
 === Go-live checklist: ca-nova-scotia-new-minas (ca-nova-scotia-new-minas.strollopia.com) ===
 
+cd /home/john/strollopia_git_hub/strollopia-org-setup
+source .env/bin/activate
+export USE_PROD=1
+-- run those three first; every command below targets prod, needs the
+   venv active, and assumes that working directory.
+
 ┌─────┬────────────────────┬────────────────────────────────────────────────────────────────────────────┬────────────────────────────┐
 │ #   │ Status             │ Step                                                                       │ Who                        │
 ├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
-│ 1   │ [done]             │ python tools/post_org_setup.py ca-nova-scotia-new-minas  (USE_PROD=1)      │ You (super-admin login)    │
+│ 1   │ [done]             │ python tools/post_org_setup.py ca-nova-scotia-new-minas                    │ You (super-admin login)    │
 ├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
 │ 2   │ [done]             │ python tools/strollopia_import.py org-data/ca-nova-scotia-new-minas/       │ You, or I can run it       │
 │     │ 248 POIs live      │ --all-maps                                                                 │ (reads secrets file)       │

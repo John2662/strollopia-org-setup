@@ -9,6 +9,7 @@ from unittest.mock import patch, MagicMock
 from generate_todo import (
     resolve_org_slug, _local_row_count, _org_posted, _site_live,
     _data_imported, build_checklist, _wrap_lines, _render_table,
+    print_checklist,
 )
 
 
@@ -191,3 +192,19 @@ def test_render_table_overflows_rather_than_breaks_an_unbreakable_word():
     # allowed to overflow that one line's width instead.
     table = _render_table(["#", "Step"], [["1", "unbreakablylongword"]], widths=[3, 5])
     assert "unbreakablylongword" in table
+
+
+def test_print_checklist_includes_setup_commands(tmp_path, capsys):
+    with patch("generate_todo._org_posted", return_value=False), \
+         patch("generate_todo._site_live", return_value=False):
+        print_checklist("test-town", str(tmp_path), str(tmp_path))
+
+    out = capsys.readouterr().out
+    assert "cd " in out
+    assert "source .env/bin/activate" in out
+    assert "export USE_PROD=1" in out
+    # The cd target must be a real, absolute path to this repo, not a
+    # placeholder -- it should exist and contain this tool.
+    cd_line = next(line for line in out.splitlines() if line.startswith("cd "))
+    repo_root = cd_line[len("cd "):]
+    assert os.path.isfile(os.path.join(repo_root, "tools", "generate_todo.py"))

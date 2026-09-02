@@ -116,7 +116,7 @@ def build_checklist(org_slug, output_dir, sites_repo):
     # Each row: (num, step text -- the exact command where one exists,
     # who, status, dynamic detail shown under the status mark)
     rows = [
-        (1, f"python tools/post_org_setup.py {org_slug}  (USE_PROD=1)",
+        (1, f"python tools/post_org_setup.py {org_slug}",
          "You (super-admin login)", posted, None),
         (2, f"python tools/strollopia_import.py {org_dir}/ --all-maps\n"
             f"(no --email/--password needed, reads the secrets file automatically)",
@@ -179,7 +179,13 @@ def _render_table(headers, rows, widths):
 
 def print_checklist(org_slug, output_dir, sites_repo):
     domain, rows = build_checklist(org_slug, output_dir, sites_repo)
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     print(f"\n=== Go-live checklist: {org_slug} ({domain}) ===\n")
+    print(f"cd {repo_root}")
+    print("source .env/bin/activate")
+    print("export USE_PROD=1")
+    print("-- run those three first; every command below targets prod, needs the")
+    print("   venv active, and assumes that working directory.\n")
 
     table_rows = []
     for num, step, who, status, detail in rows:
