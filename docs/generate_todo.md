@@ -72,7 +72,10 @@ password to match the file, and re-run.
 
 ## Expected output, so you know what you're looking at
 
-Every line is `<mark> <step>`, where `<mark>` is one of:
+The `Step` column is the **exact command to run**, copy-pasteable as-is
+(where one exists — steps 3 and 5 are actions, not shell commands). Long
+lines wrap, but never mid-word/mid-slug, so a wrapped command is still
+safe to copy in full. The `Status` column is one of:
 
 - **`[done]`** — that step is confirmed complete.
 - **`[pending]`** — checked, and it's genuinely not done yet.
@@ -85,18 +88,25 @@ Every line is `<mark> <step>`, where `<mark>` is one of:
 ```
 === Go-live checklist: ca-nova-scotia-annapolis-royal (ca-nova-scotia-annapolis-royal.strollopia.com) ===
 
-1. [pending] Post org to prod (post_org_setup.py)
-             Who: You (super-admin login)
-2. [?]       Import POI data (strollopia_import.py) -- org not posted yet
-             Who: You, or I can run it (reads secrets file)
-3. [pending] Generate deploy.sh
-             Who: I can do this
-4. [pending] Run deploy.sh (wrangler)
-             Who: You (Cloudflare/wrangler login)
-5. [pending] Attach custom domain + DNS CNAME
-             Who: You (Cloudflare dashboard)
-6. [pending] Confirm with check_live.py
-             Who: I can do this
+┌─────┬────────────────────┬────────────────────────────────────────────────────────────────────────────┬────────────────────────────┐
+│ #   │ Status             │ Step                                                                       │ Who                        │
+├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
+│ 1   │ [pending]          │ python tools/post_org_setup.py ca-nova-scotia-annapolis-royal              │ You (super-admin login)    │
+│     │                    │ (USE_PROD=1)                                                               │                            │
+├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
+│ 2   │ [?]                │ python tools/strollopia_import.py org-data/ca-nova-scotia-annapolis-royal/ │ You, or I can run it       │
+│     │ org not posted yet │ --all-maps                                                                 │ (reads secrets file)       │
+│     │                    │ (no --email/--password needed, reads the secrets file automatically)       │                            │
+├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
+│ 3   │ [pending]          │ Generate deploy.sh once the map pk is known                                │ I can do this              │
+├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
+│ 4   │ [pending]          │ bash org-data/ca-nova-scotia-annapolis-royal/deploy.sh                     │ You (Cloudflare/wrangler   │
+│     │                    │ (watch for the KV JSON→TOML gotcha, see ONBOARDING.md)                     │ login)                     │
+├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
+│ 5   │ [pending]          │ Attach custom domain + create DNS CNAME (Cloudflare dashboard)             │ You (Cloudflare dashboard) │
+├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
+│ 6   │ [pending]          │ python tools/check_live.py ca-nova-scotia-annapolis-royal.strollopia.com   │ I can do this              │
+└─────┴────────────────────┴────────────────────────────────────────────────────────────────────────────┴────────────────────────────┘
 ```
 
 Steps 3-6 all show `[pending]` here even though nothing has actively
@@ -108,18 +118,24 @@ to check yet. That's expected, not a sign of a problem.
 ```
 === Go-live checklist: ca-nova-scotia-new-minas (ca-nova-scotia-new-minas.strollopia.com) ===
 
-1. [done]    Post org to prod (post_org_setup.py)
-             Who: You (super-admin login)
-2. [done]    Import POI data (strollopia_import.py) -- 248 POIs live (expected 248)
-             Who: You, or I can run it (reads secrets file)
-3. [done]    Generate deploy.sh
-             Who: I can do this
-4. [done]    Run deploy.sh (wrangler)
-             Who: You (Cloudflare/wrangler login)
-5. [done]    Attach custom domain + DNS CNAME
-             Who: You (Cloudflare dashboard)
-6. [done]    Confirm with check_live.py
-             Who: I can do this
+┌─────┬────────────────────┬────────────────────────────────────────────────────────────────────────────┬────────────────────────────┐
+│ #   │ Status             │ Step                                                                       │ Who                        │
+├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
+│ 1   │ [done]             │ python tools/post_org_setup.py ca-nova-scotia-new-minas  (USE_PROD=1)      │ You (super-admin login)    │
+├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
+│ 2   │ [done]             │ python tools/strollopia_import.py org-data/ca-nova-scotia-new-minas/       │ You, or I can run it       │
+│     │ 248 POIs live      │ --all-maps                                                                 │ (reads secrets file)       │
+│     │ (expected 248)     │ (no --email/--password needed, reads the secrets file automatically)       │                            │
+├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
+│ 3   │ [done]             │ Generate deploy.sh once the map pk is known                                │ I can do this              │
+├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
+│ 4   │ [done]             │ bash org-data/ca-nova-scotia-new-minas/deploy.sh                           │ You (Cloudflare/wrangler   │
+│     │                    │ (watch for the KV JSON→TOML gotcha, see ONBOARDING.md)                     │ login)                     │
+├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
+│ 5   │ [done]             │ Attach custom domain + create DNS CNAME (Cloudflare dashboard)             │ You (Cloudflare dashboard) │
+├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
+│ 6   │ [done]             │ python tools/check_live.py ca-nova-scotia-new-minas.strollopia.com         │ I can do this              │
+└─────┴────────────────────┴────────────────────────────────────────────────────────────────────────────┴────────────────────────────┘
 ```
 
 ### Step-by-step: what each mark actually means

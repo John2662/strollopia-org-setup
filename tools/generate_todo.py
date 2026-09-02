@@ -17,6 +17,7 @@ import argparse
 import csv
 import os
 import sys
+import textwrap
 
 import requests
 
@@ -112,25 +113,81 @@ def build_checklist(org_slug, output_dir, sites_repo):
     site_dir_exists = os.path.isdir(site_dir)
     site_live = _site_live(domain) if posted else False
 
+    # Each row: (num, step text -- the exact command where one exists,
+    # who, status, dynamic detail shown under the status mark)
     rows = [
-        (1, "Post org to prod (post_org_setup.py)", "You (super-admin login)", posted),
-        (2, f"Import POI data (strollopia_import.py) -- {imported_detail}",
-         "You, or I can run it (reads secrets file)", imported),
-        (3, "Generate deploy.sh", "I can do this", deploy_script_exists),
-        (4, "Run deploy.sh (wrangler)", "You (Cloudflare/wrangler login)", site_dir_exists),
-        (5, "Attach custom domain + DNS CNAME", "You (Cloudflare dashboard)", site_live),
-        (6, "Confirm with check_live.py", "I can do this", site_live),
+        (1, f"python tools/post_org_setup.py {org_slug}  (USE_PROD=1)",
+         "You (super-admin login)", posted, None),
+        (2, f"python tools/strollopia_import.py {org_dir}/ --all-maps\n"
+            f"(no --email/--password needed, reads the secrets file automatically)",
+         "You, or I can run it (reads secrets file)", imported, imported_detail),
+        (3, "Generate deploy.sh once the map pk is known",
+         "I can do this", deploy_script_exists, None),
+        (4, f"bash {org_dir}/deploy.sh\n(watch for the KV JSON→TOML gotcha, see ONBOARDING.md)",
+         "You (Cloudflare/wrangler login)", site_dir_exists, None),
+        (5, "Attach custom domain + create DNS CNAME (Cloudflare dashboard)",
+         "You (Cloudflare dashboard)", site_live, None),
+        (6, f"python tools/check_live.py {domain}",
+         "I can do this", site_live, None),
     ]
     return domain, rows
+
+
+def _wrap_lines(text, width):
+    """Wrap text to width, respecting existing newlines as hard breaks.
+
+    break_on_hyphens=False so slugs like ca-nova-scotia-annapolis-royal
+    never split mid-word -- these lines are meant to be copy-pasted as
+    real commands, and a hyphen-broken slug pastes as a broken command.
+    """
+    lines = []
+    for para in text.split("\n"):
+        wrapped = textwrap.wrap(
+            para, width=width, break_on_hyphens=False, break_long_words=False,
+        ) or [""]
+        lines.extend(wrapped)
+    return lines
+
+
+def _render_table(headers, rows, widths):
+    """Render a Unicode box-drawing table. rows: list of list-of-cell-strings
+    (already the right length); cells may contain embedded newlines."""
+    def border(left, mid, right, fill="─"):
+        return left + mid.join(fill * (w + 2) for w in widths) + right
+
+    def render_row(cells):
+        wrapped_cells = [_wrap_lines(str(c), w) for c, w in zip(cells, widths)]
+        height = max(len(wc) for wc in wrapped_cells)
+        lines = []
+        for i in range(height):
+            parts = []
+            for wc, w in zip(wrapped_cells, widths):
+                text = wc[i] if i < len(wc) else ""
+                parts.append(f" {text:<{w}} ")
+            lines.append("│" + "│".join(parts) + "│")
+        return "\n".join(lines)
+
+    out = [border("┌", "┬", "┐")]
+    out.append(render_row(headers))
+    out.append(border("├", "┼", "┤"))
+    for row in rows:
+        out.append(render_row(row))
+        out.append(border("├", "┼", "┤"))
+    out[-1] = border("└", "┴", "┘")
+    return "\n".join(out)
 
 
 def print_checklist(org_slug, output_dir, sites_repo):
     domain, rows = build_checklist(org_slug, output_dir, sites_repo)
     print(f"\n=== Go-live checklist: {org_slug} ({domain}) ===\n")
-    for num, step, who, status in rows:
+
+    table_rows = []
+    for num, step, who, status, detail in rows:
         mark = "[done]" if status is True else "[?]" if status is None else "[pending]"
-        print(f"{num}. {mark:<9} {step}")
-        print(f"   {'':<9} Who: {who}")
+        status_cell = mark if detail is None else f"{mark}\n{detail}"
+        table_rows.append([str(num), status_cell, step, who])
+
+    print(_render_table(["#", "Status", "Step", "Who"], table_rows, widths=[3, 18, 74, 26]))
     print()
 
 

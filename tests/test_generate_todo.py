@@ -8,7 +8,7 @@ import yaml
 from unittest.mock import patch, MagicMock
 from generate_todo import (
     resolve_org_slug, _local_row_count, _org_posted, _site_live,
-    _data_imported, build_checklist,
+    _data_imported, build_checklist, _wrap_lines, _render_table,
 )
 
 
@@ -151,5 +151,43 @@ def test_build_checklist_org_not_posted_short_circuits(tmp_path):
     posted_row = rows[0]
     assert posted_row[3] is False
     imported_row = rows[1]
-    assert "org not posted yet" in imported_row[1]
     assert imported_row[3] is None
+    assert "org not posted yet" in imported_row[4]
+
+
+def test_wrap_lines_never_breaks_a_slug_mid_hyphen():
+    # Regression test: a slug like ca-nova-scotia-annapolis-royal must
+    # never split across lines -- these lines are meant to be
+    # copy-pasted as real commands, and a hyphen-broken slug pastes as
+    # a broken command.
+    text = "python tools/post_org_setup.py ca-nova-scotia-annapolis-royal  (USE_PROD=1)"
+    lines = _wrap_lines(text, width=40)
+    assert not any(line.endswith("-") for line in lines)
+    assert "ca-nova-scotia-annapolis-royal" in "".join(lines)
+
+
+def test_wrap_lines_respects_embedded_newlines_as_hard_breaks():
+    lines = _wrap_lines("first line\nsecond line", width=40)
+    assert lines == ["first line", "second line"]
+
+
+def test_render_table_produces_aligned_box_when_content_fits():
+    table = _render_table(
+        ["#", "Step"], [["1", "short"], ["2", "two words"]],
+        widths=[3, 12],
+    )
+    lines = table.split("\n")
+    # Every line should be the same length (straight box edges) when
+    # every word fits within its column.
+    widths_seen = {len(line) for line in lines}
+    assert len(widths_seen) == 1
+    assert lines[0].startswith("┌") and lines[0].endswith("┐")
+    assert lines[-1].startswith("└") and lines[-1].endswith("┘")
+
+
+def test_render_table_overflows_rather_than_breaks_an_unbreakable_word():
+    # A single word longer than its column can't be wrapped without
+    # breaking it -- by design (see _wrap_lines), it's left intact and
+    # allowed to overflow that one line's width instead.
+    table = _render_table(["#", "Step"], [["1", "unbreakablylongword"]], widths=[3, 5])
+    assert "unbreakablylongword" in table
