@@ -23,6 +23,7 @@ import requests
 
 from api_client import get_api_base_url, get_org_policy, login
 from city_discover import make_domain, domain_to_slug
+from generate_deploy_script import print_manual_checklist
 from org_config import load_org_config
 
 
@@ -195,6 +196,16 @@ def print_checklist(org_slug, output_dir, sites_repo):
 
     print(_render_table(["#", "Status", "Step", "Who"], table_rows, widths=[3, 18, 74, 26]))
     print()
+
+    # Step 5 (index 4 -- rows are in fixed 1-6 order from build_checklist)
+    # is the one manual, multi-part Cloudflare dashboard step with no
+    # single command of its own -- spell out exactly how to do it, reusing
+    # generate_deploy_script.py's own instructions rather than duplicating
+    # them, so the two never drift apart.
+    step5_status = rows[4][3]
+    if step5_status is not True:
+        print("How to do step 5 (Cloudflare dashboard):")
+        print_manual_checklist(org_slug, domain)
 
 
 def main(argv=None):
