@@ -70,6 +70,107 @@ and the live password can go out of sync. When that happens, step 2 shows
 the secrets file to match whatever was actually set, or reset the live
 password to match the file, and re-run.
 
+## Expected output, so you know what you're looking at
+
+Every line is `<mark> <step>`, where `<mark>` is one of:
+
+- **`[done]`** — that step is confirmed complete.
+- **`[pending]`** — checked, and it's genuinely not done yet.
+- **`[?]`** — couldn't determine either way (see the per-step notes below
+  for what causes this on each one) — treat this as "needs a manual look,"
+  not as pending.
+
+### A town before anything is posted (real output, Annapolis Royal)
+
+```
+=== Go-live checklist: ca-nova-scotia-annapolis-royal (ca-nova-scotia-annapolis-royal.strollopia.com) ===
+
+1. [pending] Post org to prod (post_org_setup.py)
+             Who: You (super-admin login)
+2. [?]       Import POI data (strollopia_import.py) -- org not posted yet
+             Who: You, or I can run it (reads secrets file)
+3. [pending] Generate deploy.sh
+             Who: I can do this
+4. [pending] Run deploy.sh (wrangler)
+             Who: You (Cloudflare/wrangler login)
+5. [pending] Attach custom domain + DNS CNAME
+             Who: You (Cloudflare dashboard)
+6. [pending] Confirm with check_live.py
+             Who: I can do this
+```
+
+Steps 3-6 all show `[pending]` here even though nothing has actively
+*failed* for them — they're just downstream of step 1, so there's nothing
+to check yet. That's expected, not a sign of a problem.
+
+### A fully launched town (real output, New Minas)
+
+```
+=== Go-live checklist: ca-nova-scotia-new-minas (ca-nova-scotia-new-minas.strollopia.com) ===
+
+1. [done]    Post org to prod (post_org_setup.py)
+             Who: You (super-admin login)
+2. [done]    Import POI data (strollopia_import.py) -- 248 POIs live (expected 248)
+             Who: You, or I can run it (reads secrets file)
+3. [done]    Generate deploy.sh
+             Who: I can do this
+4. [done]    Run deploy.sh (wrangler)
+             Who: You (Cloudflare/wrangler login)
+5. [done]    Attach custom domain + DNS CNAME
+             Who: You (Cloudflare dashboard)
+6. [done]    Confirm with check_live.py
+             Who: I can do this
+```
+
+### Step-by-step: what each mark actually means
+
+**1. Post org to prod**
+- `[done]` — the org exists on prod (`get-org-policy` succeeded).
+- `[pending]` — it doesn't. Only state this step can be in; no `[?]`.
+
+**2. Import POI data** — the most detailed step; the message after `--`
+tells you exactly what was checked:
+| Message | Mark | Meaning |
+|---|---|---|
+| `org not posted yet` | `[?]` | Step 1 isn't done — nothing to check |
+| `no org-setup.yaml found locally` | `[?]` | Missing local file, not an import-progress question |
+| `no admin credentials found locally` | `[?]` | No `org-setup.secrets.yaml` next to it |
+| `admin login failed (...)` | `[?]` | **The password-drift gotcha above** — live password and the secrets file disagree |
+| `could not list POIs (HTTP nnn)` | `[?]` | API call itself failed — check the API is reachable |
+| `N POIs live (expected M)`, N ≥ M | `[done]` | Every local row has a live counterpart |
+| `N/M POIs live -- import incomplete or in progress` | `[pending]` | Fewer live than expected — either still running, or some rows were skipped (see the `skip_existing` name-only-matching limitation documented in `strollopia_import.py` if the count won't budge on a re-run) |
+| `N POIs live` (no `expected M`) | `[done]`/`[pending]` | No local TSV found to compare against — this is just "is anything live at all" |
+
+**3. Generate deploy.sh**
+- `[done]` — `org-data/<slug>/deploy.sh` exists on disk.
+- `[pending]` — it doesn't yet.
+
+**4. Run deploy.sh (wrangler)**
+- `[done]` — `sites/<slug>/` exists locally in the sites repo. This is a
+  **heuristic**, not a live check: the directory can exist without ever
+  having been pushed. If step 4 says done but step 5/6 say pending, that's
+  the likely explanation — the deploy ran locally but wasn't pushed, or
+  pushed to the wrong project name.
+
+**5. Attach custom domain + DNS CNAME** and **6. Confirm with
+check_live.py**
+- Both come from the same single check: does `https://<slug>.strollopia.com/`
+  respond 200 with the template's "Open the Map" marker? If yes, both are
+  `[done]`; if the request fails or the marker's missing, both are
+  `[pending]`. There's no way to tell these two apart from the outside —
+  a `[pending]` here could mean the domain isn't attached yet, DNS hasn't
+  propagated, or the deploy itself was bad.
+
+### A note on `USE_PROD`
+
+`make todo SITE=<slug>` sets `USE_PROD=1` **only for that one command** —
+it's an inline prefix (`USE_PROD=1 python tools/generate_todo.py ...`),
+not an export. It won't show up in `echo $USE_PROD` in your shell
+afterward, and it doesn't need to — the checklist still genuinely checked
+prod. Running the script directly instead of through `make todo`, you do
+need `export USE_PROD=1` yourself first (see "Running it" above), or it
+defaults to checking dev.
+
 ## How the town's location actually reaches Google
 
 This tool **never talks to Google** — it only checks state after the
