@@ -661,7 +661,23 @@ def resolve_layout_card(row, schema, org_layouts):
 
 
 def get_existing_poi_names(token, org_domain_name):
-    """Fetch existing POI names for a map (for skip_existing)."""
+    """Fetch existing POI names for a map (for skip_existing).
+
+    KNOWN LIMITATION: name-only matching, no location awareness. If a town
+    has two genuinely distinct real locations sharing an exact name (e.g.
+    a second Irving Oil, or a third Little Library branch -- both real
+    cases found on New Minas), and one of them already exists on the map,
+    re-running the import will wrongly skip the other one as if it were a
+    duplicate. This previously required manually identifying and creating
+    4 missing New Minas rows by comparing coordinates (haversine < 30m)
+    against the live POI list, then re-running with skip_existing forced
+    off for just that pre-verified subset. A proper fix would make this
+    function location-aware too (fetch each existing POI's coordinates,
+    not just its name), at the cost of one detail request per existing
+    POI -- expensive enough (rate-limited past ~200 requests) that it
+    hasn't been worth doing for the common case, where a single clean
+    import run never hits this at all.
+    """
     pois = get_map_pois(token, org_domain_name)
     names = set()
     for poi in pois:
