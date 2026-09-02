@@ -83,7 +83,7 @@ safe to copy in full. The `Status` column is one of:
   for what causes this on each one) — treat this as "needs a manual look,"
   not as pending.
 
-### A town before anything is posted (real output, Annapolis Royal)
+### A town partway through launch (real output, Annapolis Royal)
 
 ```
 === Go-live checklist: ca-nova-scotia-annapolis-royal (ca-nova-scotia-annapolis-royal.strollopia.com) ===
@@ -97,27 +97,38 @@ export USE_PROD=1
 ┌─────┬────────────────────┬────────────────────────────────────────────────────────────────────────────┬────────────────────────────┐
 │ #   │ Status             │ Step                                                                       │ Who                        │
 ├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
-│ 1   │ [pending]          │ python tools/post_org_setup.py ca-nova-scotia-annapolis-royal              │ You (super-admin login)    │
-│     │                    │ (USE_PROD=1)                                                               │                            │
+│ 1   │ [done]             │ python tools/post_org_setup.py ca-nova-scotia-annapolis-royal              │ You (super-admin login)    │
 ├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
-│ 2   │ [?]                │ python tools/strollopia_import.py org-data/ca-nova-scotia-annapolis-royal/ │ You, or I can run it       │
-│     │ org not posted yet │ --all-maps                                                                 │ (reads secrets file)       │
-│     │                    │ (no --email/--password needed, reads the secrets file automatically)       │                            │
+│ 2   │ [done]             │ python tools/strollopia_import.py org-data/ca-nova-scotia-annapolis-royal/ │ You, or I can run it       │
+│     │ 133 POIs live      │ --all-maps                                                                 │ (reads secrets file)       │
+│     │ (expected 133)     │ (no --email/--password needed, reads the secrets file automatically)       │                            │
 ├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
-│ 3   │ [pending]          │ Generate deploy.sh once the map pk is known                                │ I can do this              │
+│ 3   │ [done]             │ Generate deploy.sh once the map pk is known                                │ I can do this              │
 ├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
-│ 4   │ [pending]          │ bash org-data/ca-nova-scotia-annapolis-royal/deploy.sh                     │ You (Cloudflare/wrangler   │
+│ 4   │ [done]             │ bash org-data/ca-nova-scotia-annapolis-royal/deploy.sh                     │ You (Cloudflare/wrangler   │
 │     │                    │ (watch for the KV JSON→TOML gotcha, see ONBOARDING.md)                     │ login)                     │
 ├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
 │ 5   │ [pending]          │ Attach custom domain + create DNS CNAME (Cloudflare dashboard)             │ You (Cloudflare dashboard) │
 ├─────┼────────────────────┼────────────────────────────────────────────────────────────────────────────┼────────────────────────────┤
 │ 6   │ [pending]          │ python tools/check_live.py ca-nova-scotia-annapolis-royal.strollopia.com   │ I can do this              │
 └─────┴────────────────────┴────────────────────────────────────────────────────────────────────────────┴────────────────────────────┘
+
+How to do step 5 (Cloudflare dashboard):
+
+Manual steps (Cloudflare dashboard -- need dashboard access or an elevated API token):
+  1. Attach custom domain: Workers & Pages -> ca-nova-scotia-annapolis-royal -> Custom domains
+     -> Add a domain -> ca-nova-scotia-annapolis-royal.strollopia.com
+  2. Create DNS record: strollopia.com zone -> DNS -> Add record
+       Type: CNAME   Name: ca-nova-scotia-annapolis-royal   Target: ca-nova-scotia-annapolis-royal.pages.dev
+       Proxy status: Proxied
+  3. Wait ~1-2 minutes for the certificate, then run:
+       python tools/check_live.py ca-nova-scotia-annapolis-royal.strollopia.com
 ```
 
-Steps 3-6 all show `[pending]` here even though nothing has actively
-*failed* for them — they're just downstream of step 1, so there's nothing
-to check yet. That's expected, not a sign of a problem.
+Whenever step 5 isn't done yet, its exact instructions print right after
+the table automatically (reusing `generate_deploy_script.py`'s own
+`print_manual_checklist()`, so the two can never drift apart) — once step
+5 is confirmed done, this block disappears from the output.
 
 ### A fully launched town (real output, New Minas)
 
