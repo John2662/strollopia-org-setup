@@ -111,7 +111,14 @@ PRESETS = {
             "performing_arts_theater": ("Landmark", "Cultural"),
             "theatre":                 ("Landmark", "Cultural"),
         },
-        "default_category": ("Landmark", "Landmark"),
+        # A landmarks-preset search radius sweeps up plenty of ordinary
+        # places Google has no specific type for (just establishment/
+        # point_of_interest) -- a farm market, an architect's office, a
+        # holdings company. In a small town that's overwhelmingly more
+        # likely to be a generic business than an overlooked landmark, so
+        # the fallback lands there instead of asserting a false, specific
+        # "Landmark" subcategory.
+        "default_category": ("Business", "Other"),
     },
     "public-art": {
         "dir_name": "public-art-map",
@@ -148,6 +155,51 @@ PRESETS = {
         "default_category": ("Nature", "Park"),
     },
 }
+
+# Google Place types outside every preset's own search vocabulary that still
+# show up constantly in Nearby Search results (any preset's radius search
+# picks up whatever businesses happen to sit within it, not just places
+# matching that preset's `type` param). Without these, a lawyer's office or
+# bank swept in by a landmarks/parks search had no matching key in that
+# preset's type_to_category and fell through to its default_category --
+# e.g. "Landmark/Landmark" on an accountant's office, which reads as a
+# real landmark instead of the categorization miss it actually is.
+SUPPLEMENTAL_TYPE_TO_CATEGORY = {
+    "lawyer":                 ("Business", "Professional Services"),
+    "accounting":             ("Business", "Professional Services"),
+    "insurance_agency":       ("Business", "Professional Services"),
+    "real_estate_agency":     ("Business", "Professional Services"),
+    "finance":                ("Business", "Professional Services"),
+    "bank":                   ("Business", "Finance"),
+    "physiotherapist":        ("Business", "Health"),
+    "doctor":                 ("Business", "Health"),
+    "dentist":                ("Business", "Health"),
+    "veterinary_care":        ("Business", "Health"),
+    "local_government_office": ("Landmark", "Civic"),
+    "fire_station":           ("Landmark", "Civic"),
+    "police":                 ("Landmark", "Civic"),
+    "post_office":            ("Landmark", "Civic"),
+    "school":                 ("Landmark", "Education"),
+    "primary_school":         ("Landmark", "Education"),
+    "secondary_school":       ("Landmark", "Education"),
+    "general_contractor":     ("Business", "Services"),
+    "electrician":            ("Business", "Services"),
+    "plumber":                ("Business", "Services"),
+    "moving_company":         ("Business", "Services"),
+    "storage":                ("Business", "Services"),
+}
+
+# All presets discover into one merged main-map (see run()), so a place's
+# category should come from whatever type it actually carries, not from
+# which preset's search radius happened to sweep it up. Built once here so
+# discover_google can classify every result the same way regardless of
+# preset. Merge order only matters for keys duplicated across presets, and
+# there are none today -- if that changes, put the more specific preset
+# first.
+COMBINED_TYPE_TO_CATEGORY = {}
+for _preset in PRESETS.values():
+    COMBINED_TYPE_TO_CATEGORY.update(_preset["type_to_category"])
+COMBINED_TYPE_TO_CATEGORY.update(SUPPLEMENTAL_TYPE_TO_CATEGORY)
 
 
 # ── Slug & Domain Utilities ────────────────────────────────────────────────────
@@ -409,8 +461,14 @@ def discover_osm(preset, bbox, language="en"):
     except requests.exceptions.Timeout:
         print("  Warning: OSM Overpass timed out — skipping OSM source for this preset")
         return []
-    except requests.exceptions.HTTPError as exc:
-        print(f"  Warning: OSM Overpass HTTP error ({exc}) — skipping OSM source for this preset")
+    except requests.exceptions.RequestException as exc:
+        # Covers HTTPError (406/etc), ConnectionError (dropped connection),
+        # and anything else requests raises for a bad/unreachable response --
+        # Overpass is a shared public instance and fails in different ways
+        # at different times. Any of them should degrade to OSM-less
+        # results for this preset, not crash a run that already paid for
+        # Google Places calls in earlier presets.
+        print(f"  Warning: OSM Overpass request failed ({exc}) — skipping OSM source for this preset")
         return []
 
     type_map = preset["type_to_category"]
@@ -478,7 +536,6 @@ def discover_google(preset, center, api_key, language="en"):
     if not api_key:
         return []
 
-    type_map = preset["type_to_category"]
     default_cat = preset["default_category"]
     places = []
     seen_ids = set()
@@ -503,11 +560,13 @@ def discover_google(preset, center, api_key, language="en"):
                         continue
                     seen_ids.add(pid)
                     loc = item["geometry"]["location"]
-                    # Prefer category from the item's own types list
+                    # Classify from the item's own types list, using the
+                    # combined map across all presets (not just this
+                    # preset's) -- see COMBINED_TYPE_TO_CATEGORY.
                     category, subcategory = default_cat
                     for t in item.get("types", []):
-                        if t in type_map:
-                            category, subcategory = type_map[t]
+                        if t in COMBINED_TYPE_TO_CATEGORY:
+                            category, subcategory = COMBINED_TYPE_TO_CATEGORY[t]
                             break
                     photo_ref = None
                     if item.get("photos"):
