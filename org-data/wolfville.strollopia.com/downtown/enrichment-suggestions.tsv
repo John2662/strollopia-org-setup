@@ -1,0 +1,51 @@
+downtown_poi_name	phone	website	address	has_photo_already	new_photo_available	new_photo_filename
+BeLeaf Aveda Concept Salons & Spa	(902) 365-5323	https://beleafsalonspa.ca/	336 Main St, Wolfville, NS B4P 1C8, Canada	True	True	beleaf-aveda-concept-salons-spa.jpg
+The Church Brewing Co	(902) 542-2337	http://www.churchbrewing.ca/	329 Main St, Wolfville, NS B4P 1C4, Canada	True	True	the-church-brewing-co.jpg
+Joe's Food Emporium	(902) 542-3033	http://www.joesfoodemporium.ca/	434 Main St, Wolfville, NS B4P 2A1, Canada	False	True	joe-s-food-emporium.jpg
+Pronto Pizza	(902) 542-4100	https://176838.com/pronto	467 Main St, Wolfville, NS B4P 2A3, Canada	True	True	pronto-pizza.jpg
+Paddy’s Brewpub & Rosie’s Restaurant	(902) 542-0059	http://www.paddyswolfville.ca/	460 Main St, Wolfville, NS B4P 2A1, Canada	True	True	paddy-s-brewpub-rosie-s-restaurant.jpg
+Wolfville Farmers Market	(902) 697-3344	http://www.wolfvillefarmersmarket.ca/	24 Elm Ave, Wolfville, NS B4P 1Z9, Canada	True	True	wolfville-farmers-market.jpg
+Herbin Jewellers	(902) 542-5705	https://www.herbinjewellers.com/#utm_source=google&utm_medium=local&utm_campaign=Wolfville	453 Main St, Wolfville, NS B4P 1E3, Canada	True	True	herbin-jewellers.jpg
+Gingerbread House Inn	(902) 542-1458	http://www.gingerbreadhouse.ca/	8 Robie Tufts Dr, Wolfville, NS B4P 1X1, Canada	True	True	gingerbread-house-inn.jpg
+Harvest Gallery	(902) 542-7093	http://harvestgallery.ca/	462 Main St, Wolfville, NS B4P 2A1, Canada	True	True	harvest-gallery.jpg
+Lightfoot & Wolfville Vineyards	(902) 542-7774	http://lightfootandwolfville.com/	11143 Evangeline Trl, Wolfville, NS B4P 2M6, Canada	True	True	lightfoot-wolfville-vineyards.jpg
+L'Arche Homefires	(902) 542-3520	http://larchehomefires.org/	341 Main St, Wolfville, NS B4P 2N5, Canada	True	True	l-arche-homefires.jpg
+Vincent den Hartog Architect	(902) 542-4194	http://www.denhartogarchitect.com/	176 Main St, Wolfville, NS B4P 2M6, Canada	True	True	vincent-den-hartog-architect.jpg
+Wolfville Memorial Library	(902) 542-5760	http://www.valleylibrary.ca/branch/wolfville-memorial-library	21 Elm Ave, Wolfville, NS B4P 2A1, Canada	False	True	wolfville-memorial-library.jpg
+Kimball Law	(902) 542-5757	http://kimballlaw.ca/	121 Front St, Wolfville, NS B4P 1A4, Canada	False	True	kimball-law.jpg
+Tim Hortons	(902) 542-1755	https://locations.timhortons.ca/en/ns/wolfville/370-main-st/	370 Main St, Wolfville, NS B4P 1C4, Canada	False	True	tim-hortons.jpg
+Wolfville Fire Department	(902) 542-5635	https://www.wolfvillefire.ca/	355 Main St, Wolfville, NS B4P 1C4, Canada	False	True	wolfville-fire-department.jpg
+Shoppers Drug Mart	(902) 542-2248	https://www.shoppersdrugmart.ca/en/stores/158-shoppers-drug-mart-wolfville/?utm_source=G&utm_medium=lpm&utm_campaign=LPM_SDM	433 Main St, Wolfville, NS B4P 0C4, Canada	False	True	shoppers-drug-mart.jpg
+Juniper Food + Wine	(902) 542-3548	http://www.juniperluncheonette.com/	389 Main St, Wolfville, NS B4P 2B8, Canada	True	True	juniper-food-wine.jpg
+Blomidon Inn	(800) 565-2291	http://www.blomidon.ns.ca/	195 Main St, Wolfville, NS B4P 2H9, Canada	True	True	blomidon-inn.jpg
+Clock Park			484 Main St, Wolfville, NS B4P 1E3, Canada	False	True	clock-park.jpg
+Randall House Museum	(902) 542-9775	http://wolfvillehs.ednet.ns.ca/	259 Main St, Wolfville, NS B4P 1C6, Canada	False	True	randall-house-museum.jpg
+St. John's Anglican Church, Parish of Horton	(902) 542-2464	http://www.stjohnsanglicanchurchwolfville.ca/	164 Main St, Wolfville, NS B4P 2M6, Canada	False	True	st-john-s-anglican-church-parish-of-horton.jpg
+Manning Memorial Chapel	(902) 585-1203	http://chapel.acadiau.ca/	Manning Memorial Chapel, 45 Acadia St, Wolfville, NS B4P 2P7, Canada	False	True	manning-memorial-chapel.jpg
+Christ Community Church	(902) 670-6853	https://www.justchurch.ca/	450 Main St, Wolfville, NS B4P 2A1, Canada	False	True	christ-community-church.jpg
+Wolfville Ridge United Baptist Church	(902) 542-3419	https://www.facebook.com/WolfvilleridgeChurch/	1350 Ridge Rd, Wolfville, NS B4P 0G1, Canada	False	True	wolfville-ridge-united-baptist-church.jpg
+Acadia Divinity College	(902) 585-2210	http://acadiadiv.ca/	38 Highland Ave, Wolfville, NS B4P 2R6, Canada	False	True	acadia-divinity-college.jpg
+Blue Shutters Accommodations		https://airbnb.com/h/bsa-apartment	7 Blomidon Terrace, Wolfville, NS B4P 2G8, Canada	False	True	blue-shutters-accommodations.jpg
+Acadia University	(902) 542-2201	https://www.acadiau.ca/	15 University Ave, Wolfville, NS B4P 2R6, Canada	False	True	acadia-university.jpg
+Acadia University	(902) 542-2201	http://www.acadiau.ca/	University Hall, 13 University Ave, Wolfville, NS B4P 2R6, Canada	False	True	acadia-university.jpg
+Acadia University Bookstore	(902) 585-1201	https://www.bkstr.com/acadiastore/home?cm_mmc=OrganicSearch-_-GoogleMyBusiness-_-Google-_-921	Wheelock Dining Hall, 44 Highland Ave, Wolfville, NS B4P 1Y7, Canada	False	True	acadia-university-bookstore.jpg
+Bodyworks Massage Therapy	(902) 542-4700	http://www.bodyworks-massage-therapy.com/	189 Dykeland St, Wolfville, NS B4P 1A3, Canada	False	False	
+Colibri Software	(902) 704-0243	http://www.colibri-software.com/	24 University Ave, Wolfville, NS B4P 2P7, Canada	False	False	
+Locust & Starr Inn		https://www.bluepillow.com/search/5eb4579067a9d10d04278e07?dest=bkng&cat=Villa&lat=45.09035&lng=-64.35854&language=en	Wolfville, NS B4P 2E8, Canada	False	False	
+The Clayground Studio	(902) 542-2169	https://www.theclaygroundstudio.com/	348 Main St, Wolfville, NS B4P 2E8, Canada	False	True	the-clayground-studio.jpg
+Southwest Nova Insurance Group Inc.	(902) 678-8883	http://www.swni.ca/	260 Main St, Wolfville, NS B4P 1C6, Canada	False	True	southwest-nova-insurance-group-inc.jpg
+Acadia Athletics Complex	(902) 585-1568	https://recreation.acadiau.ca/Home.html	550 Main St, Wolfville, NS B4P 2R6, Canada	False	True	acadia-athletics-complex.jpg
+Hennigar's Farm Market	(902) 542-3503	https://hennigars.com/	10272, Nova Scotia Trunk 1, Wolfville, NS B4P 2R2, Canada	False	True	hennigar-s-farm-market.jpg
+Li's Wok and Grill	(902) 542-4097	https://liswokgrill.com/?utm_source=google&utm_medium=maps&utm_campaign=website	112 Front St, Wolfville, NS B4P 1A4, Canada	False	True	li-s-wok-grill.jpg
+Just Us! Wolfville Coffee House	(902) 542-7474	http://www.justuscoffee.com/	450 Main St, Wolfville, NS B4P 2A1, Canada	True	True	just-us-wolfville-cafe.jpg
+Annapolis Cider	(902) 697-2707	http://drinkannapolis.ca/	388 Main St, Wolfville, NS B4P 2B8, Canada	True	True	annapolis-cider-company.jpg
+Troy Restaurant	(902) 542-4425	http://www.troyrestaurant.ca/	12D Elm Ave, Wolfville, NS B4P 1Z9, Canada	True	True	troy-restaurant-grill.jpg
+Buds and Bygones flower shops	(902) 542-7623	http://www.wolfvilleflowers.com/	11 Gaspereau Ave, Wolfville, NS B4P 2C3, Canada	False	True	buds-and-bygones.jpg
+Rotary Field			33-43 Orchard Ave, Wolfville, NS B4P 1C5, Canada	False	True	wolfville-rotary-field.jpg
+Waterfront Park		https://www.wolfville.ca/parks-and-trails.html	Wolfville, NS, Canada	False	True	wolfville-waterfront-park.jpg
+Jane's Again Boutique	(902) 542-1671	https://m.facebook.com/Janes-Again-244061345616922/	390 Main St, Wolfville, NS B4P 1A4, Canada	False	True	janes-again.jpg
+Wolfville Children's Centre	(902) 542-5087	https://sites.google.com/view/wolfvillechildren/home?authuser=0	17 Earnscliffe Ave, Wolfville, NS B0P 1X0, Canada	False	False	
+Cajun's Clothing	(902) 585-2137	https://www.acadiagearstore.com/	15 University Ave, Wolfville, NS B4P 2R6, Canada	False	True	cajun-s-clothing-store.jpg
+In Wolfville Luxury Bed & Breakfast	(902) 542-0400		56 Main St, Wolfville, NS B4P 0B7, Canada	False	True	in-wolfville-luxury-bed-and-breakfast.jpg
+St. Francis of Assisi Catholic Church	(902) 542-3074	http://www.corpuschristins.ca/	118 Main St, Wolfville, NS B4P 0B5, Canada	False	True	saint-francis-of-assisi-catholic-church.jpg
+Applewicks Craft Shop	(902) 542-3520	https://www.larchehomefires.org/our-products	341 Main St, Wolfville, NS B4P 2C2, Canada	False	True	applewicks-craft-shoppe.jpg
