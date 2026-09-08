@@ -6,7 +6,11 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'tools'))
 import shutil
 import stat
 import subprocess
-from generate_deploy_script import generate_deploy_script
+from unittest.mock import patch
+
+import yaml
+
+from generate_deploy_script import generate_deploy_script, main
 
 
 def test_generated_script_substitutes_config_values():
@@ -135,3 +139,53 @@ def test_generate_deploy_script_writes_executable_file(tmp_path):
     assert output_path.exists()
     mode = output_path.stat().st_mode
     assert mode & stat.S_IXUSR
+
+
+def _write_org_setup(org_dir, org_domain_name, display_name):
+    os.makedirs(org_dir, exist_ok=True)
+    with open(os.path.join(org_dir, "org-setup.yaml"), "w") as f:
+        yaml.dump({"org_domain_name": org_domain_name, "display_name": display_name}, f)
+
+
+def test_main_writes_deploy_script_using_resolved_map_pk(tmp_path):
+    org_slug = "ca-ns-kentville"
+    org_dir = tmp_path / "org-data" / org_slug
+    _write_org_setup(org_dir, "ca-ns-kentville.strollopia.com", "Kentville")
+
+    fake_policy = {"public_org_maps": [{"org_map_name": "main-map", "map_obj": 42}]}
+    with patch("generate_deploy_script.get_org_policy", return_value=fake_policy) as mock_policy:
+        exit_code = main([
+            org_slug,
+            "--sites-repo", "/home/john/strollopia_git_hub/strollopia-sites",
+            "--output-dir", str(tmp_path / "org-data"),
+        ])
+
+    assert exit_code == 0
+    mock_policy.assert_called_once_with("ca-ns-kentville.strollopia.com")
+
+    deploy_script_path = org_dir / "deploy.sh"
+    assert deploy_script_path.exists()
+    script = deploy_script_path.read_text()
+    assert "sites/ca-ns-kentville" in script
+    assert "s/REPLACE_MAP_ID/42/g" in script
+    assert "Kentville" in script
+
+
+def test_main_errors_when_map_not_found_in_policy(tmp_path, capsys):
+    org_slug = "ca-ns-kentville"
+    org_dir = tmp_path / "org-data" / org_slug
+    _write_org_setup(org_dir, "ca-ns-kentville.strollopia.com", "Kentville")
+
+    fake_policy = {"public_org_maps": []}
+    with patch("generate_deploy_script.get_org_policy", return_value=fake_policy):
+        exit_code = main([org_slug, "--output-dir", str(tmp_path / "org-data")])
+
+    assert exit_code == 1
+    assert "not found in org policy" in capsys.readouterr().out
+    assert not (org_dir / "deploy.sh").exists()
+
+
+def test_main_errors_when_org_setup_missing(tmp_path, capsys):
+    exit_code = main(["does-not-exist", "--output-dir", str(tmp_path / "org-data")])
+    assert exit_code == 1
+    assert "not found" in capsys.readouterr().out

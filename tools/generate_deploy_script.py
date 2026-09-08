@@ -7,7 +7,13 @@ read and run. The Cloudflare custom-domain and DNS steps are deliberately
 left out of the script (see print_manual_checklist) since they need
 dashboard access or an elevated API token this pipeline doesn't have.
 """
+import argparse
 import os
+
+import yaml
+
+from api_client import get_org_policy
+from strollopia_import import get_map_pk_from_policy
 
 
 DEPLOY_SCRIPT_TEMPLATE = """#!/bin/bash
@@ -76,3 +82,53 @@ Manual steps (Cloudflare dashboard -- need dashboard access or an elevated API t
   3. Wait ~1-2 minutes for the certificate, then run:
        python tools/check_live.py {domain}
 """)
+
+
+def main(argv=None):
+    """CLI: resolve an org's map pk from the live API and write deploy.sh.
+
+    Reads display_name/org_domain_name from the org's own org-setup.yaml
+    so the only required argument is the org_slug -- everything else
+    (map pk, domain) is looked up, not retyped by hand.
+    """
+    parser = argparse.ArgumentParser(
+        description="Generate a reviewable deploy.sh for an already-imported org.",
+    )
+    parser.add_argument("org_slug", help="Directory label under org-data/ (e.g. 'ca-nova-scotia-kingston')")
+    parser.add_argument("--map-name", default="main-map",
+                         help="org_map_name to deploy (default: main-map)")
+    parser.add_argument("--sites-repo", default="../strollopia-sites",
+                         help="Path to a strollopia-sites checkout (default: ../strollopia-sites)")
+    parser.add_argument("--output-dir", default="org-data",
+                         help="Base org-data directory (default: org-data)")
+    args = parser.parse_args(argv)
+
+    yaml_path = os.path.join(args.output_dir, args.org_slug, "org-setup.yaml")
+    if not os.path.exists(yaml_path):
+        print(f"Error: file not found: {yaml_path}")
+        return 1
+    with open(yaml_path) as f:
+        config = yaml.safe_load(f) or {}
+    org_domain_name = config.get("org_domain_name")
+    if not org_domain_name:
+        print(f"Error: {yaml_path} has no org_domain_name")
+        return 1
+    display_name = config.get("display_name", args.org_slug)
+
+    policy = get_org_policy(org_domain_name)
+    map_id = get_map_pk_from_policy(policy, args.map_name)
+    if map_id is None:
+        print(f"Error: map {args.map_name!r} not found in org policy for {org_domain_name}.")
+        print("Is it public/in_public_viewer_list, and has the import run yet?")
+        return 1
+
+    output_path = os.path.join(args.output_dir, args.org_slug, "deploy.sh")
+    generate_deploy_script(args.org_slug, display_name, map_id, args.sites_repo, output_path=output_path)
+    print(f"Written {output_path} (map pk {map_id})")
+    print_manual_checklist(args.org_slug, org_domain_name)
+    return 0
+
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(main())
