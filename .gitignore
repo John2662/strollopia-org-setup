@@ -15,4 +15,8 @@ org-data/*/*/media/*
 # write_org_setup and post_org_setup.py's load_org_config
 org-data/*/org-setup.secrets.yaml
 
+# generate_marketing_pdf.py embeds the org's plaintext admin email/password
+# in this PDF by design, for physical hand-off to the customer — never commit
+org-data/*/marketing.pdf
+
 .worktrees/
