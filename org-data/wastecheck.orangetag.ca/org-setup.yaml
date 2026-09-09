@@ -1,0 +1,41 @@
+---
+org_domain_name: wastecheck.orangetag.ca
+viewer: wastecheck.orangetag.ca/viewer
+main_admin_email: amy@wastecheck.ca
+main_admin_name: Amy Hillyard
+map_default_lat: 45.6834
+map_default_lng: -62.7153
+display_name: 'Digby Curbside Audit'
+tag_line: 'Making Audits Easy'
+allows_anonymous: false
+anonymous_settings:
+  period: 3600
+  max_anon: 10
+  org_key: nceruncuerhgv
+restrict_public_map: false
+categories:
+  orange tag: ['chemicals', 'food waste', 'electronics', 'too heavy', 'other']
+  other: ['other']
+mediatypes: ['richtext', 'image', 'audio']
+layouts:
+  report: ['i1:image', 'a1:audio', 'rt1:richtext']
+org_maps:
+  main-map: { 'is_public': true, 'map_centre_dynamic': true }
+route_feature_patterns:
+  - name: curbside
+    is_default: true
+    mark_point_voice_memo: true
+    mark_point_notes: true
+    point_types:
+      - Info kit
+      - type: dark bags
+        input: ">=0"
+      - type: clear bags
+        input: ">=0"
+      - type: carts
+        input: "[0,10]"
+      - type: recycling bags
+        input: ">=0"
+ui_support:
+  datalogger: 'DL'
+  default_language: 'en'
