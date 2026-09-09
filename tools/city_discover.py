@@ -33,6 +33,15 @@ GOOGLE_GEOCODE_BASE = "https://maps.googleapis.com/maps/api/geocode/json"
 NOMINATIM_BASE = "https://nominatim.openstreetmap.org/search"
 OVERPASS_BASE = "https://overpass-api.de/api/interpreter"
 
+# Both OSM-related public instances filter or reject requests carrying a
+# generic/default requests library User-Agent as an anti-abuse measure -
+# Nominatim already sent this on its own request, but discover_osm's
+# Overpass POST sent none at all, which is the actual cause of the
+# consistent 406 seen on every discovery run so far (unrelated to where
+# the request originates from - overpass-api.de is the standard public
+# instance used globally, not a geography-specific failure).
+USER_AGENT = "strollopia-city-discover/1.0"
+
 DEFAULT_RADIUS_M = 5000
 DEDUP_THRESHOLD_M = 30
 OVERPASS_TIMEOUT = 30
@@ -409,7 +418,7 @@ def geocode_city(city, api_key):
             "format": "json",
             "addressdetails": 1,
             "limit": 1,
-        }, headers={"User-Agent": "strollopia-city-discover/1.0"})
+        }, headers={"User-Agent": USER_AGENT})
         resp.raise_for_status()
         data = resp.json()
         if not data:
@@ -455,6 +464,7 @@ def discover_osm(preset, bbox, language="en"):
     query = _build_overpass_query(preset, bbox)
     try:
         resp = requests.post(OVERPASS_BASE, data={"data": query},
+                             headers={"User-Agent": USER_AGENT},
                              timeout=OVERPASS_TIMEOUT + 5)
         resp.raise_for_status()
         elements = resp.json().get("elements", [])
