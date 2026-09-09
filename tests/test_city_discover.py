@@ -686,6 +686,34 @@ def test_write_org_setup_writes_secrets_sidecar():
         assert len(secrets_config["main_admin_password"]) == 16
 
 
+def test_write_org_setup_uses_real_admin_name_and_email_when_given():
+    """A caller-supplied admin_name/admin_email (e.g. a real named community
+    contact) overrides the auto-generated 'Admin' placeholder and the
+    auto-generated <city><digits>@strollopia.com address. The password is
+    still always freshly generated - there's no override for that.
+    """
+    with tempfile.TemporaryDirectory() as tmpdir:
+        geocode = {"lat": 49.2597, "lng": 23.8478,
+                   "country_code": "UA", "state": "Lviv Oblast", "city": "Stryi"}
+        write_org_setup(
+            org_dir=tmpdir,
+            org_domain="stryi.mapukraine.org",
+            geocode=geocode,
+            preset_names=["businesses"],
+            languages=["en"],
+            admin_name="Mariia Ilnytska",
+            admin_email="ilnytska88@gmail.com",
+        )
+        with open(os.path.join(tmpdir, "org-setup.yaml")) as f:
+            config = yaml.safe_load(f)
+        with open(os.path.join(tmpdir, "org-setup.secrets.yaml")) as f:
+            secrets_config = yaml.safe_load(f)
+
+        assert config["main_admin_name"] == "Mariia Ilnytska"
+        assert secrets_config["main_admin_email"] == "ilnytska88@gmail.com"
+        assert len(secrets_config["main_admin_password"]) == 16
+
+
 def test_write_org_setup_languages_excludes_default():
     # The API's UiPage.generate_categories_page does [default_language] +
     # languages - including the default in languages too makes it process

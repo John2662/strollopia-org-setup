@@ -68,6 +68,8 @@ CITY_QUERY="$TOWN, $PROVINCE, $COUNTRY"
 echo
 echo "Will geocode: \"$CITY_QUERY\""
 read -r -p "Domain override (leave blank to auto-generate the standard slug): " DOMAIN_OVERRIDE
+read -r -p "Org owner name (leave blank for a generic 'Admin' placeholder): " ADMIN_NAME
+read -r -p "Org owner email (leave blank to auto-generate a placeholder address): " ADMIN_EMAIL
 
 if [ ! -f .secrets.env ]; then
   fail ".secrets.env not found in $ORG_SETUP_REPO -- needed for GOOGLE_PLACES_API_KEY"
@@ -86,12 +88,27 @@ DISCOVER_ARGS=(tools/city_discover.py "$CITY_QUERY" --languages en --init)
 if [ -n "$DOMAIN_OVERRIDE" ]; then
   DISCOVER_ARGS+=(--domain "$DOMAIN_OVERRIDE")
 fi
+if [ -n "$ADMIN_NAME" ]; then
+  DISCOVER_ARGS+=(--admin-name "$ADMIN_NAME")
+fi
+if [ -n "$ADMIN_EMAIL" ]; then
+  DISCOVER_ARGS+=(--admin-email "$ADMIN_EMAIL")
+fi
 DISCOVER_OUTPUT=$("$PYTHON" "${DISCOVER_ARGS[@]}" 2>&1 | tee /dev/stderr) \
   || fail "city_discover.py failed -- see output above"
 
 ACTUAL_DOMAIN=$(printf '%s\n' "$DISCOVER_OUTPUT" | grep -m1 '^\[domain\]' | awk '{print $2}')
 [ -n "$ACTUAL_DOMAIN" ] || fail "could not read the org domain from city_discover.py's output"
-SLUG=${ACTUAL_DOMAIN%.strollopia.com}
+# Mirror city_discover.py's own domain_to_slug() exactly: strip the
+# .strollopia.com suffix when present, else take the first dot-separated
+# component (e.g. "stryi.mapukraine.org" -> "stryi"). A plain suffix-strip
+# alone would leave the whole domain as the slug for any non-strollopia.com
+# domain, which is not the directory city_discover.py actually wrote to.
+if [[ "$ACTUAL_DOMAIN" == *.strollopia.com ]]; then
+  SLUG=${ACTUAL_DOMAIN%.strollopia.com}
+else
+  SLUG=${ACTUAL_DOMAIN%%.*}
+fi
 SITE_DIR="$SITES_REPO_PATH/sites/$SLUG"
 WRANGLER_TOML="$SITE_DIR/wrangler.toml"
 

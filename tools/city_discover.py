@@ -770,10 +770,19 @@ def _collect_categories(preset_names):
     return categories
 
 
-def write_org_setup(org_dir, org_domain, geocode, preset_names, languages, force=False):
+def write_org_setup(org_dir, org_domain, geocode, preset_names, languages, force=False,
+                     admin_name=None, admin_email=None):
     """Write org-setup.yaml with city-app defaults.
 
     Skips if file exists and force is False.
+
+    admin_name/admin_email let a caller set a real org owner (e.g. a named
+    community contact) instead of the auto-generated "Admin" placeholder
+    name and a random <city><digits>@strollopia.com address - for orgs
+    where a real person, not a placeholder, should show up as the account
+    owner from the start. admin_password is always freshly generated
+    either way; there's no path for a caller-supplied password, since it
+    would then have to travel through argv/a prompt in plaintext.
     """
     yaml_path = os.path.join(org_dir, "org-setup.yaml")
     if os.path.exists(yaml_path) and not force:
@@ -806,7 +815,7 @@ def write_org_setup(org_dir, org_domain, geocode, preset_names, languages, force
         "viewer": f"https://{domain_to_slug(org_domain)}.viewer.strollopia.com",
         "display_name": city_name,
         "tag_line": f"Explore {city_name}",
-        "main_admin_name": "Admin",
+        "main_admin_name": admin_name or "Admin",
         "allows_anonymous": True,
         "anonymous_settings": {"period": 3600, "max_anon": 10, "org_key": org_key},
         "map_default_lat": geocode["lat"],
@@ -864,7 +873,7 @@ def write_org_setup(org_dir, org_domain, geocode, preset_names, languages, force
     # sidecar rather than org-setup.yaml itself, so the real admin
     # credentials never end up committed to git (org-setup.yaml is
     # committed; org-setup.secrets.yaml is not -- see .gitignore).
-    admin_email = generate_admin_email(city_name)
+    admin_email = admin_email or generate_admin_email(city_name)
     admin_password = generate_admin_password()
     secrets_config = {
         "main_admin_email": admin_email,
@@ -884,7 +893,8 @@ def write_org_setup(org_dir, org_domain, geocode, preset_names, languages, force
     print(f"  Written: {secrets_yaml_path} (gitignored -- real admin email/password)")
 
 
-def run(city, api_key, domain, languages, preset_names, init, no_photos, force, output_dir):
+def run(city, api_key, domain, languages, preset_names, init, no_photos, force, output_dir,
+        admin_name=None, admin_email=None):
     """Orchestrate the full discovery pipeline for a city."""
     # 1. Geocode
     print(f"[geocode] {city}")
@@ -988,7 +998,8 @@ def run(city, api_key, domain, languages, preset_names, init, no_photos, force, 
     # 8. Optionally write org-setup.yaml
     if init:
         print("[org-setup] Writing org-setup.yaml...")
-        write_org_setup(org_dir, domain, geocode, preset_names, languages, force=force)
+        write_org_setup(org_dir, domain, geocode, preset_names, languages, force=force,
+                         admin_name=admin_name, admin_email=admin_email)
 
     # 9. Print summary
     print(f"\n✓ Discovery complete: {domain}")
@@ -1038,6 +1049,10 @@ Examples:
                         help="Overwrite existing TSV, schema, and org-setup files")
     parser.add_argument("--output-dir", default="org-data",
                         help="Base output directory (default: org-data)")
+    parser.add_argument("--admin-name", default=None,
+                        help="Real org owner name (default: auto-generated 'Admin' placeholder)")
+    parser.add_argument("--admin-email", default=None,
+                        help="Real org owner email (default: auto-generated <city><digits>@strollopia.com)")
     args = parser.parse_args()
 
     languages = [lang.strip() for lang in args.languages.split(",") if lang.strip()]
@@ -1056,7 +1071,8 @@ Examples:
         print("  Set GOOGLE_PLACES_API_KEY or pass --api-key to enable Google Places.\n")
 
     run(args.city, args.api_key, args.domain, languages, preset_names,
-        args.init, args.no_photos, args.force, args.output_dir)
+        args.init, args.no_photos, args.force, args.output_dir,
+        admin_name=args.admin_name, admin_email=args.admin_email)
 
 
 if __name__ == "__main__":
