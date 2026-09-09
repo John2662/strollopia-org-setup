@@ -4,8 +4,8 @@ Berwick,NS,1,ca-nova-scotia-berwick,ca-nova-scotia-berwick.strollopia.com,,,,,no
 Windsor,NS,2,ca-nova-scotia-windsor,ca-nova-scotia-windsor.strollopia.com,,,,,not_started,
 Middleton,NS,2,ca-nova-scotia-middleton,ca-nova-scotia-middleton.strollopia.com,,,,,not_started,
 Bridgetown,NS,2,ca-nova-scotia-bridgetown,ca-nova-scotia-bridgetown.strollopia.com,,,,,not_started,
-Annapolis Royal,NS,2,ca-nova-scotia-annapolis-royal,ca-nova-scotia-annapolis-royal.strollopia.com,,,,,not_started,
-Lunenburg,NS,3,ca-nova-scotia-lunenburg,ca-nova-scotia-lunenburg.strollopia.com,,,,,not_started,
+Annapolis Royal,NS,2,ca-nova-scotia-annapolis-royal,ca-nova-scotia-annapolis-royal.strollopia.com,2026-08-30,2026-09-02,,,not_started,
+Lunenburg,NS,3,ca-nova-scotia-lunenburg,ca-nova-scotia-lunenburg.strollopia.com,2026-09-09,2026-09-09,,,not_started,go_live_wizard.sh test run - confirmed live
 Mahone Bay,NS,3,ca-nova-scotia-mahone-bay,ca-nova-scotia-mahone-bay.strollopia.com,,,,,not_started,
 Chester,NS,3,ca-nova-scotia-chester,ca-nova-scotia-chester.strollopia.com,,,,,not_started,
 Digby,NS,3,ca-nova-scotia-digby,ca-nova-scotia-digby.strollopia.com,,,,,not_started,
@@ -14,3 +14,5 @@ Bridgewater,NS,4,ca-nova-scotia-bridgewater,ca-nova-scotia-bridgewater.strollopi
 Yarmouth,NS,4,ca-nova-scotia-yarmouth,ca-nova-scotia-yarmouth.strollopia.com,,,,,not_started,
 Antigonish,NS,4,ca-nova-scotia-antigonish,ca-nova-scotia-antigonish.strollopia.com,,,,,not_started,
 Kingston,NS,ad-hoc,ca-nova-scotia-kingston,ca-nova-scotia-kingston.strollopia.com,2026-09-07,2026-09-08,,,not_started,Added ad-hoc outside the phased plan - business-owner meeting on 2026-09-08 prompted early discovery
+Belnan,NS,ad-hoc,ca-nova-scotia-belnan,ca-nova-scotia-belnan.strollopia.com,2026-09-09,2026-09-09,,,not_started,go_live_wizard.sh test run - confirmed live
+Grand Pre,NS,ad-hoc,ca-nova-scotia-grand-pre,ca-nova-scotia-grand-pre.strollopia.com,2026-09-09,2026-09-09,,,not_started,go_live_wizard.sh test run - confirmed live, walked through Cloudflare custom domain setup with screenshots
