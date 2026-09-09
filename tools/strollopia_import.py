@@ -688,6 +688,74 @@ def get_existing_poi_names(token, org_domain_name):
     return names
 
 
+# Known error patterns -> a human-readable suggestion. Matched by substring
+# against the error's string representation, first match wins. Add to this
+# as new recurring failure modes get diagnosed - it's meant to grow, not
+# to be exhaustive from the start.
+_KNOWN_ERROR_SUGGESTIONS = [
+    (
+        'Unsupported content type for upload: application/octet-stream',
+        "The photo's filename likely has no extension mimetypes recognizes "
+        '(e.g. a bare ".jpg" with no basename). If this map was generated '
+        'by city_discover.py, this usually means a POI name in a script '
+        "with no Latin transliteration (Cyrillic, CJK, Arabic, ...) hit "
+        "slugify()'s old empty-string bug, which collapsed multiple POIs' "
+        'photo filenames into the same ".jpg" and overwrote each other. '
+        'Fix: update to a city_discover.py with the fixed slugify() (falls '
+        'back to a hash instead of ""), then re-run city_discover.py with '
+        '--force (omit --init if org-setup.yaml already exists and is '
+        'correct) to regenerate correct filenames and re-download photos, '
+        'then re-run this import - rows that already succeeded will be '
+        'skipped automatically.'
+    ),
+    (
+        'Image file not found',
+        'The TSV references a photo file that is missing from media/ - '
+        'check the exact filename in the image_file column matches a real '
+        'file in that directory (case-sensitive), or re-run discovery with '
+        '--force to re-download it.'
+    ),
+]
+
+
+def suggest_fix(error_message):
+    """Return a human-readable suggestion for a known error pattern, or
+    None if this error isn't one of the ones we have specific advice for.
+    """
+    text = str(error_message)
+    for pattern, suggestion in _KNOWN_ERROR_SUGGESTIONS:
+        if pattern in text:
+            return suggestion
+    return None
+
+
+def write_import_error_report(map_dir, errors):
+    """Write a persistent report of failed rows (with suggestions where
+    available) to <map_dir>/import-errors.txt.
+
+    Console log output scrolls away in a long batch import (443 rows is
+    not unusual) - a file that survives after the run is what actually
+    lets someone come back later and fix specific rows, rather than
+    needing to have caught everything in the terminal in the moment.
+    Returns the path written, or None if there were no errors to report.
+    """
+    if not errors:
+        return None
+    report_path = os.path.join(map_dir, 'import-errors.txt')
+    with open(report_path, 'w', encoding='utf-8') as f:
+        f.write(f'{len(errors)} row(s) failed to import.\n')
+        f.write('Re-run the import after fixing what you can - rows that '
+                'already succeeded are skipped automatically.\n\n')
+        for row_num, name, error in errors:
+            f.write(f'Row {row_num}: "{name}"\n')
+            f.write(f'  Error: {error}\n')
+            suggestion = suggest_fix(error)
+            if suggestion:
+                f.write(f'  Suggested fix: {suggestion}\n')
+            f.write('\n')
+    return report_path
+
+
 def run_import(org_creds, schema, headers, rows, map_name, media_dir,
                dry_run=False, super_admin=False):
     """Execute the import process for a single map.
@@ -838,6 +906,17 @@ def run_import(org_creds, schema, headers, rows, map_name, media_dir,
         logger.info('ERRORS:')
         for row_num, name, err in errors:
             logger.info(f'  Row {row_num} ("{name}"): {err}')
+            suggestion = suggest_fix(err)
+            if suggestion:
+                logger.info(f'    Suggested fix: {suggestion}')
+        report_path = write_import_error_report(os.path.dirname(media_dir), errors)
+        logger.info('')
+        logger.info(f'Full error report (with suggested fixes) written to: {report_path}')
+        logger.info(
+            f'The {success_count} successfully-imported POIs are already live on the map - '
+            'this import does not need to be perfect to be usable. Fix what you can, then '
+            're-run this same command: rows that already succeeded are skipped automatically.'
+        )
     logger.info('=' * 60)
 
     return error_count == 0

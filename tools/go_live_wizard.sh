@@ -132,12 +132,34 @@ echo "Check: it should have printed \"Organization created\" and \"OK: org admin
 pause "import the discovered POIs (uses the org-admin credentials already saved in $ORG_SETUP_REPO/org-data/$SLUG/org-setup.secrets.yaml -- no login needed from you)"
 
 section "Step 3/8: Import POIs"
-"$PYTHON" tools/strollopia_import.py "org-data/$SLUG/" --all-maps \
-  || fail "strollopia_import.py failed -- see output above"
+IMPORT_EXIT=0
+"$PYTHON" tools/strollopia_import.py "org-data/$SLUG/" --all-maps || IMPORT_EXIT=$?
 
 echo
-echo "What happened: POIs imported."
-echo "Check: the row count posted should match the number discovery reported."
+if [ "$IMPORT_EXIT" -eq 0 ]; then
+  echo "What happened: POIs imported, no errors."
+  echo "Check: the row count posted should match the number discovery reported."
+else
+  # A non-zero exit here means SOME rows failed, not that nothing
+  # imported -- strollopia_import.py already continues past a failed row
+  # rather than aborting the batch (see its own per-row exception
+  # handling), so a partial map is a normal, usable outcome here, not a
+  # reason to kill the rest of the pipeline the way `fail` would.
+  ERROR_REPORT="org-data/$SLUG/main-map/import-errors.txt"
+  echo "${YELLOW}What happened: some rows failed to import (see the ERRORS section above).${RESET}"
+  if [ -f "$ERROR_REPORT" ]; then
+    echo "A full report with suggested fixes was written to: $ORG_SETUP_REPO/$ERROR_REPORT"
+  fi
+  echo "The rows that succeeded are already live on the map -- a partial import still produces a usable, deployable site."
+  while true; do
+    read -r -p "Continue with the rest of the pipeline using what succeeded? (Y/N): " IMPORT_CONTINUE
+    case "$IMPORT_CONTINUE" in
+      [Yy]*) break ;;
+      [Nn]*) fail "stopped after import errors -- fix what you can (see the report above), then re-run: $PYTHON tools/strollopia_import.py org-data/$SLUG/ --all-maps (rows that already succeeded are skipped automatically)" ;;
+      *) echo "Please answer Y or N." ;;
+    esac
+  done
+fi
 
 pause "generate and run the build script -- looks up the map's numeric pk from the live API, writes $ORG_SETUP_REPO/org-data/$SLUG/deploy-1-build.sh and deploy-2-publish.sh, then runs the build one (copies the template and substitutes placeholders -- no Cloudflare calls, nothing interactive)"
 
