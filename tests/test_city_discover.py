@@ -3,6 +3,8 @@ import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'tools'))
 
+import mimetypes
+import re
 import tempfile
 import yaml
 from unittest.mock import patch, MagicMock
@@ -86,6 +88,32 @@ def test_slugify_german_sharp_s():
 def test_slugify_ligatures():
     assert slugify("œuvre") == "oeuvre"
     assert slugify("Ærø") == "aero"
+
+
+def test_slugify_non_latin_script_falls_back_to_hash_not_empty_string():
+    """Regression test for a real Stryi, Ukraine discovery run: Cyrillic
+    (and CJK/Arabic/Greek/Hebrew, same root cause) has no NFKD
+    decomposition to ASCII, so this used to return "". Every photo
+    filename is slugify(name) + ".jpg", so every such POI collapsed to
+    the literal filename ".jpg" (each overwriting the last on disk), and
+    Python's mimetypes treats ".jpg" as an extensionless hidden file, not
+    a JPEG - causing the upload to go out as application/octet-stream,
+    which the server rejects outright.
+    """
+    slug = slugify("Кафе Львів")
+    assert slug != ""
+    assert re.match(r"^[a-z0-9-]+$", slug)
+
+    filename = slug + ".jpg"
+    content_type, _ = mimetypes.guess_type(filename)
+    assert content_type == "image/jpeg"
+
+
+def test_slugify_non_latin_script_is_deterministic_and_distinct():
+    # Same input -> same slug (stable across languages/reruns), different
+    # inputs -> different slugs (no silent filename collisions).
+    assert slugify("Кафе") == slugify("Кафе")
+    assert slugify("Кафе") != slugify("Ресторан")
 
 
 def test_generate_admin_email_format():

@@ -13,6 +13,7 @@ Usage:
 
 import argparse
 import csv
+import hashlib
 import math
 import os
 import random
@@ -222,13 +223,31 @@ _TRANSLITERATE = str.maketrans({
 
 
 def slugify(text):
-    """Lowercase, strip accents, replace non-alphanumeric runs with hyphens."""
-    text = str(text).translate(_TRANSLITERATE)
-    text = unicodedata.normalize("NFKD", text)
-    text = text.encode("ascii", "ignore").decode("ascii")
-    text = text.lower()
-    text = re.sub(r"[^a-z0-9]+", "-", text)
-    return text.strip("-")
+    """Lowercase, strip accents, replace non-alphanumeric runs with hyphens.
+
+    Falls back to a short hash of the original text when transliteration
+    strips everything - Cyrillic, CJK, Arabic, Greek, Hebrew, etc. have no
+    NFKD decomposition to ASCII, so a name entirely in one of those scripts
+    used to come out as "". That's not just cosmetic: every photo filename
+    is built as slugify(name) + ".jpg", so every such POI collapsed to the
+    literal filename ".jpg", each one overwriting the last on disk, and
+    Python's mimetypes module treats ".jpg" as an extensionless hidden
+    file rather than a JPEG - upload_media_file's mimetypes.guess_type()
+    then falls back to application/octet-stream, which the server rejects
+    outright ("Unsupported content type for upload: application/octet-stream").
+    Found via a real Stryi, Ukraine discovery run where every POI's
+    Cyrillic-only name hit exactly this.
+    """
+    original = str(text)
+    ascii_text = original.translate(_TRANSLITERATE)
+    ascii_text = unicodedata.normalize("NFKD", ascii_text)
+    ascii_text = ascii_text.encode("ascii", "ignore").decode("ascii")
+    ascii_text = ascii_text.lower()
+    ascii_text = re.sub(r"[^a-z0-9]+", "-", ascii_text)
+    slug = ascii_text.strip("-")
+    if not slug:
+        slug = "x-" + hashlib.sha1(original.encode("utf-8")).hexdigest()[:10]
+    return slug
 
 
 def make_domain(country_code, state, city):
