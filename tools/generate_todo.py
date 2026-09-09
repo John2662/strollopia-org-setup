@@ -110,8 +110,14 @@ def build_checklist(org_slug, output_dir, sites_repo):
         imported, imported_detail = _data_imported(org_dir, domain)
     else:
         imported, imported_detail = None, "org not posted yet"
-    deploy_script_exists = os.path.exists(os.path.join(org_dir, "deploy.sh"))
+    build_script_exists = os.path.exists(os.path.join(org_dir, "deploy-1-build.sh"))
+    publish_script_exists = os.path.exists(os.path.join(org_dir, "deploy-2-publish.sh"))
     site_dir_exists = os.path.isdir(site_dir)
+    wrangler_toml_path = os.path.join(site_dir, "wrangler.toml")
+    kv_patched = (
+        os.path.exists(wrangler_toml_path)
+        and "REPLACE_WITH_NEW_KV_NAMESPACE_ID" not in open(wrangler_toml_path).read()
+    ) if site_dir_exists else False
     site_live = _site_live(domain) if posted else False
 
     # Each row: (num, step text -- the exact command where one exists,
@@ -122,13 +128,18 @@ def build_checklist(org_slug, output_dir, sites_repo):
         (2, f"python tools/strollopia_import.py {org_dir}/ --all-maps\n"
             f"(no --email/--password needed, reads the secrets file automatically)",
          "You, or I can run it (reads secrets file)", imported, imported_detail),
-        (3, "Generate deploy.sh once the map pk is known",
-         "I can do this", deploy_script_exists, None),
-        (4, f"bash {org_dir}/deploy.sh\n(watch for the KV JSON→TOML gotcha, see ONBOARDING.md)",
-         "You (Cloudflare/wrangler login)", site_dir_exists, None),
-        (5, "Attach custom domain + create DNS CNAME (Cloudflare dashboard)",
+        (3, "Generate deploy-1-build.sh/deploy-2-publish.sh once the map pk is known",
+         "I can do this", build_script_exists and publish_script_exists, None),
+        (4, f"bash {org_dir}/deploy-1-build.sh",
+         "You (or run go_live_wizard.sh, which handles this)", site_dir_exists, None),
+        (5, f"npx wrangler kv namespace create \"{org_slug}-SPLASH_CONTENT\"\n"
+            f"then paste its id into {site_dir}/wrangler.toml's REPLACE_WITH_NEW_KV_NAMESPACE_ID",
+         "You (Cloudflare/wrangler login)", kv_patched, None),
+        (6, f"bash {org_dir}/deploy-2-publish.sh",
+         "You (Cloudflare/wrangler login)", site_live, None),
+        (7, "Set up the custom domain (Cloudflare dashboard -- one flow, no separate DNS step)",
          "You (Cloudflare dashboard)", site_live, None),
-        (6, f"python tools/check_live.py {domain}",
+        (8, f"python tools/check_live.py {domain}",
          "I can do this", site_live, None),
     ]
     return domain, rows
@@ -197,14 +208,14 @@ def print_checklist(org_slug, output_dir, sites_repo):
     print(_render_table(["#", "Status", "Step", "Who"], table_rows, widths=[3, 18, 74, 26]))
     print()
 
-    # Step 5 (index 4 -- rows are in fixed 1-6 order from build_checklist)
+    # Step 7 (index 6 -- rows are in fixed 1-8 order from build_checklist)
     # is the one manual, multi-part Cloudflare dashboard step with no
     # single command of its own -- spell out exactly how to do it, reusing
     # generate_deploy_script.py's own instructions rather than duplicating
     # them, so the two never drift apart.
-    step5_status = rows[4][3]
-    if step5_status is not True:
-        print("How to do step 5 (Cloudflare dashboard):")
+    step7_status = rows[6][3]
+    if step7_status is not True:
+        print("How to do step 7 (Cloudflare dashboard):")
         print_manual_checklist(org_slug, domain)
 
 

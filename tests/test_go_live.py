@@ -19,7 +19,7 @@ def test_path_pwa_stops_after_import_before_deploy_script(tmp_path, monkeypatch)
     with patch("go_live.city_discover.run") as mock_discover, \
          patch("go_live.post_org_setup", return_value=True) as mock_post, \
          patch("go_live.strollopia_import.main", return_value=0) as mock_import, \
-         patch("go_live.generate_deploy_script") as mock_deploy, \
+         patch("go_live.generate_deploy_scripts") as mock_deploy, \
          patch("builtins.input", return_value=""):
         mock_discover.return_value = {
             "org_slug": "ca-ns-kentville", "org_dir": str(tmp_path / "ca-ns-kentville"),
@@ -38,7 +38,7 @@ def test_dry_run_stops_before_deploy_script(tmp_path, monkeypatch):
     with patch("go_live.city_discover.run") as mock_discover, \
          patch("go_live.post_org_setup", return_value=True), \
          patch("go_live.strollopia_import.main", return_value=0) as mock_import, \
-         patch("go_live.generate_deploy_script") as mock_deploy, \
+         patch("go_live.generate_deploy_scripts") as mock_deploy, \
          patch("builtins.input", return_value=""):
         mock_discover.return_value = {
             "org_slug": "ca-ns-kentville", "org_dir": str(tmp_path / "ca-ns-kentville"),
@@ -72,7 +72,7 @@ def test_import_failure_stops_before_deploy_script(tmp_path, monkeypatch):
     with patch("go_live.city_discover.run") as mock_discover, \
          patch("go_live.post_org_setup", return_value=True), \
          patch("go_live.strollopia_import.main", return_value=1), \
-         patch("go_live.generate_deploy_script") as mock_deploy, \
+         patch("go_live.generate_deploy_scripts") as mock_deploy, \
          patch("builtins.input", return_value=""):
         mock_discover.return_value = {
             "org_slug": "ca-ns-kentville", "org_dir": str(tmp_path / "ca-ns-kentville"),

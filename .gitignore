@@ -20,3 +20,8 @@ org-data/*/org-setup.secrets.yaml
 org-data/*/marketing.pdf
 
 .worktrees/
+
+# go_live_wizard.sh's KV-namespace step runs `npx wrangler` from this repo's
+# root (not from strollopia-sites), which leaves wrangler's own account/
+# cache files here
+.wrangler/

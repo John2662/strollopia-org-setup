@@ -210,23 +210,23 @@ def test_print_checklist_includes_setup_commands(tmp_path, capsys):
     assert os.path.isfile(os.path.join(repo_root, "tools", "generate_todo.py"))
 
 
-def test_print_checklist_shows_step5_instructions_when_pending(tmp_path, capsys):
+def test_print_checklist_shows_step7_instructions_when_pending(tmp_path, capsys):
     with patch("generate_todo._org_posted", return_value=True), \
          patch("generate_todo._data_imported", return_value=(True, "133 POIs live (expected 133)")), \
          patch("generate_todo._site_live", return_value=False):
         print_checklist("test-town", str(tmp_path), str(tmp_path))
 
     out = capsys.readouterr().out
-    assert "How to do step 5" in out
-    assert "Attach custom domain" in out
-    assert "Create DNS record" in out
+    assert "How to do step 7" in out
+    assert "Set up a custom domain" in out
+    assert "Activate Domain" in out
 
 
-def test_print_checklist_omits_step5_instructions_when_done(tmp_path, capsys):
+def test_print_checklist_omits_step7_instructions_when_done(tmp_path, capsys):
     with patch("generate_todo._org_posted", return_value=True), \
          patch("generate_todo._data_imported", return_value=(True, "133 POIs live (expected 133)")), \
          patch("generate_todo._site_live", return_value=True):
         print_checklist("test-town", str(tmp_path), str(tmp_path))
 
     out = capsys.readouterr().out
-    assert "How to do step 5" not in out
+    assert "How to do step 7" not in out

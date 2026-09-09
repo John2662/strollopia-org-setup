@@ -21,7 +21,7 @@ import strollopia_import
 from post_org_setup import post_org_setup
 from api_client import get_org_policy
 from strollopia_import import get_map_pk_from_policy
-from generate_deploy_script import generate_deploy_script, print_manual_checklist
+from generate_deploy_script import generate_deploy_scripts, print_manual_checklist
 
 
 def main(argv=None):
@@ -117,13 +117,21 @@ def main(argv=None):
               f"check the org was created correctly.")
         return 1
 
-    script_path = os.path.join(args.output_dir, org_slug, "deploy.sh")
-    generate_deploy_script(
+    org_output_dir = os.path.join(args.output_dir, org_slug)
+    generate_deploy_scripts(
         org_slug=org_slug, display_name=display_name, map_id=map_id,
-        sites_repo=args.sites_repo, output_path=script_path,
+        sites_repo=args.sites_repo, output_dir=org_output_dir,
     )
-    print(f"Deploy script written to: {script_path}")
-    print("Review it, then run it to deploy the trial site.")
+    build_path = os.path.join(org_output_dir, "deploy-1-build.sh")
+    publish_path = os.path.join(org_output_dir, "deploy-2-publish.sh")
+    print(f"Deploy scripts written to: {build_path}")
+    print(f"                           {publish_path}")
+    print(f"Review them, then:")
+    print(f"  1. Run {build_path} (copies the template, no Cloudflare calls).")
+    print(f"  2. Create the KV namespace and paste its id into "
+          f"sites/{org_slug}/wrangler.toml's REPLACE_WITH_NEW_KV_NAMESPACE_ID yourself:")
+    print(f"       npx wrangler kv namespace create \"{org_slug}-SPLASH_CONTENT\"")
+    print(f"  3. Run {publish_path} (creates the Pages project and deploys).")
     print_manual_checklist(org_slug, domain)
 
     return 0
