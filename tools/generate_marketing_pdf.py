@@ -282,13 +282,20 @@ def build_html(org_dir, config):
     counts = load_poi_counts(tsv_path)
     samples = pick_sample_pois(tsv_path, media_dir)
     site_url = f"https://{config['org_domain_name']}"
+    # /qr-map/ is a strollopia-sites _redirects rule (302 to the site root)
+    # that exists purely so Cloudflare Pages' own per-path analytics can
+    # report QR-driven scans separately from organic visits - the printed
+    # QR code encodes this path, but the human-readable URL text below it
+    # stays the clean root address, since nobody should have to type
+    # "/qr-map/" by hand.
+    qr_url = f"{site_url}/qr-map/"
 
     return HTML_TEMPLATE.format(
         display_name=config.get("display_name", config["org_domain_name"]),
         tag_line=config.get("tag_line", ""),
         stat_strip=_render_stat_strip(counts),
         sample_cards=_render_sample_cards(samples, media_dir_rel),
-        qr_data_uri=qr_data_uri(site_url),
+        qr_data_uri=qr_data_uri(qr_url),
         site_url=site_url,
         admin_email=config.get("main_admin_email", ""),
         admin_password=config.get("main_admin_password", ""),

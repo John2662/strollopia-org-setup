@@ -155,6 +155,34 @@ def test_build_html_includes_key_content(tmp_path):
     assert "great coffee" in html
 
 
+def test_build_html_qr_encodes_tracked_path_but_shows_clean_url(tmp_path, monkeypatch):
+    '''
+    The QR code itself points at /qr-map/ (a strollopia-sites _redirects
+    rule, 302 to the site root) so Cloudflare Pages' own per-path
+    analytics can report QR-driven scans separately - but the printed,
+    human-readable URL text stays the clean root address, since nobody
+    should have to type "/qr-map/" by hand.
+    '''
+    org_dir = _make_org_dir(tmp_path)
+    from post_org_setup import load_org_config
+    config = load_org_config(os.path.join(org_dir, "org-setup.yaml"))
+
+    import generate_marketing_pdf as gmp
+    captured = {}
+    original_qr_data_uri = gmp.qr_data_uri
+
+    def spy(url):
+        captured["url"] = url
+        return original_qr_data_uri(url)
+
+    monkeypatch.setattr(gmp, "qr_data_uri", spy)
+    html = gmp.build_html(org_dir, config)
+
+    assert captured["url"] == "https://test-town.strollopia.com/qr-map/"
+    url_div = re.search(r'<div class="url">([^<]+)</div>', html)
+    assert url_div and url_div.group(1) == "https://test-town.strollopia.com"
+
+
 def test_generate_marketing_pdf_embeds_photos_not_blank_boxes(tmp_path, monkeypatch):
     '''
     Regression test for a real bug (2026-09-13, found by actually reading
