@@ -4,6 +4,7 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'tools'))
 
 import csv
+import re
 import yaml
 from generate_marketing_pdf import (
     load_poi_counts, pick_sample_pois, qr_data_uri,
@@ -152,6 +153,40 @@ def test_build_html_includes_key_content(tmp_path):
     assert "RealPassword123" in html
     assert "Test Cafe" in html
     assert "great coffee" in html
+
+
+def test_generate_marketing_pdf_embeds_photos_not_blank_boxes(tmp_path, monkeypatch):
+    '''
+    Regression test for a real bug (2026-09-13, found by actually reading
+    the generated PDF, not by code inspection): build_html()'s <img src>
+    was built from media_dir, a path that already had org_dir baked in
+    (needed separately so pick_sample_pois' has_photo() check can open
+    the file from the CWD) - weasyprint's HTML(base_url=org_dir) then
+    doubled org_dir when resolving that relative src, so every photo
+    silently failed to load. write_pdf() doesn't raise on a missing
+    image, it just renders a blank box, which is why this went unnoticed
+    (a 9-test suite, all passing, existed alongside the live bug).
+
+    This only reproduces with a *relative* org_dir (exactly what main()
+    passes: os.path.join(output_dir, org_slug)) - an absolute tmp_path
+    used directly as org_dir doesn't trigger it, since Python's own
+    os.path.join short-circuits differently than weasyprint's URL-join
+    resolution does for two paths that both look absolute. Hence
+    monkeypatch.chdir() + a relative org_dir here, and a real end-to-end
+    PDF byte check rather than inspecting the HTML string, since the bug
+    only manifests in weasyprint's own resolution step.
+    '''
+    monkeypatch.chdir(tmp_path)
+    org_dir_abs = _make_org_dir(tmp_path)
+    org_dir_rel = os.path.relpath(org_dir_abs, tmp_path)
+
+    output_path = generate_marketing_pdf(org_dir_rel)
+
+    with open(output_path, "rb") as f:
+        pdf_bytes = f.read()
+    # A real embedded JPEG carries its SOI marker into the PDF's object
+    # stream - a blank/missing-image box does not.
+    assert b"\xff\xd8\xff" in pdf_bytes, "no JPEG image data found embedded in the PDF"
 
 
 def test_generate_marketing_pdf_writes_valid_pdf(tmp_path):

@@ -269,6 +269,15 @@ def build_html(org_dir, config):
     map_dir = os.path.join(org_dir, "main-map")
     tsv_path = os.path.join(map_dir, "map-data.en.tsv")
     media_dir = os.path.join(map_dir, "media")
+    # generate_marketing_pdf() renders with base_url=org_dir, so an <img src>
+    # needs to be relative to org_dir - NOT the same media_dir used above,
+    # which already has org_dir baked in (it's built from org_dir + "main-map"
+    # + "media" so pick_sample_pois' has_photo() check can open the file
+    # directly from the CWD). Using media_dir for the src too double-prefixes
+    # org_dir when weasyprint resolves the relative URL against base_url,
+    # so every image silently 404s (write_pdf() doesn't raise on a missing
+    # image - it just renders a blank box, which is why this went unnoticed).
+    media_dir_rel = os.path.join("main-map", "media")
 
     counts = load_poi_counts(tsv_path)
     samples = pick_sample_pois(tsv_path, media_dir)
@@ -278,7 +287,7 @@ def build_html(org_dir, config):
         display_name=config.get("display_name", config["org_domain_name"]),
         tag_line=config.get("tag_line", ""),
         stat_strip=_render_stat_strip(counts),
-        sample_cards=_render_sample_cards(samples, media_dir),
+        sample_cards=_render_sample_cards(samples, media_dir_rel),
         qr_data_uri=qr_data_uri(site_url),
         site_url=site_url,
         admin_email=config.get("main_admin_email", ""),
