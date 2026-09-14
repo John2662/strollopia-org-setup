@@ -249,11 +249,15 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     padding: 0.3in;
     background: #eef4f3;
     border-radius: 8px;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }}
   .analytics-callout h2 {{ font-size: 13pt; margin-bottom: 0.1in; }}
   .analytics-callout p {{ font-size: 10pt; color: #3a4643; line-height: 1.5; margin: 0 0 0.15in 0; }}
   .analytics-callout img {{
-    width: 100%;
+    display: block;
+    max-width: 100%;
+    max-height: 2.4in;
     border-radius: 6px;
     border: 1px solid #d8e3e0;
     margin-top: 0.1in;

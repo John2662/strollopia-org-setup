@@ -183,22 +183,23 @@ def test_build_html_qr_encodes_tracked_path_but_shows_clean_url(tmp_path, monkey
     assert url_div and url_div.group(1) == "https://test-town.strollopia.com"
 
 
-def test_build_html_analytics_callout_renders_text_only_without_screenshot(tmp_path):
+def test_build_html_analytics_callout_renders_text_only_without_screenshot(tmp_path, monkeypatch):
     '''
     GA_SCREENSHOT_PATH is a single shared asset (not per-org, since no
-    town has its own GA data - it's opt-in and none has set it up yet).
-    The callout must still render sensibly when that file doesn't exist,
-    since the feature shipped before the actual screenshot was available.
+    town has its own real GA data - it's opt-in and none has set it up
+    yet; the asset itself is a mocked-up illustration, not a real
+    dashboard). The callout must still render sensibly when that file
+    doesn't exist - pointed at a definitely-missing path here rather
+    than relying on the real asset's absence, since a real (mocked)
+    screenshot was added 2026-09-14 and this test shouldn't depend on
+    whether that file happens to exist on disk.
     '''
     org_dir = _make_org_dir(tmp_path)
     from post_org_setup import load_org_config
     config = load_org_config(os.path.join(org_dir, "org-setup.yaml"))
 
     import generate_marketing_pdf as gmp
-    assert not os.path.exists(gmp.GA_SCREENSHOT_PATH), (
-        "this test assumes no screenshot asset is present - see the paired "
-        "test_build_html_analytics_callout_includes_screenshot_when_present"
-    )
+    monkeypatch.setattr(gmp, "GA_SCREENSHOT_PATH", str(tmp_path / "does-not-exist.png"))
 
     html = gmp.build_html(org_dir, config)
 
