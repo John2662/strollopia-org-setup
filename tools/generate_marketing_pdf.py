@@ -31,6 +31,17 @@ CATEGORY_LABELS = {
     "Nature": "parks & nature",
 }
 
+# A single shared illustrative screenshot (not per-org - no town has GA data
+# of its own yet, since it's opt-in and none has set it up) showing what a
+# Google Analytics dashboard looks like, for the "Want to see who's
+# visiting?" callout on the Getting Started page. Optional by design: the
+# callout still renders (as text only) if this file isn't present, so the
+# tool keeps working before/without this asset - drop a PNG/JPG here and
+# regenerate to pick it up, no code change needed.
+GA_SCREENSHOT_PATH = os.path.join(
+    os.path.dirname(__file__), "assets", "ga-dashboard-example.png"
+)
+
 
 def load_poi_counts(tsv_path):
     """Return {category: count}, sorted most-common first."""
@@ -82,6 +93,25 @@ def qr_data_uri(url):
     img.save(buf, format="PNG")
     b64 = base64.b64encode(buf.getvalue()).decode("ascii")
     return f"data:image/png;base64,{b64}"
+
+
+def _render_ga_screenshot():
+    """
+    An <img> tag for GA_SCREENSHOT_PATH, base64-embedded (not a relative
+    <img src>) so it works regardless of org_dir - the shared asset lives
+    outside any org's directory, unlike the per-org sample-card photos,
+    which is exactly the path-resolution mistake that made those silently
+    fail to render before (see build_html's media_dir_rel comment).
+    Returns "" if the screenshot doesn't exist yet, so this callout still
+    renders as text-only rather than breaking the whole page.
+    """
+    if not os.path.exists(GA_SCREENSHOT_PATH):
+        return ""
+    with open(GA_SCREENSHOT_PATH, "rb") as f:
+        b64 = base64.b64encode(f.read()).decode("ascii")
+    ext = os.path.splitext(GA_SCREENSHOT_PATH)[1].lstrip(".").lower()
+    mime = "jpeg" if ext in ("jpg", "jpeg") else ext
+    return f'<img src="data:image/{mime};base64,{b64}" alt="Example Google Analytics dashboard">'
 
 
 def _render_stat_strip(counts):
@@ -213,6 +243,21 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   .credentials .label {{ color: #5b6d68; font-size: 9pt; text-transform: uppercase; letter-spacing: 0.05em; }}
   .credentials .value {{ font-family: "DejaVu Sans Mono", monospace; font-size: 12pt; color: #163634; }}
   .instructions {{ margin-top: 0.35in; font-size: 10.5pt; color: #3a4643; line-height: 1.5; }}
+
+  .analytics-callout {{
+    margin-top: 0.35in;
+    padding: 0.3in;
+    background: #eef4f3;
+    border-radius: 8px;
+  }}
+  .analytics-callout h2 {{ font-size: 13pt; margin-bottom: 0.1in; }}
+  .analytics-callout p {{ font-size: 10pt; color: #3a4643; line-height: 1.5; margin: 0 0 0.15in 0; }}
+  .analytics-callout img {{
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #d8e3e0;
+    margin-top: 0.1in;
+  }}
 </style>
 </head>
 <body>
@@ -259,6 +304,16 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     change photos, and invite others to help manage the site.</p>
   </div>
 
+  <div class="analytics-callout">
+    <h2>Want to see who's visiting?</h2>
+    <p>Every point on your map already tracks views right in your admin
+    panel's Stats view -- no setup required. Want richer reporting (traffic
+    sources, device types, time on page)? Add your own free Google
+    Analytics ID under Organization settings, and Strollopia sends your
+    visitor data there automatically.</p>
+    {ga_screenshot_html}
+  </div>
+
 </body>
 </html>
 """
@@ -299,6 +354,7 @@ def build_html(org_dir, config):
         site_url=site_url,
         admin_email=config.get("main_admin_email", ""),
         admin_password=config.get("main_admin_password", ""),
+        ga_screenshot_html=_render_ga_screenshot(),
     )
 
 

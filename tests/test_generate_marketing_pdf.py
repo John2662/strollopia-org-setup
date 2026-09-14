@@ -183,6 +183,50 @@ def test_build_html_qr_encodes_tracked_path_but_shows_clean_url(tmp_path, monkey
     assert url_div and url_div.group(1) == "https://test-town.strollopia.com"
 
 
+def test_build_html_analytics_callout_renders_text_only_without_screenshot(tmp_path):
+    '''
+    GA_SCREENSHOT_PATH is a single shared asset (not per-org, since no
+    town has its own GA data - it's opt-in and none has set it up yet).
+    The callout must still render sensibly when that file doesn't exist,
+    since the feature shipped before the actual screenshot was available.
+    '''
+    org_dir = _make_org_dir(tmp_path)
+    from post_org_setup import load_org_config
+    config = load_org_config(os.path.join(org_dir, "org-setup.yaml"))
+
+    import generate_marketing_pdf as gmp
+    assert not os.path.exists(gmp.GA_SCREENSHOT_PATH), (
+        "this test assumes no screenshot asset is present - see the paired "
+        "test_build_html_analytics_callout_includes_screenshot_when_present"
+    )
+
+    html = gmp.build_html(org_dir, config)
+
+    assert "Want to see who's visiting?" in html
+    assert "Organization settings" in html
+    # Scoped to the callout div specifically, not the whole page - the QR
+    # code elsewhere on the page is legitimately a data:image URI too.
+    callout = re.search(r'<div class="analytics-callout">(.*?)</div>', html, re.DOTALL)
+    assert callout and "<img" not in callout.group(1)
+
+
+def test_build_html_analytics_callout_includes_screenshot_when_present(tmp_path, monkeypatch):
+    org_dir = _make_org_dir(tmp_path)
+    from post_org_setup import load_org_config
+    config = load_org_config(os.path.join(org_dir, "org-setup.yaml"))
+
+    fake_screenshot = tmp_path / "fake-ga-screenshot.png"
+    _write_tiny_png(fake_screenshot)
+
+    import generate_marketing_pdf as gmp
+    monkeypatch.setattr(gmp, "GA_SCREENSHOT_PATH", str(fake_screenshot))
+
+    html = gmp.build_html(org_dir, config)
+
+    assert '<img src="data:image/png;base64,' in html
+    assert 'alt="Example Google Analytics dashboard"' in html
+
+
 def test_generate_marketing_pdf_embeds_photos_not_blank_boxes(tmp_path, monkeypatch):
     '''
     Regression test for a real bug (2026-09-13, found by actually reading
