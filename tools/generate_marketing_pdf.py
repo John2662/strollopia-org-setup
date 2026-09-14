@@ -205,6 +205,30 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     margin: 0.3in 0 0.15in 0;
   }}
 
+  .features-grid {{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25in;
+    margin-top: 0.3in;
+  }}
+  .feature {{
+    width: calc(50% - 0.125in);
+    padding: 0.22in;
+    border: 1px solid #d8e3e0;
+    border-radius: 8px;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }}
+  .feature h3 {{
+    font-size: 12.5pt;
+    margin: 0 0 0.07in 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.08in;
+  }}
+  .feature h3 .check {{ color: #4f8f89; font-family: "DejaVu Sans", sans-serif; }}
+  .feature p {{ font-size: 9.5pt; color: #4a5a56; line-height: 1.4; margin: 0; }}
+
   .poi-cards {{ display: flex; gap: 0.25in; }}
   .poi-card {{
     flex: 1;
@@ -284,6 +308,52 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       <div class="url">{site_url}</div>
       <p>Scan the code or visit the link above to explore {display_name}'s
       interactive map -- no app to install, works on any phone.</p>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <div class="brand">Strollopia</div>
+  <h1>Why Strollopia?</h1>
+  <p class="tagline">Everything your town needs to bring its map online.</p>
+
+  <div class="features-grid">
+    <div class="feature">
+      <h3><span class="check">&#10003;</span> No app required</h3>
+      <p>Works instantly in any phone browser -- nothing to install.</p>
+    </div>
+    <div class="feature">
+      <h3><span class="check">&#10003;</span> Points that are easy to scan</h3>
+      <p>Color-coded, icon-differentiated map pins -- not a wall of identical dots.</p>
+    </div>
+    <div class="feature">
+      <h3><span class="check">&#10003;</span> Flash sales &amp; time-limited offers</h3>
+      <p>A teaser is always visible; full details and a live countdown appear
+      only during the sale window.</p>
+    </div>
+    <div class="feature">
+      <h3><span class="check">&#10003;</span> Built-in itinerary builder</h3>
+      <p>Visitors plan a route, get walking distance and ETA, and share it
+      with a link.</p>
+    </div>
+    <div class="feature">
+      <h3><span class="check">&#10003;</span> Host it your way</h3>
+      <p>Embed the map in your existing website, or run it as your own
+      standalone site at your own URL.</p>
+    </div>
+    <div class="feature">
+      <h3><span class="check">&#10003;</span> Grows with you</h3>
+      <p>Start with the map, upgrade to a full installable mobile app
+      (PWA) when you're ready.</p>
+    </div>
+    <div class="feature">
+      <h3><span class="check">&#10003;</span> Self-serve admin</h3>
+      <p>Edit listings, swap photos, and add points anytime -- no
+      developer needed.</p>
+    </div>
+    <div class="feature">
+      <h3><span class="check">&#10003;</span> Built-in visitor analytics</h3>
+      <p>See what people are actually looking at, with zero setup required.</p>
     </div>
   </div>
 

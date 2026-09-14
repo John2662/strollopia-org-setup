@@ -155,6 +155,44 @@ def test_build_html_includes_key_content(tmp_path):
     assert "great coffee" in html
 
 
+def test_build_html_includes_features_page(tmp_path):
+    '''
+    "Why Strollopia?" is a static, org-agnostic features page (no per-org
+    data involved) - a lightweight content-presence check is enough here,
+    not a check of every bullet's exact wording.
+    '''
+    org_dir = _make_org_dir(tmp_path)
+    from post_org_setup import load_org_config
+    config = load_org_config(os.path.join(org_dir, "org-setup.yaml"))
+
+    html = build_html(org_dir, config)
+
+    assert "Why Strollopia?" in html
+    assert html.count('class="feature"') == 8
+
+
+def test_build_html_renders_to_three_pages(tmp_path):
+    '''
+    Regression test for a real layout bug (2026-09-13): adding the
+    analytics-callout screenshot pushed the Getting Started page's
+    content into an awkward, mostly-blank third page. Uses weasyprint's
+    own render() (no new PDF-reading dependency needed) to count actual
+    rendered pages, not just count of page-break divs in the HTML - a
+    literal div count wouldn't have caught that bug, since it was
+    content overflowing past a page boundary weasyprint decided on, not
+    a mismatch in the number of explicit page-break elements.
+    '''
+    from weasyprint import HTML
+    org_dir = _make_org_dir(tmp_path)
+    from post_org_setup import load_org_config
+    config = load_org_config(os.path.join(org_dir, "org-setup.yaml"))
+
+    html = build_html(org_dir, config)
+    document = HTML(string=html, base_url=org_dir).render()
+
+    assert len(document.pages) == 3
+
+
 def test_build_html_qr_encodes_tracked_path_but_shows_clean_url(tmp_path, monkeypatch):
     '''
     The QR code itself points at /qr-map/ (a strollopia-sites _redirects
