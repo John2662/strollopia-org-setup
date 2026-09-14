@@ -168,7 +168,18 @@ def test_build_html_includes_features_page(tmp_path):
     html = build_html(org_dir, config)
 
     assert "Why Strollopia?" in html
-    assert html.count('class="feature"') == 8
+    # One full-width "Host it your way" lead card (class="feature feature-wide")
+    # plus 8 regular half-width cards. re.findall on a word-boundary-safe
+    # pattern rather than a plain substring count, since 'class="feature"'
+    # doesn't match 'class="feature feature-wide"'.
+    assert len(re.findall(r'class="feature(?: feature-wide)?"', html)) == 9
+    # CSS also mentions "feature-wide" (the .feature.feature-wide selector),
+    # so count only the actual div's class attribute, not the whole document.
+    assert html.count('class="feature feature-wide"') == 1
+    assert "Business owners manage their own listing" in html
+    # The wide card must be the first one, not just present somewhere -
+    # that's the whole point of the "move to top" request.
+    assert html.index('class="feature feature-wide"') < html.index('class="feature">')
 
 
 def test_build_html_renders_to_three_pages(tmp_path):

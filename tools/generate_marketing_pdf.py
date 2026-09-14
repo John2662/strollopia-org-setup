@@ -219,6 +219,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     page-break-inside: avoid;
     break-inside: avoid;
   }}
+  .feature.feature-wide {{ width: 100%; background: #eef4f3; border-color: #d8e3e0; }}
   .feature h3 {{
     font-size: 12.5pt;
     margin: 0 0 0.07in 0;
@@ -318,13 +319,19 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <p class="tagline">Everything your town needs to bring its map online.</p>
 
   <div class="features-grid">
+    <div class="feature feature-wide">
+      <h3><span class="check">&#10003;</span> Host it your way</h3>
+      <p>Embed the map in your existing website, or run it as your own
+      standalone site at your own URL.</p>
+    </div>
     <div class="feature">
       <h3><span class="check">&#10003;</span> No app required</h3>
       <p>Works instantly in any phone browser -- nothing to install.</p>
     </div>
     <div class="feature">
       <h3><span class="check">&#10003;</span> Points that are easy to scan</h3>
-      <p>Color-coded, icon-differentiated map pins -- not a wall of identical dots.</p>
+      <p>Color-coded, icon-differentiated map pins -- not a wall of identical dots.
+      Add your own custom categories anytime, no developer needed.</p>
     </div>
     <div class="feature">
       <h3><span class="check">&#10003;</span> Flash sales &amp; time-limited offers</h3>
@@ -335,11 +342,6 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       <h3><span class="check">&#10003;</span> Built-in itinerary builder</h3>
       <p>Visitors plan a route, get walking distance and ETA, and share it
       with a link.</p>
-    </div>
-    <div class="feature">
-      <h3><span class="check">&#10003;</span> Host it your way</h3>
-      <p>Embed the map in your existing website, or run it as your own
-      standalone site at your own URL.</p>
     </div>
     <div class="feature">
       <h3><span class="check">&#10003;</span> Grows with you</h3>
@@ -354,6 +356,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     <div class="feature">
       <h3><span class="check">&#10003;</span> Built-in visitor analytics</h3>
       <p>See what people are actually looking at, with zero setup required.</p>
+    </div>
+    <div class="feature">
+      <h3><span class="check">&#10003;</span> Business owners manage their own listing</h3>
+      <p>Grant an individual business owner access to their own point only --
+      they can update hours, photos, and details without touching anyone
+      else's.</p>
     </div>
   </div>
 
