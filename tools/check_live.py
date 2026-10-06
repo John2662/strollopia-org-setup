@@ -32,9 +32,16 @@ def check_live(domain, map_id=None, timeout=10):
         print(f"FAIL: {url} returned HTTP {resp.status_code}")
         return False
 
-    if "Open the Map" not in resp.text:
+    # Checks for a link into /maps/ rather than literal button copy like
+    # "Open the Map" -- a branded site (confirmed live on strollwolfville.ca)
+    # can customize that text (e.g. "Begin Exploring") while still being a
+    # real, correctly-wired deploy. /maps/<id> is checked directly when
+    # map_id is known, since that's a stronger signal than the bare /maps/
+    # prefix (which would also match a wrong map's link).
+    marker = f"/maps/{map_id}" if map_id is not None else "/maps/"
+    if marker not in resp.text:
         print(f"FAIL: {url} responded 200 but doesn't look like the strollopia "
-              f"template (missing \"Open the Map\" link)")
+              f"template (no link to {marker} found)")
         return False
 
     print(f"OK: {url} is live and looks like the strollopia template.")
