@@ -3,9 +3,7 @@ org_domain_name: kentville.strollopia.com
 viewer: https://kentville.viewer.strollopia.com
 display_name: kentville Maps
 tag_line: Stroll through kentville
-main_admin_email: john2662@gmail.com
 main_admin_name: Admin
-main_admin_password: changeme123
 allows_anonymous: true
 anonymous_settings:
   period: 3600
@@ -19,6 +17,20 @@ categories:
     - Mural
   Other:
     - Other
+  Business:
+    - Automotive / Mechanical
+    - Community / Culture
+    - Eateries
+    - Financial Services
+    - Groceries / Pharmacy
+    - Health / Healing
+    - Legal Services
+    - Non-Profit Organizations
+    - Real Estate Services
+    - Salons / Spas / Barbers
+    - Shops
+    - Specialty Services
+    - Tech / Communications
 mediatypes:
   - richtext
   - image
@@ -32,8 +44,10 @@ layouts:
 org_maps:
   mural-map:
     is_public: true
+    in_public_viewer_list: true
   business-map:
     is_public: true
+    in_public_viewer_list: true
 ui_support:
   datalogger: 'DL'
   default_language: 'en'
