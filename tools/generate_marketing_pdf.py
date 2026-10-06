@@ -15,14 +15,17 @@ Usage:
 import argparse
 import base64
 import csv
+import glob
 import io
 import os
 import sys
 
 import qrcode
+import yaml
 from weasyprint import HTML
 
 from post_org_setup import load_org_config
+from strollopia_import import find_schemas_in_map_dir
 
 CATEGORY_LABELS = {
     "Business": "businesses",
@@ -43,31 +46,59 @@ GA_SCREENSHOT_PATH = os.path.join(
 )
 
 
-def load_poi_counts(tsv_path):
+def _as_path_list(tsv_paths):
+    """Normalize a single path or a list of paths to a list.
+
+    A map dir usually has exactly one map-data file, but one reconciled
+    from two import passes (e.g. Wolfville's hand-curated "downtown" map
+    plus a later map-data.additions.tsv) can have more than one - both
+    are real, live-imported rows, so stats/samples need to see all of
+    them, not just whichever file is found/passed first.
+    """
+    if isinstance(tsv_paths, str):
+        return [tsv_paths]
+    return list(tsv_paths)
+
+
+def load_poi_counts(tsv_paths):
     """Return {category: count}, sorted most-common first."""
     counts = {}
-    with open(tsv_path, newline="", encoding="utf-8") as f:
-        for row in csv.DictReader(f, delimiter="\t"):
-            cat = row.get("category") or "Other"
-            counts[cat] = counts.get(cat, 0) + 1
+    for tsv_path in _as_path_list(tsv_paths):
+        with open(tsv_path, newline="", encoding="utf-8") as f:
+            for row in csv.DictReader(f, delimiter="\t"):
+                cat = row.get("category") or "Other"
+                counts[cat] = counts.get(cat, 0) + 1
     return dict(sorted(counts.items(), key=lambda kv: kv[1], reverse=True))
 
 
-def pick_sample_pois(tsv_path, media_dir, limit=3):
+def pick_sample_pois(tsv_paths, media_dir, limit=3, description_col="description", image_col="image_file"):
     """Pick up to `limit` POIs to showcase.
 
     Prefers rows with both a photo and a description, and tries to cover
     distinct categories before repeating one, so the sample doesn't end up
     as 3 cafes.
+
+    description_col/image_col: the TSV's actual header names for those
+    fields, from the map's import-schema (content_columns.rt1/.i1) -
+    not every org literally names them "description"/"image_file"
+    (Wolfville's live "downtown" map uses "desc", which silently produced
+    zero sample cards when this assumed the column name instead of
+    reading the schema). Each picked row is normalized to carry both the
+    canonical keys too, since _render_sample_cards reads row["description"].
     """
-    with open(tsv_path, newline="", encoding="utf-8") as f:
-        rows = list(csv.DictReader(f, delimiter="\t"))
+    rows = []
+    for tsv_path in _as_path_list(tsv_paths):
+        with open(tsv_path, newline="", encoding="utf-8") as f:
+            rows.extend(csv.DictReader(f, delimiter="\t"))
 
     def has_photo(row):
-        image_file = row.get("image_file")
+        image_file = row.get(image_col)
         return bool(image_file) and os.path.exists(os.path.join(media_dir, image_file))
 
-    candidates = [r for r in rows if has_photo(r) and r.get("description")]
+    candidates = [r for r in rows if has_photo(r) and r.get(description_col)]
+    for row in candidates:
+        row.setdefault("description", row.get(description_col, ""))
+        row.setdefault("image_file", row.get(image_col, ""))
 
     picked = []
     seen_categories = set()
@@ -401,23 +432,86 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 """
 
 
+def _pick_public_map_dir(org_maps):
+    """Return the org-data subdirectory name to source stats/photos from.
+
+    Not every org's live map lives in a directory literally named
+    "main-map" - Wolfville's org-data also has a leftover "main-map"
+    discovery-reconciliation comparison set alongside the real live
+    "downtown" map (org_maps only declares "downtown"; using "main-map"
+    unconditionally would have put the wrong businesses - a different,
+    never-imported dataset - in a paying-customer-facing PDF). Prefers
+    the map explicitly marked in_public_viewer_list, falling back to the
+    only entry if there's just one, and to the historical "main-map"
+    default if org_maps is missing entirely (orgs set up before this
+    field existed).
+    """
+    org_maps = org_maps or {}
+    for name, map_settings in org_maps.items():
+        if (map_settings or {}).get("in_public_viewer_list"):
+            return name
+    if org_maps:
+        return next(iter(org_maps))
+    return "main-map"
+
+
+def _map_data_paths(map_dir):
+    """Return every map-data*.tsv file in map_dir, sorted for determinism.
+
+    Usually just one (map-data.en.tsv or legacy map-data.tsv) - see
+    _as_path_list for why more than one can legitimately exist.
+    """
+    import glob
+    paths = sorted(glob.glob(os.path.join(map_dir, "map-data*.tsv")))
+    if not paths:
+        raise FileNotFoundError(f"No map-data*.tsv found in {map_dir}")
+    return paths
+
+
+def _resolve_content_columns(map_dir):
+    """Return (description_column, image_column) for this map's schema.
+
+    Most schemas happen to use the literal header names "description" and
+    "image_file" (the defaults here), but not all do - Wolfville's live
+    "downtown" map maps rt1 (richtext) to a column literally named "desc",
+    which silently produced zero sample cards (every row's
+    r.get("description") was None) until this read the schema instead of
+    assuming the column name. rt1/i1 are used by every schema seen in
+    this pipeline as the richtext/image field keys.
+    """
+    description_col, image_col = "description", "image_file"
+    schemas = find_schemas_in_map_dir(map_dir)
+    if not schemas:
+        return description_col, image_col
+    with open(schemas[0]) as f:
+        schema = yaml.safe_load(f) or {}
+    content_columns = schema.get("content_columns") or {}
+    description_col = (content_columns.get("rt1") or {}).get("column", description_col)
+    image_col = (content_columns.get("i1") or {}).get("column", image_col)
+    return description_col, image_col
+
+
 def build_html(org_dir, config):
     """Build the marketing page's HTML from an org's already-captured data."""
-    map_dir = os.path.join(org_dir, "main-map")
-    tsv_path = os.path.join(map_dir, "map-data.en.tsv")
+    map_dir_name = _pick_public_map_dir(config.get("org_maps"))
+    map_dir = os.path.join(org_dir, map_dir_name)
+    tsv_paths = _map_data_paths(map_dir)
+    description_col, image_col = _resolve_content_columns(map_dir)
     media_dir = os.path.join(map_dir, "media")
     # generate_marketing_pdf() renders with base_url=org_dir, so an <img src>
     # needs to be relative to org_dir - NOT the same media_dir used above,
-    # which already has org_dir baked in (it's built from org_dir + "main-map"
+    # which already has org_dir baked in (it's built from org_dir + map_dir_name
     # + "media" so pick_sample_pois' has_photo() check can open the file
     # directly from the CWD). Using media_dir for the src too double-prefixes
     # org_dir when weasyprint resolves the relative URL against base_url,
     # so every image silently 404s (write_pdf() doesn't raise on a missing
     # image - it just renders a blank box, which is why this went unnoticed).
-    media_dir_rel = os.path.join("main-map", "media")
+    media_dir_rel = os.path.join(map_dir_name, "media")
 
-    counts = load_poi_counts(tsv_path)
-    samples = pick_sample_pois(tsv_path, media_dir)
+    counts = load_poi_counts(tsv_paths)
+    samples = pick_sample_pois(
+        tsv_paths, media_dir, description_col=description_col, image_col=image_col
+    )
     site_url = f"https://{config['org_domain_name']}"
     # /qr-map/ is a strollopia-sites _redirects rule (302 to the site root)
     # that exists purely so Cloudflare Pages' own per-path analytics can

@@ -8,7 +8,8 @@ import re
 import yaml
 from generate_marketing_pdf import (
     load_poi_counts, pick_sample_pois, qr_data_uri,
-    _summary_only, build_html, generate_marketing_pdf,
+    _summary_only, _pick_public_map_dir, _map_data_paths,
+    build_html, generate_marketing_pdf,
 )
 
 TSV_COLUMNS = [
@@ -98,6 +99,113 @@ def test_pick_sample_pois_returns_fewer_than_limit_if_not_enough(tmp_path):
     ])
     picked = pick_sample_pois(str(tsv_path), str(media_dir), limit=3)
     assert len(picked) == 1
+
+
+def test_load_poi_counts_combines_multiple_tsv_files(tmp_path):
+    # Regression: Wolfville's live "downtown" map is split across
+    # map-data.tsv and map-data.additions.tsv (two import passes) - stats
+    # must count both, not just whichever file is passed first.
+    tsv1 = tmp_path / "map-data.tsv"
+    tsv2 = tmp_path / "map-data.additions.tsv"
+    _write_tsv(tsv1, [_row("A", "Business", "Cafe")])
+    _write_tsv(tsv2, [_row("B", "Business", "Restaurant"), _row("C", "Landmark", "Museum")])
+
+    counts = load_poi_counts([str(tsv1), str(tsv2)])
+    assert counts == {"Business": 2, "Landmark": 1}
+
+
+def test_pick_sample_pois_combines_multiple_tsv_files(tmp_path):
+    tsv1 = tmp_path / "map-data.tsv"
+    tsv2 = tmp_path / "map-data.additions.tsv"
+    media_dir = tmp_path / "media"
+    media_dir.mkdir()
+    _write_tiny_png(media_dir / "photo.jpg")
+    _write_tsv(tsv1, [_row("From First File", "Business", "Cafe",
+                           description="<b>From First File</b> — good coffee", image_file="photo.jpg")])
+    _write_tsv(tsv2, [_row("From Second File", "Landmark", "Museum",
+                           description="<b>From Second File</b> — local history", image_file="photo.jpg")])
+
+    picked = pick_sample_pois([str(tsv1), str(tsv2)], str(media_dir), limit=3)
+    assert {row["name"] for row in picked} == {"From First File", "From Second File"}
+
+
+def test_pick_public_map_dir_prefers_in_public_viewer_list():
+    # Regression: generate_marketing_pdf.py used to hardcode "main-map" -
+    # Wolfville's org-data also has a leftover "main-map" discovery-
+    # reconciliation comparison set that was never actually imported;
+    # only "downtown" is declared in org_maps / live on prod.
+    org_maps = {
+        "main-map": {"is_public": False},
+        "downtown": {"is_public": True, "in_public_viewer_list": True},
+    }
+    assert _pick_public_map_dir(org_maps) == "downtown"
+
+
+def test_pick_public_map_dir_falls_back_to_only_entry():
+    assert _pick_public_map_dir({"mural-map": {"is_public": True}}) == "mural-map"
+
+
+def test_pick_public_map_dir_defaults_to_main_map_when_missing():
+    assert _pick_public_map_dir(None) == "main-map"
+    assert _pick_public_map_dir({}) == "main-map"
+
+
+def test_map_data_paths_finds_all_map_data_files_sorted(tmp_path):
+    (tmp_path / "map-data.additions.tsv").write_text("x")
+    (tmp_path / "map-data.tsv").write_text("x")
+    (tmp_path / "enrichment-suggestions.tsv").write_text("x")  # must not match
+
+    paths = _map_data_paths(str(tmp_path))
+    assert [os.path.basename(p) for p in paths] == ["map-data.additions.tsv", "map-data.tsv"]
+
+
+def test_map_data_paths_raises_when_none_found(tmp_path):
+    import pytest
+    with pytest.raises(FileNotFoundError):
+        _map_data_paths(str(tmp_path))
+
+
+def test_pick_sample_pois_finds_candidates_when_description_column_is_renamed(tmp_path):
+    # Regression: Wolfville's live "downtown" map schema maps rt1 to a
+    # column literally named "desc", not "description" - pick_sample_pois
+    # used to hardcode "description", so every row's r.get("description")
+    # was None and the PDF shipped with zero sample business cards even
+    # though 316 real POIs (with real photos and descriptions) existed.
+    tsv_path = tmp_path / "map-data.tsv"
+    media_dir = tmp_path / "media"
+    media_dir.mkdir()
+    _write_tiny_png(media_dir / "photo.jpg")
+
+    with open(tsv_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["name", "category", "desc", "image_file"], delimiter="\t")
+        writer.writeheader()
+        writer.writerow({
+            "name": "Real Business", "category": "Business",
+            "desc": "<b>Real Business</b> — a real place", "image_file": "photo.jpg",
+        })
+
+    picked = pick_sample_pois(str(tsv_path), str(media_dir), description_col="desc")
+    assert [row["name"] for row in picked] == ["Real Business"]
+    # _render_sample_cards reads row["description"] regardless of the
+    # schema's actual column name - the picked row must carry it too.
+    assert picked[0]["description"] == "<b>Real Business</b> — a real place"
+
+
+def test_resolve_content_columns_reads_schema(tmp_path):
+    from generate_marketing_pdf import _resolve_content_columns
+
+    map_dir = tmp_path / "downtown"
+    map_dir.mkdir()
+    with open(map_dir / "import-schema.yaml", "w") as f:
+        yaml.dump({"content_columns": {"rt1": {"column": "desc"}, "i1": {"column": "image_file"}}}, f)
+
+    assert _resolve_content_columns(str(map_dir)) == ("desc", "image_file")
+
+
+def test_resolve_content_columns_defaults_when_no_schema(tmp_path):
+    from generate_marketing_pdf import _resolve_content_columns
+
+    assert _resolve_content_columns(str(tmp_path)) == ("description", "image_file")
 
 
 def test_summary_only_extracts_text_after_em_dash():
