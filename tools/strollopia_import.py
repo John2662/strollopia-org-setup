@@ -251,8 +251,11 @@ def collect_schema_columns(schema):
 
     # content_columns
     for field_key, mapping in schema.get('content_columns', {}).items():
-        if isinstance(mapping, dict) and 'column' in mapping:
-            columns.add(mapping['column'])
+        if isinstance(mapping, dict):
+            if 'column' in mapping:
+                columns.add(mapping['column'])
+            if 'reactive_column' in mapping:
+                columns.add(mapping['reactive_column'])
 
     return columns
 
@@ -413,14 +416,49 @@ def find_or_create_user(row, schema, org_domain_name, email_to_pk, token):
 
 # ── Content block building ────────────────────────────────────────
 
+def resolve_reactive_value(row, mapping, field_key):
+    """Return the GPS-proximity unlock distance (metres) for one field.
+
+    Only dict-style content_columns mappings can name a reactive_column
+    (e.g. {"column": "in_person_file", "reactive_column": "in_person_radius"}) -
+    a bare string mapping has no way to carry one. Defaults to 0 (always
+    visible) if unset, blank, or not a valid integer.
+    """
+    if not isinstance(mapping, dict):
+        return 0
+    reactive_col = mapping.get('reactive_column')
+    if not reactive_col:
+        return 0
+    raw = row.get(reactive_col, '').strip()
+    if not raw:
+        return 0
+    try:
+        return int(float(raw))
+    except ValueError:
+        logger.warning(
+            f'  Invalid reactive_column value "{raw}" for field_key "{field_key}" '
+            f'(column "{reactive_col}") - using 0.'
+        )
+        return 0
+
+
 def build_content_wrapper(field_key, media_type_name, media_type_pk, value,
-                          base_path=None, token=None, schema_mapping=None):
+                          base_path=None, token=None, schema_mapping=None, reactive=0):
     """Build a single PoiContentWrapper dict for a layout field.
 
     Dispatches based on media_type_name (richtext, simple_richtext, image, audio, chat).
+
+    reactive: GPS-proximity unlock distance in metres (0 = always visible).
+    Defaults to 0 for every field unless the schema's content_columns
+    mapping names a reactive_column (see build_content_block) - previously
+    hardcoded to 0 unconditionally, which silently shipped every "in
+    person" audio field ungated (confirmed live: Valley Art Map's a2
+    field has real per-POI in_person_radius values - 50m/500m/1000m,
+    tuned per installation - that were captured in map-data.tsv but never
+    reached the API).
     """
     wrapper = {
-        'reactive': 0,
+        'reactive': reactive,
         'media_type': media_type_pk,
         'media_file': None,
         'field_key': field_key,
@@ -549,6 +587,8 @@ def build_content_block(row, schema, layout_card_pk, layout_fields, media_dir, t
             if media_type_name in ('richtext', 'rich_text') and value and not value.startswith('<'):
                 value = f'<p>{value}</p>'
 
+            reactive = resolve_reactive_value(row, mapping, field_key)
+
             wrapper = build_content_wrapper(
                 field_key=field_key,
                 media_type_name=media_type_name,
@@ -557,6 +597,7 @@ def build_content_block(row, schema, layout_card_pk, layout_fields, media_dir, t
                 base_path=base_path,
                 token=token,
                 schema_mapping=mapping,
+                reactive=reactive,
             )
             content_array.append(wrapper)
         else:

@@ -296,3 +296,49 @@ def get_map_pois(token, org_domain_name):
     # This list endpoint returns {'pk': ..., 'name': ...} per item -- shape
     # it like the GeoJSON-feature 'properties.name' callers expect.
     return [{'properties': {'name': item.get('name', '')}} for item in items]
+
+
+def get_map_poi_pks(token, org_domain_name):
+    """Fetch {name: pk} for the authenticated user's POIs.
+
+    Same /api/content/pois/ list endpoint as get_map_pois(), but keeps
+    the pk instead of discarding it -- for tools that need to address a
+    specific already-imported POI (e.g. a one-off field patch), not just
+    check whether one exists by name.
+    """
+    endpoint = f'{get_api_base_url()}api/content/pois/?org_domain_name={org_domain_name}'
+    headers = {'Authorization': f'Token {token}'}
+    resp = requests.get(endpoint, headers=headers)
+    if resp.status_code != 200:
+        return {}
+    return {item.get('name', ''): item.get('pk') for item in resp.json()}
+
+
+def patch_poi_content(pk, content_block, token, org_domain_name):
+    """PATCH just the content_block of an existing POI.
+
+    content_block is the same shape post_poi's full-create payload uses
+    (a list of {'language', 'layout_card', 'content_array'} dicts) --
+    PoiViewSet.partial_update()'s underlying create_poi_content_wrappers()
+    finds the existing PoiContentWrapper by (owning_container, field_key)
+    and updates only the fields actually present/truthy in content_array,
+    so a minimal payload (e.g. just {'field_key': 'a2', 'media_type': ...,
+    'reactive': N}) safely updates that one field without touching the
+    wrapper's existing file/caption/text.
+
+    Returns (success: bool, response_data: dict or str).
+    """
+    endpoint = f'{get_api_base_url()}api/content/pois/{pk}/?org_domain_name={org_domain_name}'
+    headers = {
+        'Authorization': f'Token {token}',
+        'Content-Type': 'application/json',
+    }
+    payload = {'properties': {'content_block': content_block}}
+    resp = requests.patch(endpoint, json=payload, headers=headers)
+    if resp.status_code == 200:
+        return True, resp.json()
+    try:
+        error_data = resp.json()
+    except Exception:
+        error_data = resp.text[:500]
+    return False, f'HTTP {resp.status_code}: {error_data}'

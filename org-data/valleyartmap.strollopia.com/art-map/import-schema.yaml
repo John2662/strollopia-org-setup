@@ -23,6 +23,7 @@ content_columns:
     column: "teaser_file"
   a2:
     column: "in_person_file"
+    reactive_column: "in_person_radius"
 
 options:
   skip_existing: true
