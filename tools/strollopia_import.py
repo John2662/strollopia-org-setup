@@ -446,7 +446,7 @@ def build_content_wrapper(field_key, media_type_name, media_type_pk, value,
                           base_path=None, token=None, schema_mapping=None, reactive=0):
     """Build a single PoiContentWrapper dict for a layout field.
 
-    Dispatches based on media_type_name (richtext, simple_richtext, image, audio, chat).
+    Dispatches based on media_type_name (richtext, simple_richtext, image, audio, video, chat).
 
     reactive: GPS-proximity unlock distance in metres (0 = always visible).
     Defaults to 0 for every field unless the schema's content_columns
@@ -497,6 +497,17 @@ def build_content_wrapper(field_key, media_type_name, media_type_pk, value,
                 logger.info(f'  Uploaded audio: {file_path} -> PK {media_pk}')
             else:
                 logger.warning(f'  Audio file not found: {file_path}')
+
+    elif media_type_name == 'video':
+        if value and value.strip():
+            file_path = os.path.join(base_path, value.strip()) if base_path else value.strip()
+            if os.path.isfile(file_path):
+                media_pk = upload_media_file(file_path, token, is_public=True)
+                wrapper['media_file_w'] = media_pk
+                wrapper['is_public'] = True
+                logger.info(f'  Uploaded video: {file_path} -> PK {media_pk}')
+            else:
+                logger.warning(f'  Video file not found: {file_path}')
 
     else:
         logger.warning(f'  Unsupported media type: {media_type_name} for field_key: {field_key}')

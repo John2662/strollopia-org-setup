@@ -203,7 +203,7 @@ def get_org_layout_fields(org_domain_name):
 # ── Media upload ──────────────────────────────────────────────────
 
 def upload_media_file(file_path, token, is_public=True):
-    """Upload a media file (image or audio) and return the MediaFileWrapper PK.
+    """Upload a media file (image, audio or video) and return the MediaFileWrapper PK.
 
     Uses the single-step POST /api/media/upload/ endpoint.
     """
@@ -221,6 +221,8 @@ def upload_media_file(file_path, token, is_public=True):
         media_type = 'image'
     elif content_type.startswith('audio/'):
         media_type = 'audio'
+    elif content_type.startswith('video/'):
+        media_type = 'video'
     else:
         raise ValueError(f'Unsupported content type for upload: {content_type} ({file_path})')
 
