@@ -95,15 +95,6 @@ def initialize_org_from_config(config, filename, token):
     return False, f'HTTP {resp.status_code}: {data}'
 
 
-def _mask_secret(value):
-    """Mask a secret for debug printing: show length + first/last char only."""
-    if not value:
-        return '<empty>'
-    if len(value) <= 2:
-        return f'<{len(value)} chars>'
-    return f'{value[0]}{"*" * (len(value) - 2)}{value[-1]} <{len(value)} chars>'
-
-
 def login(email, password, org_domain_name):
     """Log in and return (token, user_pk) or raise on failure."""
     payload = {
@@ -114,7 +105,7 @@ def login(email, password, org_domain_name):
     print(
         f'POST /api/user/login/ payload: '
         f'email={email!r} org_domain_name={org_domain_name!r} '
-        f'password={_mask_secret(password)} (never printed in full)'
+        f'password=<hidden>'
     )
     resp = requests.post(f'{get_api_base_url()}api/user/login/', json=payload)
     data = resp.json()
