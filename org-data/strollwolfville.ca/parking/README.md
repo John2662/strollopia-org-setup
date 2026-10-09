@@ -72,14 +72,21 @@ python name_areas.py /tmp/parking.geojson osm-streets.geojson wolfville-downtown
 
 1. adds missing subcategories in the source map's colours: 1 Hr / 3 Hr / All
    Day / Accessible Parking and Loading Zone under "Parking", Bus Stop under
-   "Transit";
+   "Transit"; each gets a pin glyph from the shared library (Car for the time
+   limits, Wheelchair, Truck, Bus), and existing subcategories without a
+   glyph are patched. Without a glyph the viewer shows a palette pin;
 2. creates the 32 areas with `POST /api/geo/map-area/`; `create_poi` gives
    each area a linked POI with its subcategory and a `text` card ("3 Hr
    Parking near Front Street." plus the source line);
 3. creates the 34 points as ordinary POIs with the same card.
 
 Names already on the map are skipped, so it can be re-run. Needs
-strollopia-api 51746e50 or later (the `create_poi` object form).
+strollopia-api 51746e50 or later (the `create_poi` object form) and
+content migration 0049 (Wheelchair, Truck and Bus glyphs, 1c327779).
+
+Changing only subcategories (e.g. adding glyphs) doesn't re-render the public
+map JSON on S3; save any area or POI on the map afterwards (e.g. PATCH an
+area with its own colour) until the API does this itself.
 
 ```bash
 python org-data/strollwolfville.ca/parking/import_parking.py --dry-run
@@ -92,6 +99,11 @@ python org-data/strollwolfville.ca/parking/import_parking.py \
 Deleting an area also deletes its POI; the points and the subcategories
 have to be deleted separately.
 
-Imported so far: dev only, as a test on climate-stories.strollopia.com's
-climate-map (map 107), 2026-10-09: 66 created. Not on strollwolfville.ca
-yet (it isn't on dev; prod after the town's OK).
+Imported so far:
+
+- dev, as a test on climate-stories.strollopia.com's climate-map (map 107),
+  2026-10-09: 66 created (no glyphs yet; re-run to add them).
+- prod, strollwolfville.ca downtown (map 11), 2026-10-09: 66 created (32
+  areas, 34 points); glyphs added by a re-run the same day. The old test
+  areas "parking lot 123" / "parking lot 234" (with POIs 208, 1413) and
+  subcategories "1 hour Parking" / "2 hour parking" were deleted.
