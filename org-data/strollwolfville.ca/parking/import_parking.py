@@ -53,15 +53,18 @@ from strollopia_import import (  # noqa: E402
 GEOJSON = os.path.join(HERE, 'wolfville-downtown-parking.geojson')
 SOURCE = 'Source: Town of Wolfville, Map 23A Downtown Parking (2024-07-26).'
 
-# subcategory name -> (category name, colour). Area colours match the
-# source map's legend; point colours match its icons.
+# subcategory name -> (category name, colour, pin glyph). Area colours
+# match the source map's legend; point colours match its icons. Glyphs come
+# from the shared library (GET /api/org/glyphs/); Wheelchair, Truck and Bus
+# were added by strollopia-api migration content 0049. Without a glyph the
+# viewer shows its default (an artist's palette).
 SUBCATEGORIES = {
-    '1 Hr Parking': ('Parking', '#a4a233'),
-    '3 Hr Parking': ('Parking', '#33a8a5'),
-    'All Day Parking': ('Parking', '#ea3e82'),
-    'Accessible Parking': ('Parking', '#0070ff'),
-    'Loading Zone': ('Parking', '#1d75bc'),
-    'Bus Stop': ('Transit', '#333333'),
+    '1 Hr Parking': ('Parking', '#a4a233', 'Car'),
+    '3 Hr Parking': ('Parking', '#33a8a5', 'Car'),
+    'All Day Parking': ('Parking', '#ea3e82', 'Car'),
+    'Accessible Parking': ('Parking', '#0070ff', 'Wheelchair'),
+    'Loading Zone': ('Parking', '#1d75bc', 'Truck'),
+    'Bus Stop': ('Transit', '#333333', 'Bus'),
 }
 
 POINT_TEXT = {
@@ -103,12 +106,24 @@ class Api:
                                f'HTTP {resp.status_code}: {resp.text[:500]}')
         return resp.json()
 
+    def patch(self, path, payload):
+        resp = requests.patch(self.url(path), json=payload, headers=self.headers)
+        if resp.status_code != 200:
+            raise RuntimeError(f'PATCH {path}: HTTP {resp.status_code}: {resp.text[:500]}')
+        return resp.json()
+
 
 def ensure_subcategories(api):
-    """Return {subcategory name: pk}, creating what's missing."""
+    """Return {subcategory name: pk}, creating what's missing and giving
+    each one its glyph if it has none."""
     categories = {c['name']: c for c in api.get('api/org/categories/')}
+    glyphs = {g['name']: g['id'] for g in api.get('api/org/glyphs/')}
     pks = {}
-    for sub_name, (cat_name, color) in SUBCATEGORIES.items():
+    for sub_name, (cat_name, color, glyph_name) in SUBCATEGORIES.items():
+        glyph_pk = glyphs.get(glyph_name)
+        if glyph_pk is None:
+            print(f'  ! no glyph {glyph_name!r} in the shared library; '
+                  f'{sub_name} keeps the default pin')
         cat = categories.get(cat_name)
         if cat is None:
             print(f'  + category {cat_name}')
@@ -117,16 +132,22 @@ def ensure_subcategories(api):
                 cat = api.post('api/org/categories/', {'name': cat_name})
                 cat['sub_categories'] = []
             categories[cat_name] = cat
-        existing = {s['name']: s['id'] for s in cat.get('sub_categories', [])}
+        existing = {s['name']: s for s in cat.get('sub_categories', [])}
         if sub_name in existing:
-            pks[sub_name] = existing[sub_name]
+            sub = existing[sub_name]
+            pks[sub_name] = sub['id']
+            if not sub.get('glyph') and glyph_pk is not None:
+                print(f'  ~ subcategory {cat_name} / {sub_name}: glyph {glyph_name}')
+                if not api.dry_run:
+                    api.patch(f'api/org/subcategories/{sub["id"]}/', {'glyph': glyph_pk})
             continue
-        print(f'  + subcategory {cat_name} / {sub_name} {color}')
+        print(f'  + subcategory {cat_name} / {sub_name} {color} {glyph_name}')
         if api.dry_run:
             pks[sub_name] = None
             continue
         sub = api.post('api/org/subcategories/', {
             'owning_category': cat['id'], 'name': sub_name, 'color': color,
+            'glyph': glyph_pk,
         })
         cat['sub_categories'].append(sub)
         pks[sub_name] = sub['id']
