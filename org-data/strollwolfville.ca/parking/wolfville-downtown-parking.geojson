@@ -1671,7 +1671,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 1"
+    "name": "Accessible Parking - Dykeland Street",
+    "street": "Dykeland Street",
+    "street_distance_m": 78.1
    }
   },
   {
@@ -1686,7 +1688,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 2"
+    "name": "Accessible Parking - Front Street (2)",
+    "street": "Front Street",
+    "street_distance_m": 67.3
    }
   },
   {
@@ -1701,7 +1705,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 3"
+    "name": "Accessible Parking - Elm Avenue (2)",
+    "street": "Elm Avenue",
+    "street_distance_m": 22.2
    }
   },
   {
@@ -1716,7 +1722,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 4"
+    "name": "Accessible Parking - Elm Avenue (1)",
+    "street": "Elm Avenue",
+    "street_distance_m": 12.4
    }
   },
   {
@@ -1731,7 +1739,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 5"
+    "name": "Accessible Parking - Front Street (1)",
+    "street": "Front Street",
+    "street_distance_m": 36.8
    }
   },
   {
@@ -1746,7 +1756,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 6"
+    "name": "Accessible Parking - Harbourside Drive",
+    "street": "Harbourside Drive",
+    "street_distance_m": 11.1
    }
   },
   {
@@ -1761,7 +1773,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 7"
+    "name": "Accessible Parking - Front Street (3)",
+    "street": "Front Street",
+    "street_distance_m": 5.9
    }
   },
   {
@@ -1776,7 +1790,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 8"
+    "name": "Accessible Parking - Main Street (2)",
+    "street": "Main Street",
+    "street_distance_m": 5.8
    }
   },
   {
@@ -1791,7 +1807,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 9"
+    "name": "Accessible Parking - Main Street (4)",
+    "street": "Main Street",
+    "street_distance_m": 7.1
    }
   },
   {
@@ -1806,7 +1824,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 10"
+    "name": "Accessible Parking - Main Street (3)",
+    "street": "Main Street",
+    "street_distance_m": 2.2
    }
   },
   {
@@ -1821,7 +1841,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 11"
+    "name": "Accessible Parking - Main Street (1)",
+    "street": "Main Street",
+    "street_distance_m": 8.7
    }
   },
   {
@@ -1836,7 +1858,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 12"
+    "name": "Accessible Parking - Main Street (7)",
+    "street": "Main Street",
+    "street_distance_m": 6.7
    }
   },
   {
@@ -1851,7 +1875,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 13"
+    "name": "Accessible Parking - Main Street (9)",
+    "street": "Main Street",
+    "street_distance_m": 6.4
    }
   },
   {
@@ -1866,7 +1892,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 14"
+    "name": "Accessible Parking - Main Street (8)",
+    "street": "Main Street",
+    "street_distance_m": 2.7
    }
   },
   {
@@ -1881,7 +1909,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 15"
+    "name": "Accessible Parking - Main Street (5)",
+    "street": "Main Street",
+    "street_distance_m": 28.0
    }
   },
   {
@@ -1896,7 +1926,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 16"
+    "name": "Accessible Parking - Main Street (6)",
+    "street": "Main Street",
+    "street_distance_m": 27.3
    }
   },
   {
@@ -1911,7 +1943,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 17"
+    "name": "Accessible Parking - Linden Avenue",
+    "street": "Linden Avenue",
+    "street_distance_m": 8.8
    }
   },
   {
@@ -1926,7 +1960,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 18"
+    "name": "Accessible Parking - Main Street (10)",
+    "street": "Main Street",
+    "street_distance_m": 2.5
    }
   },
   {
@@ -1941,7 +1977,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 19"
+    "name": "Accessible Parking - Gaspereau Avenue",
+    "street": "Gaspereau Avenue",
+    "street_distance_m": 14.6
    }
   },
   {
@@ -1956,7 +1994,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 20"
+    "name": "Accessible Parking - Seaview Avenue",
+    "street": "Seaview Avenue",
+    "street_distance_m": 4.5
    }
   },
   {
@@ -1971,7 +2011,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 21"
+    "name": "Accessible Parking - Willow Avenue (2)",
+    "street": "Willow Avenue",
+    "street_distance_m": 4.4
    }
   },
   {
@@ -1986,7 +2028,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 22"
+    "name": "Accessible Parking - Willow Avenue (1)",
+    "street": "Willow Avenue",
+    "street_distance_m": 3.0
    }
   },
   {
@@ -2001,7 +2045,9 @@
    "properties": {
     "kind": "poi",
     "category": "Accessible Parking",
-    "name": "Accessible Parking 23"
+    "name": "Accessible Parking - Acadia Street",
+    "street": "Acadia Street",
+    "street_distance_m": 4.8
    }
   },
   {
@@ -2016,7 +2062,9 @@
    "properties": {
     "kind": "poi",
     "category": "Loading Zone",
-    "name": "Loading Zone 1"
+    "name": "Loading Zone - Harbourside Drive",
+    "street": "Harbourside Drive",
+    "street_distance_m": 4.3
    }
   },
   {
@@ -2031,7 +2079,9 @@
    "properties": {
     "kind": "poi",
     "category": "Loading Zone",
-    "name": "Loading Zone 2"
+    "name": "Loading Zone - Front Street (1)",
+    "street": "Front Street",
+    "street_distance_m": 4.2
    }
   },
   {
@@ -2046,7 +2096,9 @@
    "properties": {
     "kind": "poi",
     "category": "Loading Zone",
-    "name": "Loading Zone 3"
+    "name": "Loading Zone - Front Street (2)",
+    "street": "Front Street",
+    "street_distance_m": 4.6
    }
   },
   {
@@ -2061,7 +2113,9 @@
    "properties": {
     "kind": "poi",
     "category": "Loading Zone",
-    "name": "Loading Zone 4"
+    "name": "Loading Zone - Central Avenue",
+    "street": "Central Avenue",
+    "street_distance_m": 3.7
    }
   },
   {
@@ -2076,7 +2130,9 @@
    "properties": {
     "kind": "poi",
     "category": "Loading Zone",
-    "name": "Loading Zone 5"
+    "name": "Loading Zone - Main Street (1)",
+    "street": "Main Street",
+    "street_distance_m": 1.7
    }
   },
   {
@@ -2091,7 +2147,9 @@
    "properties": {
     "kind": "poi",
     "category": "Loading Zone",
-    "name": "Loading Zone 6"
+    "name": "Loading Zone - Linden Avenue",
+    "street": "Linden Avenue",
+    "street_distance_m": 4.9
    }
   },
   {
@@ -2106,7 +2164,9 @@
    "properties": {
     "kind": "poi",
     "category": "Loading Zone",
-    "name": "Loading Zone 7"
+    "name": "Loading Zone - Main Street (2)",
+    "street": "Main Street",
+    "street_distance_m": 3.7
    }
   },
   {
@@ -2121,7 +2181,9 @@
    "properties": {
     "kind": "poi",
     "category": "Bus Stop",
-    "name": "Bus Stop 1"
+    "name": "Bus Stop - Main Street (1)",
+    "street": "Main Street",
+    "street_distance_m": 15.0
    }
   },
   {
@@ -2136,7 +2198,9 @@
    "properties": {
     "kind": "poi",
     "category": "Bus Stop",
-    "name": "Bus Stop 2"
+    "name": "Bus Stop - Main Street (2)",
+    "street": "Main Street",
+    "street_distance_m": 4.5
    }
   },
   {
@@ -2151,7 +2215,9 @@
    "properties": {
     "kind": "poi",
     "category": "Bus Stop",
-    "name": "Bus Stop 3"
+    "name": "Bus Stop - Highland Avenue",
+    "street": "Highland Avenue",
+    "street_distance_m": 7.6
    }
   },
   {
@@ -2166,7 +2232,9 @@
    "properties": {
     "kind": "poi",
     "category": "Bus Stop",
-    "name": "Bus Stop 4"
+    "name": "Bus Stop - Main Street (3)",
+    "street": "Main Street",
+    "street_distance_m": 11.9
    }
   }
  ]

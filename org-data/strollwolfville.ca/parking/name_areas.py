@@ -1,4 +1,4 @@
-"""Name each parking area after its nearest street (OSM roads, not trails).
+"""Name each parking area and point after its nearest street (OSM roads, not trails).
 Usage: name_areas.py <parking.geojson> <streets.geojson> <out.geojson>"""
 import collections, json, sys
 from pyproj import Transformer
@@ -13,21 +13,21 @@ streets = [(f['properties']['name'], transform(utm, shape(f['geometry'])))
            if f['properties'].get('name') and f['properties'].get('highway') in ROADS
            and f['geometry']['type'] == 'LineString']
 d = json.load(open(src))
-areas = [f for f in d['features'] if f['properties']['kind'] == 'area']
+features = d['features']
 named = collections.Counter()
-for f in areas:
-    poly = transform(utm, shape(f['geometry']))
-    dist, street = min((poly.distance(g), n) for n, g in streets)
+for f in features:
+    geom = transform(utm, shape(f['geometry']))
+    dist, street = min((geom.distance(g), n) for n, g in streets)
     f['properties']['street'] = street
     f['properties']['street_distance_m'] = round(dist, 1)
     named[(f['properties']['category'], street)] += 1
 seen = collections.Counter()
-for f in sorted(areas, key=lambda f: (f['properties']['category'], f['properties']['street'],
-                                       shape(f['geometry']).centroid.x)):
+for f in sorted(features, key=lambda f: (f['properties']['category'], f['properties']['street'],
+                                          shape(f['geometry']).centroid.x)):
     p = f['properties']
     key = (p['category'], p['street'])
     seen[key] += 1
     p['name'] = f"{p['category']} - {p['street']}" + (f" ({seen[key]})" if named[key] > 1 else '')
 json.dump(d, open(out, 'w'), indent=1)
-for f in areas:
-    p = f['properties']; print(f"{p['name']:<45} {p['street_distance_m']:>5} m  {p['area_m2']} m2")
+for f in features:
+    p = f['properties']; print(f"{p['name']:<45} {p['street_distance_m']:>5} m  {p.get('area_m2', '')}")
