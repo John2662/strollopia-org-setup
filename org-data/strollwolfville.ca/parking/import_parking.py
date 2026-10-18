@@ -23,7 +23,7 @@ to re-run. Run from the repo root:
 To test on another org (credentials from that org's folder):
 
     python org-data/strollwolfville.ca/parking/import_parking.py \
-        --org-dir org-data/climate-stories.strollopia.com --map climate-map
+        --org-dir org-data/climate-stories.ca --map climate-map
 
 Needs the API's create_poi object form (strollopia-api 51746e50,
 2026-10-09).

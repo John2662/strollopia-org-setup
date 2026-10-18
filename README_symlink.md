@@ -51,8 +51,8 @@ org-data/<project-domain>/<map-name>/media/<file>
 
 ## Migrated folders
 
-### `org-data/climate-stories.strollopia.com/climate-map/media`
-- **Symlink:** `/home/john/strollopia_git_hub/strollopia-org-setup/org-data/climate-stories.strollopia.com/climate-map/media`
+### `org-data/climate-stories.ca/climate-map/media`
+- **Symlink:** `/home/john/strollopia_git_hub/strollopia-org-setup/org-data/climate-stories.ca/climate-map/media`
 - **Destination:** `/home/john/pCloudDrive/strollopia_org_data/org-data/climate-stories.strollopia.com/climate-map/media`
 - **Files (13):**
   - `1.png`
