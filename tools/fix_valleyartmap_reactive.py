@@ -36,7 +36,7 @@ from api_client import (
 from org_config import load_org_config
 from strollopia_import import get_layout_card_info
 
-ORG_DIR = os.path.join(os.path.dirname(__file__), '..', 'org-data', 'valleyartmap.strollopia.com')
+ORG_DIR = os.path.join(os.path.dirname(__file__), '..', 'org-data', 'valleyartmap.ca')
 MAP_DIR = os.path.join(ORG_DIR, 'art-map')
 FIELD_KEY = 'a2'
 LAYOUT_NAME = 'layout1'

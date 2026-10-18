@@ -270,8 +270,8 @@ org-data/<project-domain>/<map-name>/media/<file>
   - `the_wave.jpg`
   - `whispers.jpg`
 
-### `org-data/valleyartmap.strollopia.com/art-map/media`
-- **Symlink:** `/home/john/strollopia_git_hub/strollopia-org-setup/org-data/valleyartmap.strollopia.com/art-map/media`
+### `org-data/valleyartmap.ca/art-map/media`
+- **Symlink:** `/home/john/strollopia_git_hub/strollopia-org-setup/org-data/valleyartmap.ca/art-map/media`
 - **Destination:** `/home/john/pCloudDrive/strollopia_org_data/org-data/valleyartmap.strollopia.com/art-map/media`
 - **Files (51):**
   - `Acadian-Deportation-Cross-Landscapet-for-VAM-by-John-Robichaud.jpg`
