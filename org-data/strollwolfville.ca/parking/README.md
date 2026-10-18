@@ -97,8 +97,8 @@ python org-data/strollwolfville.ca/parking/import_parking.py \
 ```
 
 The Climate Stories org on prod was renamed to climate-stories.ca on
-2026-10-18; dev still calls it climate-stories.strollopia.com (map 107), so
-that example now targets prod unless dev is renamed too.
+2026-10-18, and its dev copy (map 107, with the test import below) was
+deleted the same day, so that example now targets prod.
 
 Deleting an area also deletes its POI; the points and the subcategories
 have to be deleted separately.
