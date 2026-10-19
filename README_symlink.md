@@ -69,8 +69,8 @@ org-data/<project-domain>/<map-name>/media/<file>
   - `WFM.jpeg`
   - `logo-transparent.png`
 
-### `org-data/kentville.strollopia.com/business-map/media`
-- **Symlink:** `/home/john/strollopia_git_hub/strollopia-org-setup/org-data/kentville.strollopia.com/business-map/media`
+### `org-data/kentvillemurals.ca/business-map/media`
+- **Symlink:** `/home/john/strollopia_git_hub/strollopia-org-setup/org-data/kentvillemurals.ca/business-map/media`
 - **Destination:** `/home/john/pCloudDrive/strollopia_org_data/org-data/kentville.strollopia.com/business-map/media`
 - **Files (165):**
   - `AG_Custom_Apparel.jpg`
@@ -239,8 +239,8 @@ org-data/<project-domain>/<map-name>/media/<file>
   - `Wink_Eye_Glamour.jpg`
   - `igot_Skate.jpg`
 
-### `org-data/kentville.strollopia.com/mural-map/media`
-- **Symlink:** `/home/john/strollopia_git_hub/strollopia-org-setup/org-data/kentville.strollopia.com/mural-map/media`
+### `org-data/kentvillemurals.ca/mural-map/media`
+- **Symlink:** `/home/john/strollopia_git_hub/strollopia-org-setup/org-data/kentvillemurals.ca/mural-map/media`
 - **Destination:** `/home/john/pCloudDrive/strollopia_org_data/org-data/kentville.strollopia.com/mural-map/media`
 - **Files (26):**
   - `361112759_1448081519350246_691799926509851250_n.jpg`
