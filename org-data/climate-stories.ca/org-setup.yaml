@@ -5,7 +5,6 @@ display_name: Climate Stories
 tag_line: Climate action stories from the Annapolis Valley
 main_admin_email: john2662@gmail.com
 main_admin_name: Admin
-main_admin_password: changeme123
 allows_anonymous: true
 anonymous_settings:
   period: 3600

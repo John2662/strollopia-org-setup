@@ -5,7 +5,6 @@ display_name: Valley Art Map
 tag_line: Explore public art in the Annapolis Valley
 main_admin_email: john@strollopia.com
 main_admin_name: John Read
-main_admin_password: UosLHR_slc0mMAqIekUx
 allows_anonymous: false
 anonymous_settings:
   period: 3600

@@ -16,7 +16,8 @@ Dry run by default (no login needed). From the repo root:
     USE_PROD=1 python org-data/strollwolfville.ca/main-map/add_hours.py
     USE_PROD=1 python org-data/strollwolfville.ca/main-map/add_hours.py --apply
 
---apply asks for the org admin's password (not echoed).
+--apply logs in with the org admin from org-setup.secrets.yaml, or asks for
+the password (not echoed) when there is none.
 """
 import argparse
 import collections
@@ -33,6 +34,7 @@ ORG_DIR = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(ORG_DIR, '..', '..', 'tools'))
 
 from api_client import get_api_base_url, get_org_policy, login, print_api_base_url  # noqa: E402
+from org_config import load_org_config  # noqa: E402
 from strollopia_import import load_data, parse_open_hours  # noqa: E402
 
 MAP_NAME = 'downtown'
@@ -123,7 +125,9 @@ def main(argv=None):
     if not args.apply:
         print('Dry run: nothing written. Re-run with --apply.')
         return
-    token = login(org_cfg['main_admin_email'], getpass.getpass('Org admin password: '), org)
+    creds = load_org_config(os.path.join(ORG_DIR, 'org-setup.yaml'))
+    password = creds.get('main_admin_password') or getpass.getpass('Org admin password: ')
+    token = login(creds['main_admin_email'], password, org)
     headers = {'Authorization': f'Token {token}'}
     done = 0
     for poi, hours, _ in matches:
