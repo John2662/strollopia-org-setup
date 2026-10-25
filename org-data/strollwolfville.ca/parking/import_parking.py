@@ -20,6 +20,14 @@ to re-run. Run from the repo root:
     python org-data/strollwolfville.ca/parking/import_parking.py
     USE_PROD=1 python org-data/strollwolfville.ca/parking/import_parking.py
 
+Another town's parking (its own GeoJSON; a top-level "subcategories"
+object and per-feature "card_html"/"description" override the Wolfville
+defaults below):
+
+    python org-data/strollwolfville.ca/parking/import_parking.py \
+        --org-dir org-data/ca-nova-scotia-antigonish --map main-map \
+        --geojson org-data/ca-nova-scotia-antigonish/parking/antigonish-parking.geojson
+
 To test on another org (credentials from that org's folder):
 
     python org-data/strollwolfville.ca/parking/import_parking.py \
@@ -75,6 +83,8 @@ POINT_TEXT = {
 
 
 def card_text(props):
+    if props.get('card_html'):
+        return props['card_html']
     category, street = props['category'], props['street']
     if props['kind'] == 'area':
         first = f'{category} near {street}.'
@@ -113,13 +123,13 @@ class Api:
         return resp.json()
 
 
-def ensure_subcategories(api):
+def ensure_subcategories(api, subcategories=SUBCATEGORIES):
     """Return {subcategory name: pk}, creating what's missing and giving
     each one its glyph if it has none."""
     categories = {c['name']: c for c in api.get('api/org/categories/')}
     glyphs = {g['name']: g['id'] for g in api.get('api/org/glyphs/')}
     pks = {}
-    for sub_name, (cat_name, color, glyph_name) in SUBCATEGORIES.items():
+    for sub_name, (cat_name, color, glyph_name) in subcategories.items():
         glyph_pk = glyphs.get(glyph_name)
         if glyph_pk is None:
             print(f'  ! no glyph {glyph_name!r} in the shared library; '
@@ -160,6 +170,8 @@ def main(argv=None):
                         help='org-data folder of the target org (default: strollwolfville.ca)')
     parser.add_argument('--map', default='downtown', help='org_map_name (default: downtown)')
     parser.add_argument('--card', default='text', help='layout card name (default: text)')
+    parser.add_argument('--geojson', default=GEOJSON,
+                        help='features to import (default: Wolfville downtown parking)')
     parser.add_argument('--language', default='en')
     parser.add_argument('--dry-run', action='store_true',
                         help='show what would be created, change nothing')
@@ -191,15 +203,16 @@ def main(argv=None):
     print(f'Org {org}, map {args.map} (pk {map_pk}), card {args.card} '
           f'(pk {card_pk}, text field {text_key})')
 
+    collection = json.load(open(args.geojson))
     print('Subcategories:')
-    subcats = ensure_subcategories(api)
+    subcats = ensure_subcategories(api, collection.get('subcategories', SUBCATEGORIES))
 
     existing_areas = {a['name'] for a in api.get('api/geo/map-area/')
                       if a['owning_map'] == map_pk}
     existing_pois = {p['properties']['name'] for p in get_map_pois(token, org)
                      if p['properties'].get('owning_map', map_pk) == map_pk}
 
-    features = json.load(open(GEOJSON))['features']
+    features = collection['features']
     created = skipped = 0
     for f in features:
         props = f['properties']
@@ -213,7 +226,8 @@ def main(argv=None):
             payload = {
                 'owning_map': map_pk,
                 'name': name,
-                'description': f'{props["category"]} near {props["street"]}. {SOURCE}',
+                'description': props.get('description')
+                or f'{props["category"]} near {props["street"]}. {SOURCE}',
                 'color': props['color'],
                 'lat_lng_array': f['geometry']['coordinates'][0],
                 'create_poi': {

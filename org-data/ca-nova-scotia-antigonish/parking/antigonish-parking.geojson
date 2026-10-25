@@ -1,0 +1,1477 @@
+{
+ "type": "FeatureCollection",
+ "subcategories": {
+  "Town Lot": [
+   "Parking",
+   "#0f766e",
+   "Car"
+  ],
+  "Public": [
+   "Parking",
+   "#c27c0e",
+   "Car"
+  ],
+  "Customer": [
+   "Parking",
+   "#6d5a9c",
+   "Car"
+  ],
+  "Hospital": [
+   "Parking",
+   "#b4423a",
+   "Car"
+  ],
+  "StFX Campus": [
+   "Parking",
+   "#2f5f9e",
+   "Car"
+  ],
+  "Residential / Unknown": [
+   "Parking",
+   "#8a948e",
+   "Car"
+  ]
+ },
+ "source": "OpenStreetMap ways (amenity=parking) inside the Town of Antigonish, fetched 2026-10-25; grouping reviewed by John 2026-10-25.",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.990462,
+       45.62331
+      ],
+      [
+       -61.990293,
+       45.623053
+      ],
+      [
+       -61.989951,
+       45.623143
+      ],
+      [
+       -61.990111,
+       45.623379
+      ],
+      [
+       -61.990462,
+       45.62331
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Town Lot",
+    "name": "Sydney Street Lot",
+    "color": "#0f766e",
+    "area_m2": 853,
+    "osm_way": 256877294,
+    "capacity": "40",
+    "description": "Town parking lot, about 40 spaces. Lot outline from OpenStreetMap (© OpenStreetMap contributors). Rates and rules from the Town of Antigonish parking page (October 2026).",
+    "card_html": "<p>Town parking lot, about 40 spaces.</p><p>Paid Monday to Friday, 7 a.m. to 5 p.m.: $0.50 an hour, 2 hours maximum. Enter your licence plate and pay at the kiosk (cash, debit or credit).</p><p>Overnight parking is allowed May 1 to November 30 (move your car by 7 a.m.). From December 1 to April 30 the winter parking ban applies: no parking from 12 a.m. to 7 a.m.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors). Rates and rules from the Town of Antigonish parking page (October 2026).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.99048,
+       45.621451
+      ],
+      [
+       -61.990633,
+       45.621811
+      ],
+      [
+       -61.99031,
+       45.62183
+      ],
+      [
+       -61.990274,
+       45.621832
+      ],
+      [
+       -61.989971,
+       45.621885
+      ],
+      [
+       -61.989722,
+       45.621942
+      ],
+      [
+       -61.989362,
+       45.621564
+      ],
+      [
+       -61.98933,
+       45.62147
+      ],
+      [
+       -61.989335,
+       45.621407
+      ],
+      [
+       -61.989474,
+       45.62137
+      ],
+      [
+       -61.989917,
+       45.621493
+      ],
+      [
+       -61.990448,
+       45.621421
+      ],
+      [
+       -61.99048,
+       45.621451
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Town Lot",
+    "name": "Creighton Lane Lot",
+    "color": "#0f766e",
+    "area_m2": 4063,
+    "osm_way": 233807861,
+    "capacity": "150",
+    "description": "Town parking lot by Brierly Brook, about 150 spaces. Lot outline from OpenStreetMap (© OpenStreetMap contributors). Rates and rules from the Town of Antigonish parking page (October 2026).",
+    "card_html": "<p>Town parking lot by Brierly Brook, about 150 spaces.</p><p>The middle rows are paid Monday to Friday, 7 a.m. to 5 p.m.: $0.50 an hour, 3 hours maximum, pay at the kiosk. The spaces around the edge are free. Accessible spaces are at the Creighton Lane end.</p><p>Overnight parking is allowed May 1 to November 30 (move your car by 7 a.m.). From December 1 to April 30 the winter parking ban applies: no parking from 12 a.m. to 7 a.m.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors). Rates and rules from the Town of Antigonish parking page (October 2026).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -62.002262,
+       45.616147
+      ],
+      [
+       -62.001667,
+       45.616325
+      ],
+      [
+       -62.001519,
+       45.616059
+      ],
+      [
+       -62.002061,
+       45.615896
+      ],
+      [
+       -62.002262,
+       45.616147
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Town Lot",
+    "name": "Arena Parking (West)",
+    "color": "#0f766e",
+    "area_m2": 1531,
+    "osm_way": 324146570,
+    "capacity": "48",
+    "description": "Town parking at the Antigonish Arena on James Street, about 48 spaces. Lot outline from OpenStreetMap (© OpenStreetMap contributors). Rates and rules from the Town of Antigonish parking page (October 2026).",
+    "card_html": "<p>Town parking at the Antigonish Arena on James Street, about 48 spaces.</p><p>Overnight parking is allowed May 1 to November 30 (move your car by 7 a.m.). From December 1 to April 30 the winter parking ban applies: no parking from 12 a.m. to 7 a.m.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors). Rates and rules from the Town of Antigonish parking page (October 2026).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -62.001406,
+       45.61616
+      ],
+      [
+       -62.000369,
+       45.616493
+      ],
+      [
+       -62.000656,
+       45.616931
+      ],
+      [
+       -62.001159,
+       45.616769
+      ],
+      [
+       -62.0017,
+       45.616603
+      ],
+      [
+       -62.001406,
+       45.61616
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Town Lot",
+    "name": "Arena & Farmers' Market Parking",
+    "color": "#0f766e",
+    "area_m2": 4777,
+    "osm_way": 324146564,
+    "capacity": null,
+    "description": "Town parking beside the Antigonish Farmers' Market and the arena on James Street. Lot outline from OpenStreetMap (© OpenStreetMap contributors). Rates and rules from the Town of Antigonish parking page (October 2026).",
+    "card_html": "<p>Town parking beside the Antigonish Farmers' Market and the arena on James Street.</p><p>Overnight parking is allowed May 1 to November 30 (move your car by 7 a.m.). From December 1 to April 30 the winter parking ban applies: no parking from 12 a.m. to 7 a.m.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors). Rates and rules from the Town of Antigonish parking page (October 2026).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.989135,
+       45.623466
+      ],
+      [
+       -61.989059,
+       45.623492
+      ],
+      [
+       -61.988988,
+       45.623515
+      ],
+      [
+       -61.988729,
+       45.623134
+      ],
+      [
+       -61.988806,
+       45.623108
+      ],
+      [
+       -61.988876,
+       45.623085
+      ],
+      [
+       -61.989135,
+       45.623466
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Public",
+    "name": "St. Marys Street Lot",
+    "color": "#c27c0e",
+    "area_m2": 594,
+    "osm_way": 308232450,
+    "capacity": "40",
+    "description": "Parking lot off St. Marys Street, about 40 spaces. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Parking lot off St. Marys Street, about 40 spaces.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.991349,
+       45.621822
+      ],
+      [
+       -61.991371,
+       45.621645
+      ],
+      [
+       -61.9907,
+       45.621585
+      ],
+      [
+       -61.99062,
+       45.621443
+      ],
+      [
+       -61.990515,
+       45.621454
+      ],
+      [
+       -61.990665,
+       45.621801
+      ],
+      [
+       -61.990775,
+       45.621804
+      ],
+      [
+       -61.991349,
+       45.621822
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Public",
+    "name": "Creighton Lane Lot (East)",
+    "color": "#c27c0e",
+    "area_m2": 1418,
+    "osm_way": 311432936,
+    "capacity": null,
+    "description": "Small parking lot off Creighton Lane, behind the Main Street shops. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Small parking lot off Creighton Lane, behind the Main Street shops.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.993773,
+       45.622262
+      ],
+      [
+       -61.99337,
+       45.621651
+      ],
+      [
+       -61.993317,
+       45.621561
+      ],
+      [
+       -61.992727,
+       45.621666
+      ],
+      [
+       -61.992684,
+       45.62163
+      ],
+      [
+       -61.992399,
+       45.621702
+      ],
+      [
+       -61.992222,
+       45.621526
+      ],
+      [
+       -61.991984,
+       45.621552
+      ],
+      [
+       -61.992043,
+       45.621621
+      ],
+      [
+       -61.991675,
+       45.621591
+      ],
+      [
+       -61.991568,
+       45.621637
+      ],
+      [
+       -61.991509,
+       45.622125
+      ],
+      [
+       -61.99187,
+       45.622113
+      ],
+      [
+       -61.991752,
+       45.621863
+      ],
+      [
+       -61.99189,
+       45.621823
+      ],
+      [
+       -61.99214,
+       45.621799
+      ],
+      [
+       -61.992247,
+       45.621824
+      ],
+      [
+       -61.992312,
+       45.621877
+      ],
+      [
+       -61.992358,
+       45.622033
+      ],
+      [
+       -61.992322,
+       45.622115
+      ],
+      [
+       -61.992413,
+       45.622349
+      ],
+      [
+       -61.992575,
+       45.622329
+      ],
+      [
+       -61.992434,
+       45.622129
+      ],
+      [
+       -61.99242,
+       45.622086
+      ],
+      [
+       -61.99277,
+       45.621937
+      ],
+      [
+       -61.992797,
+       45.621976
+      ],
+      [
+       -61.993046,
+       45.621896
+      ],
+      [
+       -61.993142,
+       45.622033
+      ],
+      [
+       -61.99319,
+       45.622016
+      ],
+      [
+       -61.993393,
+       45.622293
+      ],
+      [
+       -61.993554,
+       45.62226
+      ],
+      [
+       -61.993599,
+       45.62231
+      ],
+      [
+       -61.993773,
+       45.622262
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Public",
+    "name": "Main Street Lot (behind Cineplex)",
+    "color": "#c27c0e",
+    "area_m2": 7178,
+    "osm_way": 311432934,
+    "capacity": null,
+    "description": "Parking behind the cinema, Shoppers Drug Mart and the public library. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Parking behind the cinema, Shoppers Drug Mart and the public library.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.99137,
+       45.621917
+      ],
+      [
+       -61.99136,
+       45.622096
+      ],
+      [
+       -61.990872,
+       45.622126
+      ],
+      [
+       -61.990836,
+       45.62191
+      ],
+      [
+       -61.99137,
+       45.621917
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Public",
+    "name": "Creighton Lane Parkade",
+    "color": "#c27c0e",
+    "area_m2": 876,
+    "osm_way": 327085630,
+    "capacity": "50",
+    "description": "Multi-storey parking off Creighton Lane, about 50 spaces. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Multi-storey parking off Creighton Lane, about 50 spaces.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.983709,
+       45.615147
+      ],
+      [
+       -61.983044,
+       45.615279
+      ],
+      [
+       -61.982744,
+       45.614626
+      ],
+      [
+       -61.983516,
+       45.614791
+      ],
+      [
+       -61.983709,
+       45.615147
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Customer",
+    "name": "Boston Pizza / Claymore Inn Parking",
+    "color": "#6d5a9c",
+    "area_m2": 3102,
+    "osm_way": 243267663,
+    "capacity": null,
+    "description": "Customer parking for the businesses here. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Customer parking for the businesses here.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.985434,
+       45.616058
+      ],
+      [
+       -61.985264,
+       45.615732
+      ],
+      [
+       -61.983413,
+       45.616201
+      ],
+      [
+       -61.983582,
+       45.616528
+      ],
+      [
+       -61.985434,
+       45.616058
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Customer",
+    "name": "Sobeys / NSLC Parking",
+    "color": "#6d5a9c",
+    "area_m2": 5918,
+    "osm_way": 243267662,
+    "capacity": null,
+    "description": "Customer parking for Sobeys and the NSLC. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Customer parking for Sobeys and the NSLC.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.985872,
+       45.617477
+      ],
+      [
+       -61.985357,
+       45.616442
+      ],
+      [
+       -61.98334,
+       45.616914
+      ],
+      [
+       -61.98349,
+       45.617312
+      ],
+      [
+       -61.984423,
+       45.617582
+      ],
+      [
+       -61.984981,
+       45.617762
+      ],
+      [
+       -61.985872,
+       45.617477
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Customer",
+    "name": "Market Square Mall Parking",
+    "color": "#6d5a9c",
+    "area_m2": 17572,
+    "osm_way": 243267460,
+    "capacity": null,
+    "description": "Customer parking for Antigonish Market Square and Canadian Tire. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Customer parking for Antigonish Market Square and Canadian Tire.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.993908,
+       45.621572
+      ],
+      [
+       -61.993795,
+       45.621379
+      ],
+      [
+       -61.993551,
+       45.621392
+      ],
+      [
+       -61.993363,
+       45.621456
+      ],
+      [
+       -61.993419,
+       45.621613
+      ],
+      [
+       -61.9935,
+       45.621673
+      ],
+      [
+       -61.993908,
+       45.621572
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Customer",
+    "name": "Federal Building Parking",
+    "color": "#6d5a9c",
+    "area_m2": 939,
+    "osm_way": 311432935,
+    "capacity": null,
+    "description": "Parking for the Government of Canada building on St. Ninian Street. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Parking for the Government of Canada building on St. Ninian Street.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.981419,
+       45.627803
+      ],
+      [
+       -61.980911,
+       45.627439
+      ],
+      [
+       -61.980257,
+       45.627885
+      ],
+      [
+       -61.980858,
+       45.628186
+      ],
+      [
+       -61.981419,
+       45.627803
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Hospital",
+    "name": "St. Martha's Hospital Parking (Bay Street)",
+    "color": "#b4423a",
+    "area_m2": 3731,
+    "osm_way": 243245939,
+    "capacity": null,
+    "description": "Parking at St. Martha's Regional Hospital. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Parking at St. Martha's Regional Hospital.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.981761,
+       45.628867
+      ],
+      [
+       -61.981164,
+       45.628532
+      ],
+      [
+       -61.980733,
+       45.628908
+      ],
+      [
+       -61.98133,
+       45.629243
+      ],
+      [
+       -61.981761,
+       45.628867
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Hospital",
+    "name": "St. Martha's Hospital Parking (Marian Drive)",
+    "color": "#b4423a",
+    "area_m2": 3189,
+    "osm_way": 243245940,
+    "capacity": null,
+    "description": "Parking at St. Martha's Regional Hospital. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Parking at St. Martha's Regional Hospital.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.982397,
+       45.629483
+      ],
+      [
+       -61.982305,
+       45.629271
+      ],
+      [
+       -61.983592,
+       45.628915
+      ],
+      [
+       -61.983715,
+       45.629098
+      ],
+      [
+       -61.983298,
+       45.629268
+      ],
+      [
+       -61.982397,
+       45.629483
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Hospital",
+    "name": "St. Martha's Hospital Parking (North)",
+    "color": "#b4423a",
+    "area_m2": 2836,
+    "osm_way": 1359008048,
+    "capacity": null,
+    "description": "Parking at St. Martha's Regional Hospital. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Parking at St. Martha's Regional Hospital.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.998423,
+       45.615131
+      ],
+      [
+       -61.998374,
+       45.61487
+      ],
+      [
+       -61.997428,
+       45.614561
+      ],
+      [
+       -61.997334,
+       45.614729
+      ],
+      [
+       -61.997843,
+       45.614975
+      ],
+      [
+       -61.997969,
+       45.6149
+      ],
+      [
+       -61.998128,
+       45.615146
+      ],
+      [
+       -61.998423,
+       45.615131
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "StFX Campus",
+    "name": "StFX Parking - Governors Hall",
+    "color": "#2f5f9e",
+    "area_m2": 2285,
+    "osm_way": 324790308,
+    "capacity": "75",
+    "description": "StFX campus parking, about 75 spaces. Campus permit rules apply (StFX Security). Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>StFX campus parking, about 75 spaces. Campus permit rules apply (StFX Security).</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.99708,
+       45.614838
+      ],
+      [
+       -61.997088,
+       45.615217
+      ],
+      [
+       -61.997422,
+       45.615413
+      ],
+      [
+       -61.997414,
+       45.616183
+      ],
+      [
+       -61.99787,
+       45.616148
+      ],
+      [
+       -61.997821,
+       45.61526
+      ],
+      [
+       -61.997716,
+       45.615071
+      ],
+      [
+       -61.997485,
+       45.6149
+      ],
+      [
+       -61.997189,
+       45.614797
+      ],
+      [
+       -61.99708,
+       45.614838
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "StFX Campus",
+    "name": "StFX Parking - Governors Hall East",
+    "color": "#2f5f9e",
+    "area_m2": 5591,
+    "osm_way": 330058699,
+    "capacity": null,
+    "description": "StFX campus parking. Campus permit rules apply (StFX Security). Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>StFX campus parking. Campus permit rules apply (StFX Security).</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.994365,
+       45.615402
+      ],
+      [
+       -61.99403,
+       45.615405
+      ],
+      [
+       -61.994004,
+       45.615349
+      ],
+      [
+       -61.993831,
+       45.615362
+      ],
+      [
+       -61.993817,
+       45.615446
+      ],
+      [
+       -61.993724,
+       45.615445
+      ],
+      [
+       -61.99369,
+       45.615154
+      ],
+      [
+       -61.994355,
+       45.615142
+      ],
+      [
+       -61.994365,
+       45.615402
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "StFX Campus",
+    "name": "StFX Parking - MacIsaac Hall",
+    "color": "#2f5f9e",
+    "area_m2": 1406,
+    "osm_way": 598438857,
+    "capacity": null,
+    "description": "StFX campus parking by the residences. Campus permit rules apply (StFX Security). Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>StFX campus parking by the residences. Campus permit rules apply (StFX Security).</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.993807,
+       45.616935
+      ],
+      [
+       -61.992981,
+       45.616949
+      ],
+      [
+       -61.99278,
+       45.615998
+      ],
+      [
+       -61.992878,
+       45.615995
+      ],
+      [
+       -61.993782,
+       45.615976
+      ],
+      [
+       -61.993804,
+       45.616843
+      ],
+      [
+       -61.993807,
+       45.616935
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "StFX Campus",
+    "name": "StFX Parking - Bloomfield Centre",
+    "color": "#2f5f9e",
+    "area_m2": 7565,
+    "osm_way": 243268127,
+    "capacity": null,
+    "description": "StFX campus parking by the Bloomfield Centre and Oland Stadium. Campus permit rules apply (StFX Security). Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>StFX campus parking by the Bloomfield Centre and Oland Stadium. Campus permit rules apply (StFX Security).</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.997439,
+       45.616888
+      ],
+      [
+       -61.997454,
+       45.617398
+      ],
+      [
+       -61.99685,
+       45.617407
+      ],
+      [
+       -61.996834,
+       45.616897
+      ],
+      [
+       -61.997439,
+       45.616888
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "StFX Campus",
+    "name": "StFX Parking - Power Hall",
+    "color": "#2f5f9e",
+    "area_m2": 2668,
+    "osm_way": 324790302,
+    "capacity": "60",
+    "description": "StFX campus parking, about 60 spaces. Campus permit rules apply (StFX Security). Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>StFX campus parking, about 60 spaces. Campus permit rules apply (StFX Security).</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.991979,
+       45.619104
+      ],
+      [
+       -61.991941,
+       45.619105
+      ],
+      [
+       -61.991349,
+       45.619132
+      ],
+      [
+       -61.991331,
+       45.618852
+      ],
+      [
+       -61.991169,
+       45.618856
+      ],
+      [
+       -61.990886,
+       45.61847
+      ],
+      [
+       -61.990679,
+       45.618136
+      ],
+      [
+       -61.990664,
+       45.617847
+      ],
+      [
+       -61.990783,
+       45.617787
+      ],
+      [
+       -61.991503,
+       45.617758
+      ],
+      [
+       -61.991524,
+       45.617843
+      ],
+      [
+       -61.991606,
+       45.617963
+      ],
+      [
+       -61.991619,
+       45.618098
+      ],
+      [
+       -61.991899,
+       45.618081
+      ],
+      [
+       -61.991979,
+       45.619104
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "StFX Campus",
+    "name": "StFX Parking - J. Bruce Brown Hall",
+    "color": "#2f5f9e",
+    "area_m2": 10688,
+    "osm_way": 330058700,
+    "capacity": null,
+    "description": "StFX campus parking. Campus permit rules apply (StFX Security). Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>StFX campus parking. Campus permit rules apply (StFX Security).</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.99699,
+       45.619751
+      ],
+      [
+       -61.996943,
+       45.619736
+      ],
+      [
+       -61.99688,
+       45.619718
+      ],
+      [
+       -61.996824,
+       45.619705
+      ],
+      [
+       -61.99675,
+       45.619689
+      ],
+      [
+       -61.996678,
+       45.619675
+      ],
+      [
+       -61.996738,
+       45.619624
+      ],
+      [
+       -61.996788,
+       45.619571
+      ],
+      [
+       -61.997075,
+       45.619635
+      ],
+      [
+       -61.997034,
+       45.619691
+      ],
+      [
+       -61.99699,
+       45.619751
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "StFX Campus",
+    "name": "StFX Parking - Markin Complex",
+    "color": "#2f5f9e",
+    "area_m2": 330,
+    "osm_way": 299764025,
+    "capacity": null,
+    "description": "Small StFX campus lot off Tompkins Lane. Campus permit rules apply (StFX Security). Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Small StFX campus lot off Tompkins Lane. Campus permit rules apply (StFX Security).</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -62.000059,
+       45.617134
+      ],
+      [
+       -61.999889,
+       45.616923
+      ],
+      [
+       -61.999801,
+       45.616957
+      ],
+      [
+       -61.999971,
+       45.617168
+      ],
+      [
+       -62.000059,
+       45.617134
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "StFX Campus",
+    "name": "Fairview Street Parking",
+    "color": "#2f5f9e",
+    "area_m2": 211,
+    "osm_way": 497521291,
+    "capacity": null,
+    "description": "Small parking area off Fairview Street, by Cody International House. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Small parking area off Fairview Street, by Cody International House.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.995335,
+       45.624571
+      ],
+      [
+       -61.99496,
+       45.624694
+      ],
+      [
+       -61.994569,
+       45.624111
+      ],
+      [
+       -61.994739,
+       45.624055
+      ],
+      [
+       -61.994909,
+       45.62431
+      ],
+      [
+       -61.995114,
+       45.624242
+      ],
+      [
+       -61.995335,
+       45.624571
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Residential / Unknown",
+    "name": "Malcolm Court Apartments Parking",
+    "color": "#8a948e",
+    "area_m2": 1756,
+    "osm_way": 497667637,
+    "capacity": null,
+    "description": "Parking for the Malcolm Court seniors apartments. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Parking for the Malcolm Court seniors apartments.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.997162,
+       45.628035
+      ],
+      [
+       -61.997226,
+       45.628169
+      ],
+      [
+       -61.996815,
+       45.628284
+      ],
+      [
+       -61.996588,
+       45.628084
+      ],
+      [
+       -61.996295,
+       45.627718
+      ],
+      [
+       -61.996375,
+       45.627681
+      ],
+      [
+       -61.996432,
+       45.627655
+      ],
+      [
+       -61.996767,
+       45.628142
+      ],
+      [
+       -61.997162,
+       45.628035
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Residential / Unknown",
+    "name": "MacLellan Street Apartments Parking",
+    "color": "#8a948e",
+    "area_m2": 1223,
+    "osm_way": 497667643,
+    "capacity": null,
+    "description": "Parking for the MacLellan Street apartments. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Parking for the MacLellan Street apartments.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.999318,
+       45.61905
+      ],
+      [
+       -61.999322,
+       45.618932
+      ],
+      [
+       -61.998865,
+       45.61893
+      ],
+      [
+       -61.998837,
+       45.619059
+      ],
+      [
+       -61.999318,
+       45.61905
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Residential / Unknown",
+    "name": "West Street Lot",
+    "color": "#8a948e",
+    "area_m2": 502,
+    "osm_way": 497521117,
+    "capacity": null,
+    "description": "Parking lot off West Street. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Parking lot off West Street.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -61.976979,
+       45.625256
+      ],
+      [
+       -61.976988,
+       45.625177
+      ],
+      [
+       -61.976229,
+       45.625158
+      ],
+      [
+       -61.976236,
+       45.625245
+      ],
+      [
+       -61.976979,
+       45.625256
+      ]
+     ]
+    ]
+   },
+   "properties": {
+    "kind": "area",
+    "category": "Residential / Unknown",
+    "name": "Adams Street Lot",
+    "color": "#8a948e",
+    "area_m2": 542,
+    "osm_way": 1490185842,
+    "capacity": null,
+    "description": "Parking lot off Adams Street. Lot outline from OpenStreetMap (© OpenStreetMap contributors).",
+    "card_html": "<p>Parking lot off Adams Street.</p><p>Lot outline from OpenStreetMap (© OpenStreetMap contributors).</p>"
+   }
+  }
+ ]
+}
