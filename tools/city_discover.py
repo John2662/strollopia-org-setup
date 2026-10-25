@@ -357,6 +357,10 @@ def parse_google_hours(periods):
     Google day index: 0=Sun, 1=Mon, ..., 6=Sat.
     """
     result = {k: "closed" for k in GOOGLE_DAY_KEYS}
+    # Always open: Google sends one period, Sunday 00:00, with no close.
+    if (len(periods) == 1 and "close" not in periods[0]
+            and periods[0]["open"].get("day") == 0 and periods[0]["open"].get("time") == "0000"):
+        return {k: "F: 00:00 T: 23:59" for k in GOOGLE_DAY_KEYS}
     for period in periods:
         day = period["open"]["day"]
         open_time = period["open"]["time"]

@@ -236,9 +236,25 @@ def test_parse_google_hours_24h():
     # natural but Django's TimeField rejects hour 24 ("wrong format" at
     # import time) -- found by actually importing a real 24-hour Tim
     # Hortons. Must stay within 00:00-23:59.
+    #
+    # Google sends a place that is always open as exactly this one period
+    # (Sunday 00:00, no close). It means every day, not Sunday only: read as
+    # Sunday only, parks and 24-hour shops showed "open Sundays".
     periods = [{"open": {"day": 0, "time": "0000"}}]
     result = parse_google_hours(periods)
-    assert result["hours_sun"] == "F: 00:00 T: 23:59"
+    assert set(result.values()) == {"F: 00:00 T: 23:59"}
+    assert len(result) == 7
+
+
+def test_parse_google_hours_one_day_without_close_is_that_day_only():
+    periods = [
+        {"open": {"day": 1, "time": "0900"}, "close": {"day": 1, "time": "1700"}},
+        {"open": {"day": 6, "time": "0000"}},
+    ]
+    result = parse_google_hours(periods)
+    assert result["hours_mon"] == "F: 09:00 T: 17:00"
+    assert result["hours_sat"] == "F: 00:00 T: 23:59"
+    assert result["hours_sun"] == "closed"
 
 
 def test_parse_google_hours_empty():
