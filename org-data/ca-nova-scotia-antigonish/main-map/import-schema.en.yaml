@@ -1,0 +1,26 @@
+---
+card_layout: image
+poi_fields:
+  name: name
+  lat: lat
+  lng: lng
+categories:
+  category: category
+  subcategory: subcategory
+schedule:
+  monday: hours_mon
+  tuesday: hours_tue
+  wednesday: hours_wed
+  thursday: hours_thu
+  friday: hours_fri
+  saturday: hours_sat
+  sunday: hours_sun
+content_columns:
+  rt1:
+    column: description
+  i1:
+    column: image_file
+options:
+  skip_existing: true
+  sleep_between_rows: 1
+  language: en
